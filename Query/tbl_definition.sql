@@ -141,9 +141,9 @@ CREATE TABLE `TBL_MEETINGROOM` (
 CREATE TABLE `TBL_PROJ` (
                             `proj_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '프로젝트ID',
                             `proj_name` VARCHAR(255) NOT NULL COMMENT '프로젝트명',
-                            `proj_start_time` TIMESTAMP COMMENT '시작일자',
-                            `proj_end_time` TIMESTAMP COMMENT '종료일자',
-                            `proj_created_at` TIMESTAMP NOT NULL COMMENT '생성일자',
+                            `start_time` TIMESTAMP COMMENT '시작일자',
+                            `end_time` TIMESTAMP COMMENT '종료일자',
+                            `created_at` TIMESTAMP NOT NULL COMMENT '생성일자',
                             `progress_status` TINYINT NOT NULL COMMENT '진척도',
                             `user_id` BIGINT NOT NULL COMMENT '작성자ID',
                             PRIMARY KEY (`proj_id`)

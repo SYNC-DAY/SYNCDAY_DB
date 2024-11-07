@@ -15,7 +15,7 @@ INSERT INTO TBL_USER (username, email, password, phone_number, position, team_id
                                                                                       ('정수진', 'jung@syncday.com', '$2a$10$1xYkvG6JpJpNS3qpBTGI7.RKZF/UADsXLEdcYtOXaGWW0xYhLW/Sm', '010-5678-9012', '인프라엔지니어', 5);
 
 -- TBL_PROJ 데이터
-INSERT INTO TBL_PROJ (proj_name, proj_start_time, proj_end_time, proj_created_at, progress_status, user_id) VALUES
+INSERT INTO TBL_PROJ (proj_name, start_time, end_time, created_at, progress_status, user_id) VALUES
                                                                                                                 ('SyncDay 플랫폼 개발', '2024-01-01', '2024-12-31', '2023-12-15', 30, 1),
                                                                                                                 ('모바일 앱 개발', '2024-02-01', '2024-08-31', '2024-01-15', 20, 2),
                                                                                                                 ('UI/UX 개선 프로젝트', '2024-03-01', '2024-06-30', '2024-02-15', 45, 3);
