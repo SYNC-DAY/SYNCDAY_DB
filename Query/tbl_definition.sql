@@ -171,6 +171,7 @@ CREATE TABLE `TBL_TEAM` (
 CREATE TABLE `TBL_TEAM_BOARD` (
                                   `team_board_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '팀게시판ID',
                                   `team_id` BIGINT NOT NULL COMMENT '팀ID',
+                                  `board_title` VARCHAR(255) NOT NULL ,
                                   PRIMARY KEY (`team_board_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8  COMMENT='팀 게시판';
 
