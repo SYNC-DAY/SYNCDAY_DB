@@ -12,7 +12,7 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `TBL_ALERT`;
 DROP TABLE IF EXISTS `TBL_CARD`;
 DROP TABLE IF EXISTS `TBL_CARD_ATTACHMENTS`;
-DROP TABLE IF EXISTS `TBL_CARD_BOARD`;
+DROP TABLE IF EXISTS `TBL_CARDBOARD`;
 DROP TABLE IF EXISTS `TBL_CARD_COMMENT`;
 DROP TABLE IF EXISTS `TBL_CARD_TAG`;
 DROP TABLE IF EXISTS `TBL_CHECKLIST`;
@@ -59,21 +59,22 @@ CREATE TABLE `TBL_CARD` (
                             `end_time` TIMESTAMP COMMENT '종료시각',
                             `assignee_id` BIGINT COMMENT '담당자ID',
                             `created_at` TIMESTAMP NOT NULL COMMENT '생성시각',
-                            `card_board_id` BIGINT NOT NULL COMMENT '카드보드ID',
+                            `cardboard_id` BIGINT NOT NULL COMMENT '카드보드ID',
                             `tag_id` BIGINT COMMENT '태그ID',
                             `vcs_obj_id` BIGINT COMMENT 'VCS 객체 ID',
                             `author` BIGINT NOT NULL COMMENT '작성자ID',
                             PRIMARY KEY (`card_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8  COMMENT='카드';
 
-CREATE TABLE `TBL_CARD_ATTACHMENTS` (
+CREATE TABLE `TBL_CARD_ATTACHMENTS` (   `card_attachment_id` BIGINT NOT NULL,
                                         `description` VARCHAR(255) COMMENT '설명',
                                         `content` BLOB NOT NULL COMMENT '내용',
-                                        `card_id` BIGINT NOT NULL COMMENT '카드ID'
+                                        `card_id` BIGINT NOT NULL COMMENT '카드ID',
+                                    PRIMARY KEY(`card_attachment_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8  COMMENT='카드 첨부파일';
 
-CREATE TABLE `TBL_CARD_BOARD` (
-                                  `card_board_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '카드보드ID',
+CREATE TABLE `TBL_CARDBOARD` (
+                                  `cardboard_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '카드보드ID',
                                   `title` VARCHAR(255) NOT NULL COMMENT '이름',
                                   `created_at` TIMESTAMP NOT NULL COMMENT '생성일자',
                                   `start_time` TIMESTAMP COMMENT '시작일자',
@@ -81,7 +82,7 @@ CREATE TABLE `TBL_CARD_BOARD` (
                                   `progress_status` TINYINT NOT NULL COMMENT '진척도',
                                   `milestone_id` BIGINT COMMENT '마일스톤 ID',
                                   `workspace_id` BIGINT NOT NULL COMMENT '워크스페이스ID',
-                                  PRIMARY KEY (`card_board_id`)
+                                  PRIMARY KEY (`cardboard_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8  COMMENT='카드보드';
 
 CREATE TABLE `TBL_CARD_COMMENT` (
@@ -119,18 +120,21 @@ CREATE TABLE `TBL_CHECKLIST_ITEM` (
 CREATE TABLE `TBL_CARD_LIKE&BOOKMARK` (
                                      `flag` VARCHAR(255) NOT NULL COMMENT '플래그 값',
                                      `user_id` BIGINT NOT NULL COMMENT '회원ID',
-                                     `card_id` BIGINT NOT NULL COMMENT '카드ID'
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8  COMMENT='카드 좋아요, 북마크';
+                                     `card_id` BIGINT NOT NULL COMMENT '카드ID',
+                                      PRIMARY KEY(`user_id`,`card_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='카드 좋아요, 북마크';
 
 CREATE TABLE `TBL_WORKSPACE_BOOKMARK` (
                                           `user_id` BIGINT NOT NULL COMMENT '회원ID',
-                                          `workspace_id` BIGINT NOT NULL COMMENT '카드ID'
+                                          `workspace_id` BIGINT NOT NULL COMMENT '카드ID',
+    PRIMARY KEY(`user_id`,`workspace_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8  COMMENT='카드 좋아요, 북마크';
 
 
 CREATE TABLE `TBL_MEETINGROOM` (
                                    `meetingroom_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '회의실ID',
                                    `team_id` BIGINT NOT NULL COMMENT '팀ID',
+                                    `meetingroom_name` VARCHAR(255) NOT NULL,
                                    PRIMARY KEY (`meetingroom_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8  COMMENT='회의실';
 
@@ -162,6 +166,17 @@ CREATE TABLE `TBL_SCHEDULE` (
                                 PRIMARY KEY (`schedule_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8  COMMENT='일정';
 
+CREATE TABLE `TBL_TEAM_COMMENT` (
+                                    `team_comment_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '팀 댓글ID',
+                                    `content` VARCHAR(1023) NOT NULL,
+                                    `created_at` TIMESTAMP NOT NULL COMMENT '생성시각',
+                                    `updated_at` TIMESTAMP NOT NULL COMMENT '수정시각',
+                                    `team_post_id` BIGINT NOT NULL COMMENT '팀 게시글ID',
+                                    `author` BIGINT NOT NULL COMMENT '작성자ID',
+
+                                    PRIMARY KEY (`team_comment_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8  COMMENT='팀 댓글';
+
 CREATE TABLE `TBL_TEAM` (
                             `team_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '팀ID',
                             `team_name` VARCHAR(255) NOT NULL COMMENT '팀 이름',
@@ -174,15 +189,6 @@ CREATE TABLE `TBL_TEAM_BOARD` (
                                   `board_title` VARCHAR(255) NOT NULL ,
                                   PRIMARY KEY (`team_board_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8  COMMENT='팀 게시판';
-
-CREATE TABLE `TBL_TEAM_COMMENT` (
-                                    `team_comment_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '팀 댓글ID',
-                                    `created_at` TIMESTAMP NOT NULL COMMENT '생성시각',
-                                    `updated_at` TIMESTAMP NOT NULL COMMENT '수정시각',
-                                    `team_post_id` BIGINT NOT NULL COMMENT '팀 게시글ID',
-                                    `author` BIGINT NOT NULL COMMENT '작성자ID',
-                                    PRIMARY KEY (`team_comment_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8  COMMENT='팀 댓글';
 
 CREATE TABLE `TBL_TEAM_POST` (
                                  `team_post_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '팀 게시글ID',
@@ -294,7 +300,7 @@ ALTER TABLE `TBL_ALERT`
 -- TBL_CARD Foreign Keys
 ALTER TABLE `TBL_CARD`
     ADD CONSTRAINT `FK_CARD_ASSIGNEE` FOREIGN KEY (`assignee_id`) REFERENCES `TBL_USER` (`user_id`),
-    ADD CONSTRAINT `FK_CARD_BOARD` FOREIGN KEY (`card_board_id`) REFERENCES `TBL_CARD_BOARD` (`card_board_id`),
+    ADD CONSTRAINT `FK_cardboard` FOREIGN KEY (`cardboard_id`) REFERENCES `TBL_CARDBOARD` (`cardboard_id`),
     ADD CONSTRAINT `FK_CARD_TAG` FOREIGN KEY (`tag_id`) REFERENCES `TBL_CARD_TAG` (`tag_id`),
     ADD CONSTRAINT `FK_CARD_VCS_OBJ` FOREIGN KEY (`vcs_obj_id`) REFERENCES `TBL_VCS_OBJ` (`vcs_obj_id`),
     ADD CONSTRAINT `FK_CARD_AUTHOR` FOREIGN KEY (`author`) REFERENCES `TBL_USER` (`user_id`);
@@ -303,10 +309,10 @@ ALTER TABLE `TBL_CARD`
 ALTER TABLE `TBL_CARD_ATTACHMENTS`
     ADD CONSTRAINT `FK_CARD_ATTACHMENTS_CARD` FOREIGN KEY (`card_id`) REFERENCES `TBL_CARD` (`card_id`);
 
--- TBL_CARD_BOARD Foreign Keys
-ALTER TABLE `TBL_CARD_BOARD`
-    ADD CONSTRAINT `FK_CARD_BOARD_MILESTONE` FOREIGN KEY (`milestone_id`) REFERENCES `TBL_VCS_MILESTONE` (`milestone_id`),
-    ADD CONSTRAINT `FK_CARD_BOARD_WORKSPACE` FOREIGN KEY (`workspace_id`) REFERENCES `TBL_WORKSPACE` (`workspace_id`);
+-- TBL_CARDBOARD Foreign Keys
+ALTER TABLE `TBL_CARDBOARD`
+    ADD CONSTRAINT `FK_cardboard_MILESTONE` FOREIGN KEY (`milestone_id`) REFERENCES `TBL_VCS_MILESTONE` (`milestone_id`),
+    ADD CONSTRAINT `FK_cardboard_WORKSPACE` FOREIGN KEY (`workspace_id`) REFERENCES `TBL_WORKSPACE` (`workspace_id`);
 
 -- TBL_CARD_COMMENT Foreign Keys
 ALTER TABLE `TBL_CARD_COMMENT`
