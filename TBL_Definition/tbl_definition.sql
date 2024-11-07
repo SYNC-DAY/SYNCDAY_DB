@@ -223,12 +223,12 @@ CREATE TABLE `TBL_USER_SCHEDULE` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='회원-일정';
 
 CREATE TABLE `TBL_VCS_ACCOUNT` (
-                                   `vcs__user_id` VARCHAR(255) NOT NULL COMMENT 'VCS 아이디',
+                                   `vcs_user_id` VARCHAR(255) NOT NULL COMMENT 'VCS 아이디',
                                    `vcs_email` VARCHAR(255) NOT NULL COMMENT 'VCS 이메일',
                                    `vcs_username` VARCHAR(255) NOT NULL COMMENT 'VCS 사용자명',
                                    `vcs_access_token` VARCHAR(1023) NOT NULL COMMENT 'VCS 액세스 토큰',
                                    `user_id` BIGINT NOT NULL COMMENT '회원ID',
-                                   PRIMARY KEY (`vcs__user_id`)
+                                   PRIMARY KEY (`vcs_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='VCS 계정';
 
 CREATE TABLE `TBL_VCS_MILESTONE` (
@@ -383,7 +383,7 @@ ALTER TABLE `TBL_VCS_MILESTONE`
 -- TBL_VCS_OBJ Foreign Keys
 ALTER TABLE `TBL_VCS_OBJ`
     ADD CONSTRAINT `FK_VCS_OBJ_REPO` FOREIGN KEY (`repo_id`) REFERENCES `TBL_VCS_REPO` (`repo_id`),
-    ADD CONSTRAINT `FK_VCS_OBJ_USER` FOREIGN KEY (`vcs_user_id`) REFERENCES `TBL_VCS_ACCOUNT` (`vcs__user_id`);
+    ADD CONSTRAINT `FK_VCS_OBJ_USER` FOREIGN KEY (`vcs_user_id`) REFERENCES `TBL_VCS_ACCOUNT` (`vcs_user_id`);
 
 -- TBL_VCS_PROJ Foreign Key
 ALTER TABLE `TBL_VCS_PROJ`
