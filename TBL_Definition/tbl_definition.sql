@@ -48,7 +48,7 @@ CREATE TABLE `TBL_ALERT` (
                              `related_id` BIGINT NOT NULL COMMENT '출처ID',
                              `sender_id` BIGINT COMMENT '발신자ID',
                              `receiver_id` BIGINT NOT NULL COMMENT '수신자ID'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='알림';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='알림';
 
 CREATE TABLE `TBL_CARD` (
                             `card_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '카드ID',
@@ -64,13 +64,13 @@ CREATE TABLE `TBL_CARD` (
                             `vcs_obj_id` BIGINT COMMENT 'VCS 객체 ID',
                             `author` BIGINT NOT NULL COMMENT '작성자ID',
                             PRIMARY KEY (`card_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='카드';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='카드';
 
 CREATE TABLE `TBL_CARD_ATTACHMENTS` (
                                         `description` VARCHAR(255) COMMENT '설명',
                                         `content` BLOB NOT NULL COMMENT '내용',
                                         `card_id` BIGINT NOT NULL COMMENT '카드ID'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='카드 첨부파일';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='카드 첨부파일';
 
 CREATE TABLE `TBL_CARD_BOARD` (
                                   `card_board_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '카드보드ID',
@@ -82,7 +82,7 @@ CREATE TABLE `TBL_CARD_BOARD` (
                                   `milestone_id` BIGINT COMMENT '마일스톤 ID',
                                   `workspace_id` BIGINT NOT NULL COMMENT '워크스페이스ID',
                                   PRIMARY KEY (`card_board_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='카드보드';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='카드보드';
 
 CREATE TABLE `TBL_CARD_COMMENT` (
                                     `card_comment_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '댓글ID',
@@ -92,7 +92,7 @@ CREATE TABLE `TBL_CARD_COMMENT` (
                                     `user_id` BIGINT NOT NULL COMMENT '회원ID',
                                     `card_id` BIGINT NOT NULL COMMENT '카드ID',
                                     PRIMARY KEY (`card_comment_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='카드 댓글';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='카드 댓글';
 
 CREATE TABLE `TBL_CARD_TAG` (
                                 `tag_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '태그ID',
@@ -100,13 +100,13 @@ CREATE TABLE `TBL_CARD_TAG` (
                                 `color` VARCHAR(255) NOT NULL COMMENT '색깔',
                                 `workspace_id` BIGINT NOT NULL COMMENT '워크스페이스ID',
                                 PRIMARY KEY (`tag_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='카드태그';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='카드태그';
 
 CREATE TABLE `TBL_CHECKLIST` (
                                  `title` VARCHAR(255) NOT NULL COMMENT '체크리스트제목',
                                  `card_id` BIGINT NOT NULL COMMENT '카드ID',
                                  PRIMARY KEY (`card_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='체크리스트';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='체크리스트';
 
 CREATE TABLE `TBL_CHECKLIST_ITEM` (
                                       `item_number` TINYINT NOT NULL COMMENT '항목번호',
@@ -114,19 +114,19 @@ CREATE TABLE `TBL_CHECKLIST_ITEM` (
                                       `content` VARCHAR(511) NOT NULL COMMENT '항목내용',
                                       `card_id` BIGINT NOT NULL COMMENT '카드ID',
                                       PRIMARY KEY (`card_id`, `item_number`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='체크리스트항목';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='체크리스트항목';
 
 CREATE TABLE `TBL_LIKE&BOOKMARK` (
                                      `flag` VARCHAR(255) NOT NULL COMMENT '플래그 값',
                                      `user_id` BIGINT NOT NULL COMMENT '회원ID',
                                      `card_id` BIGINT NOT NULL COMMENT '카드ID'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='카드 좋아요, 북마크';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='카드 좋아요, 북마크';
 
 CREATE TABLE `TBL_MEETINGROOM` (
                                    `meetingroom_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '회의실ID',
                                    `team_id` BIGINT NOT NULL COMMENT '팀ID',
                                    PRIMARY KEY (`meetingroom_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='회의실';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='회의실';
 
 CREATE TABLE `TBL_PROJ` (
                             `proj_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '프로젝트ID',
@@ -137,7 +137,7 @@ CREATE TABLE `TBL_PROJ` (
                             `progress_status` TINYINT NOT NULL COMMENT '진척도',
                             `user_id` BIGINT NOT NULL COMMENT '작성자ID',
                             PRIMARY KEY (`proj_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='프로젝트';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='프로젝트';
 
 CREATE TABLE `TBL_SCHEDULE` (
                                 `schedule_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '일정ID',
@@ -154,19 +154,19 @@ CREATE TABLE `TBL_SCHEDULE` (
                                 `team_id` BIGINT COMMENT '팀ID',
                                 `proj_id` BIGINT COMMENT '프로젝트ID',
                                 PRIMARY KEY (`schedule_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='일정';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='일정';
 
 CREATE TABLE `TBL_TEAM` (
                             `team_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '팀ID',
                             `team_name` VARCHAR(255) NOT NULL COMMENT '팀 이름',
                             PRIMARY KEY (`team_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='팀';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='팀';
 
 CREATE TABLE `TBL_TEAM_BOARD` (
                                   `team_board_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '팀게시판ID',
                                   `team_id` BIGINT NOT NULL COMMENT '팀ID',
                                   PRIMARY KEY (`team_board_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='팀 게시판';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='팀 게시판';
 
 CREATE TABLE `TBL_TEAM_COMMENT` (
                                     `team_comment_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '팀 댓글ID',
@@ -175,7 +175,7 @@ CREATE TABLE `TBL_TEAM_COMMENT` (
                                     `team_post_id` BIGINT NOT NULL COMMENT '팀 게시글ID',
                                     `author` BIGINT NOT NULL COMMENT '작성자ID',
                                     PRIMARY KEY (`team_comment_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='팀 댓글';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='팀 댓글';
 
 CREATE TABLE `TBL_TEAM_POST` (
                                  `team_post_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '팀 게시글ID',
@@ -186,7 +186,7 @@ CREATE TABLE `TBL_TEAM_POST` (
                                  `user_id` BIGINT NOT NULL COMMENT '작성자ID',
                                  `team_board_id` BIGINT NOT NULL COMMENT '팀게시판ID',
                                  PRIMARY KEY (`team_post_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='팀 게시글';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='팀 게시글';
 
 CREATE TABLE `TBL_TEAM_WORK` (
                                  `title` VARCHAR(255) NOT NULL COMMENT '팀업무제목',
@@ -198,7 +198,7 @@ CREATE TABLE `TBL_TEAM_WORK` (
                                  `status` VARCHAR(255) NOT NULL COMMENT 'status',
                                  `team_id` BIGINT NOT NULL COMMENT '팀ID',
                                  `user_id` BIGINT NOT NULL COMMENT '작성자ID'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='팀 업무';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='팀 업무';
 
 CREATE TABLE `TBL_USER` (
                             `user_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '회원ID',
@@ -209,18 +209,18 @@ CREATE TABLE `TBL_USER` (
                             `position` VARCHAR(255) COMMENT '직급',
                             `team_id` BIGINT NOT NULL COMMENT '팀ID',
                             PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='회원';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='회원';
 
 CREATE TABLE `TBL_USER_PROJ` (
                                  `bookmark_status` VARCHAR(255) NOT NULL COMMENT '북마크여부',
                                  `user_id` BIGINT NOT NULL COMMENT '회원ID',
                                  `proj_id` BIGINT NOT NULL COMMENT '프로젝트ID'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='회원-프로젝트';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='회원-프로젝트';
 
 CREATE TABLE `TBL_USER_SCHEDULE` (
                                      `user_id` BIGINT NOT NULL COMMENT '회원ID',
                                      `schedule_id` BIGINT NOT NULL COMMENT '일정ID'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='회원-일정';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='회원-일정';
 
 CREATE TABLE `TBL_VCS_ACCOUNT` (
                                    `vcs_user_id` VARCHAR(255) NOT NULL COMMENT 'VCS 아이디',
@@ -229,7 +229,7 @@ CREATE TABLE `TBL_VCS_ACCOUNT` (
                                    `vcs_access_token` VARCHAR(1023) NOT NULL COMMENT 'VCS 액세스 토큰',
                                    `user_id` BIGINT NOT NULL COMMENT '회원ID',
                                    PRIMARY KEY (`vcs_user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='VCS 계정';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='VCS 계정';
 
 CREATE TABLE `TBL_VCS_MILESTONE` (
                                      `milestone_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '마일스톤 ID',
@@ -238,7 +238,7 @@ CREATE TABLE `TBL_VCS_MILESTONE` (
                                      `url` VARCHAR(1023) NOT NULL COMMENT '마일스톤 URL',
                                      `repo_id` BIGINT NOT NULL COMMENT '저장소ID',
                                      PRIMARY KEY (`milestone_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='VCS 마일스톤';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='VCS 마일스톤';
 
 CREATE TABLE `TBL_VCS_OBJ` (
                                `vcs_obj_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'VCS 객체 ID',
@@ -250,7 +250,7 @@ CREATE TABLE `TBL_VCS_OBJ` (
                                `repo_id` BIGINT NOT NULL COMMENT '저장소ID',
                                `vcs_user_id` VARCHAR(255) NOT NULL COMMENT 'VCS 아이디',
                                PRIMARY KEY (`vcs_obj_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='VCS 객체';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='VCS 객체';
 
 CREATE TABLE `TBL_VCS_PROJ` (
                                 `vcs_proj_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'VCS 프로젝트ID',
@@ -258,7 +258,7 @@ CREATE TABLE `TBL_VCS_PROJ` (
                                 `url` VARCHAR(1023) NOT NULL COMMENT 'VCS 프로젝트URL',
                                 `proj_id` BIGINT NOT NULL COMMENT '프로젝트ID',
                                 PRIMARY KEY (`vcs_proj_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='VCS프로젝트';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='VCS프로젝트';
 
 CREATE TABLE `TBL_VCS_REPO` (
                                 `repo_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '저장소ID',
@@ -267,7 +267,7 @@ CREATE TABLE `TBL_VCS_REPO` (
                                 `vcs_proj_id` BIGINT NOT NULL COMMENT 'VCS 프로젝트ID',
                                 `workspace_id` BIGINT NOT NULL COMMENT '워크스페이스ID',
                                 PRIMARY KEY (`repo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='VCS 저장소';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='VCS 저장소';
 
 CREATE TABLE `TBL_WORKSPACE` (
                                  `workspace_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '워크스페이스ID',
@@ -277,7 +277,7 @@ CREATE TABLE `TBL_WORKSPACE` (
                                  `vcs_proj_id` BIGINT COMMENT 'VCS 프로젝트ID',
                                  `proj_id` BIGINT NOT NULL COMMENT '프로젝트ID',
                                  PRIMARY KEY (`workspace_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='워크스페이스';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT='워크스페이스';
 
 -- TBL_ALERT Foreign Keys
 ALTER TABLE `TBL_ALERT`
