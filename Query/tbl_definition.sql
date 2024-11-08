@@ -130,7 +130,7 @@ CREATE TABLE `TBL_CARD_BOARD` (
                                       REFERENCES `TBL_WORKSPACE` (`workspace_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
 
-CREATE TABLE `TBL_CARD_TAG` (
+CREATE TABLE `TBL_TAG` (
                                 `tag_id` BIGINT NOT NULL AUTO_INCREMENT,
                                 `tag_name` VARCHAR(255) NOT NULL,
                                 `color` VARCHAR(255) NOT NULL,
@@ -155,7 +155,7 @@ CREATE TABLE `TBL_CARD` (
                             CONSTRAINT `FK_CARD_BOARD` FOREIGN KEY (`card_board_id`)
                                 REFERENCES `TBL_CARD_BOARD` (`card_board_id`) ON DELETE CASCADE ON UPDATE CASCADE,
                             CONSTRAINT `FK_CARD_TAG` FOREIGN KEY (`tag_id`)
-                                REFERENCES `TBL_CARD_TAG` (`tag_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+                                REFERENCES `TBL_TAG` (`tag_id`) ON DELETE SET NULL ON UPDATE CASCADE,
                             CONSTRAINT `FK_CARD_VCS_OBJ` FOREIGN KEY (`vcs_obj_id`)
                                 REFERENCES `TBL_VCS_OBJ` (`vcs_obj_id`) ON DELETE SET NULL ON UPDATE CASCADE,
                             CONSTRAINT `FK_CARD_AUTHOR` FOREIGN KEY (`author`)
@@ -363,4 +363,3 @@ CREATE TABLE `TBL_PROJ_SCHEDULE` (
                            CONSTRAINT `FK_PROJ_SCHEDULE_SCHEDULE` FOREIGN KEY (`schedule_id`)
                                REFERENCES `TBL_SCHEDULE` (`schedule_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
