@@ -7,12 +7,12 @@ INSERT INTO TBL_TEAM (team_name) VALUES
                                      ('인프라팀');
 
 -- TBL_USER 데이터 (BCrypt로 암호화된 비밀번호 - 원래 비밀번호는 'password1234')
-INSERT INTO TBL_USER (username, email, password, phone_number, position, team_id) VALUES
-                                                                                      ('김철수', 'kim@syncday.com', '$2a$10$1xYkvG6JpJpNS3qpBTGI7.RKZF/UADsXLEdcYtOXaGWW0xYhLW/Sm', '010-1234-5678', '팀장', 1),
-                                                                                      ('이영희', 'lee@syncday.com', '$2a$10$1xYkvG6JpJpNS3qpBTGI7.RKZF/UADsXLEdcYtOXaGWW0xYhLW/Sm', '010-2345-6789', '선임개발자', 1),
-                                                                                      ('박지민', 'park@syncday.com', '$2a$10$1xYkvG6JpJpNS3qpBTGI7.RKZF/UADsXLEdcYtOXaGWW0xYhLW/Sm', '010-3456-7890', '디자이너', 3),
-                                                                                      ('최동훈', 'choi@syncday.com', '$2a$10$1xYkvG6JpJpNS3qpBTGI7.RKZF/UADsXLEdcYtOXaGWW0xYhLW/Sm', '010-4567-8901', 'PM', 4),
-                                                                                      ('정수진', 'jung@syncday.com', '$2a$10$1xYkvG6JpJpNS3qpBTGI7.RKZF/UADsXLEdcYtOXaGWW0xYhLW/Sm', '010-5678-9012', '인프라엔지니어', 5);
+INSERT INTO TBL_USER (username, email, password, phone_number, profile_photo, join_year, position, team_id) VALUES
+    ('김철수', 'kim@syncday.com', '$2a$10$1xYkvG6JpJpNS3qpBTGI7.RKZF/UADsXLEdcYtOXaGWW0xYhLW/Sm', '010-1234-5678', 'https://i.namu.wiki/i/Kvz8qpAPelibP5ze5oLc4D1bN3BsNzhrmHH-vUcb7I4x2RsGgkjyoZFBmhyWuw_tYxBw7BmNbOSF-RsidX5C-4I9Ve19GKX3xwBbUpQMazlRMKz-eexlm3hWHq3JVovkvvqeC8X7FFEdcCitl8-mfQ.webp', '2020-03-02 09:00:00', '팀장', 1),
+    ('이영희', 'lee@syncday.com', '$2a$10$1xYkvG6JpJpNS3qpBTGI7.RKZF/UADsXLEdcYtOXaGWW0xYhLW/Sm', '010-2345-6789', 'https://i.namu.wiki/i/7b972-jyc12aqgoBbPt0EIMYplnF0570Uxn_5G32-3r1fhHuJLr3uIdP1Q_8jiycoHa9ZjD1aThcxemxHwyhsTTp3vJtw4SirwhZ-y8T2rwdn7MU6-xjimTj4dCGbjdDFcrG4HiuFY6MduyLPAUiKQ.webp', '2021-06-15 09:00:00', '선임개발자', 1),
+    ('박지민', 'park@syncday.com', '$2a$10$1xYkvG6JpJpNS3qpBTGI7.RKZF/UADsXLEdcYtOXaGWW0xYhLW/Sm', '010-3456-7890', 'https://i.namu.wiki/i/EN5llJjxki4j9ZFteGARZviU-ES64FmDWO6mTXFCpN4jc-6BZ61142eedJZvFVgA3e7J-D8j4V-D48ka2HEDmTqSrrcoGXSnkKzrRLLrsnCdG1yiS_1CON0vuOXrDknJW5nDrJ99EvSht5RNWVwi0A.webp', '2022-09-01 09:00:00', '디자이너', 3),
+    ('최동훈', 'choi@syncday.com', '$2a$10$1xYkvG6JpJpNS3qpBTGI7.RKZF/UADsXLEdcYtOXaGWW0xYhLW/Sm', '010-4567-8901', 'https://i.namu.wiki/i/ItxcDH3fIMndf5FTXYsOhCLEv6wXbflb-LxQpXzCNqo3z8r-5vOVpmhbrpheJoOuBtgLfI1u8FxxywXpOHDn-SsPfflpcl3xTyeWXD3qi4hB-zbwY20CoMrJLIe70kKNN3lTDp7Cma3EKScJSPdbnA.webp', '2021-11-08 09:00:00', 'PM', 4),
+    ('정수진', 'jung@syncday.com', '$2a$10$1xYkvG6JpJpNS3qpBTGI7.RKZF/UADsXLEdcYtOXaGWW0xYhLW/Sm', '010-5678-9012', 'https://i.namu.wiki/i/TdxqW16FlJKunFTp3Qt-e2RSi_aQxm3qWPZd0zhcRbQnVPzeAGA_8AKKxcL0xaAfEvFeX-AILB2PSuy7Xbqy1qMf0KJDXWn4vw1dYE8tG3Cvx_Rfm7AXOdobqXZ_4TPmknCFSXW-pAIn-7lsd70ADQ.webp', '2023-01-16 09:00:00', '인프라엔지니어', 5);
 
 -- TBL_PROJ 데이터
 INSERT INTO TBL_PROJ (proj_name, proj_start_time, proj_end_time, proj_created_at, progress_status, user_id) VALUES
