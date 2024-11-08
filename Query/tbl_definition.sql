@@ -219,6 +219,8 @@ CREATE TABLE `TBL_USER` (
                             `email` VARCHAR(255) NOT NULL COMMENT '이메일',
                             `password` VARCHAR(255) NOT NULL COMMENT '비밀번호',
                             `phone_number` VARCHAR(255) COMMENT '전화번호',
+                            `profile_photo` VARCHAR(1023) COMMENT '프로필 사진',
+                            `join_year` TIMESTAMP COMMENT '입사연도',
                             `position` VARCHAR(255) COMMENT '직급',
                             `team_id` BIGINT NOT NULL COMMENT '팀ID',
                             PRIMARY KEY (`user_id`)
