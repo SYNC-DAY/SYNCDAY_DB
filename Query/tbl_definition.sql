@@ -270,6 +270,7 @@ CREATE TABLE `TBL_VCS_PROJ` (
                                 `title` VARCHAR(255) NOT NULL COMMENT 'VCS 프로젝트 이름',
                                 `url` VARCHAR(1023) NOT NULL COMMENT 'VCS 프로젝트URL',
                                 `proj_id` BIGINT NOT NULL COMMENT '프로젝트ID',
+                                `vcs_type` VARCHAR(255) NOT NULL,
                                 PRIMARY KEY (`vcs_proj_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8  COMMENT='VCS프로젝트';
 
@@ -279,6 +280,7 @@ CREATE TABLE `TBL_VCS_REPO` (
                                 `url` VARCHAR(1023) NOT NULL COMMENT '저장소 URL',
                                 `vcs_proj_id` BIGINT NOT NULL COMMENT 'VCS 프로젝트ID',
                                 `workspace_id` BIGINT NOT NULL COMMENT '워크스페이스ID',
+                                `vcs_type` VARCHAR(255) NOT NULL,
                                 PRIMARY KEY (`repo_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8  COMMENT='VCS 저장소';
 
