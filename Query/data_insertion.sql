@@ -1,3 +1,5 @@
+
+use syncdaydb;
 -- Team 데이터 생성
 INSERT INTO TBL_TEAM (team_name) VALUES
                                      ('개발팀'),

@@ -29,8 +29,8 @@ CREATE TABLE `TBL_PROJ` (
                             `proj_name` VARCHAR(255) NOT NULL,
                             `start_time` TIMESTAMP,
                             `end_time` TIMESTAMP,
-                            `created_at` TIMESTAMP NOT NULL,
-                            `progress_status` TINYINT NOT NULL,
+                            `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            `progress_status` TINYINT NOT NULL DEFAULT 0,
                             `user_id` BIGINT NOT NULL,
                             PRIMARY KEY (`proj_id`),
                             CONSTRAINT `FK_PROJ_USER` FOREIGN KEY (`user_id`)
