@@ -112,7 +112,7 @@ CREATE TABLE `TBL_VCS_OBJ` (
                                CONSTRAINT `FK_VCS_OBJ_REPO` FOREIGN KEY (`repo_id`)
                                    REFERENCES `TBL_VCS_REPO` (`repo_id`) ON DELETE CASCADE ON UPDATE CASCADE,
                                CONSTRAINT `FK_VCS_OBJ_USER` FOREIGN KEY (`vcs_user_id`)
-                                   REFERENCES `TBL_VCS_ACCOUNT` (`vcs__user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                                   REFERENCES `TBL_VCS_ACCOUNT` (`vcs_user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
 
 CREATE TABLE `TBL_CARD_BOARD` (
