@@ -93,6 +93,7 @@ CREATE TABLE `TBL_VCS_ACCOUNT` (
                                    `vcs_username` VARCHAR(255) NOT NULL,
                                    `vcs_access_token` VARCHAR(1023) NOT NULL,
                                    `user_id` BIGINT NOT NULL,
+    `vcs_type` VARCHAR(255) NOT NULL,
                                    PRIMARY KEY (`vcs__user_id`),
                                    CONSTRAINT `FK_VCS_ACCOUNT_USER` FOREIGN KEY (`user_id`)
                                        REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
