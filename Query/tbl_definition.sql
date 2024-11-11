@@ -326,7 +326,8 @@ CREATE TABLE `TBL_PROJ_MEMBER` (
                                  `user_id` BIGINT NOT NULL,
                                  `proj_id` BIGINT NOT NULL,
                                  `bookmark_status` VARCHAR(255) NOT NULL,
-                                 `participation_status` VARCHAR(255),
+                                 `participation_status` VARCHAR(255) NOT NULL,
+                                 `role` VARCHAR(255) NOT NULL,
                                  PRIMARY KEY (`user_id`, `proj_id`),
                                  CONSTRAINT `FK_USER_PROJ_USER` FOREIGN KEY (`user_id`)
                                      REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
