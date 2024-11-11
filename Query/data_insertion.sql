@@ -170,17 +170,17 @@ INSERT INTO TBL_TEAM_WORK (title, content, created_at, start_time, end_time, ass
                                                                                                                         ('연간 예산 계획', '2024년 예산 계획 수립', NOW(), '2024-01-02', '2024-01-31', 10, 'IN_PROGRESS', 8, 10);
 
 -- User Project 관계 데이터 생성
-INSERT INTO tbl_proj_member (user_id, proj_id, bookmark_status, participation_status, proj_role) VALUES
-                                                                                        (1, 1, 'BOOKMARK', 'PARTICIPATING', 'OWNER'),
-                                                                                        (2, 1, 'NONE', 'PARTICIPATING','MEMBER'),
-                                                                                        (3, 2, 'BOOKMARK', 'PARTICIPATING','OWNER'),
-                                                                                        (4, 2, 'NONE', 'PARTICIPATING','MEMBER'),
-                                                                                        (5, 3, 'BOOKMARK', 'PARTICIPATING','OWNER'),
-                                                                                        (6, 4, 'BOOKMARK', 'PARTICIPATING','OWNER'),
-                                                                                        (7, 5, 'BOOKMARK', 'PARTICIPATING','OWNER'),
-                                                                                        (8, 3, 'NONE', 'PARTICIPATING','MEMBER'),
-                                                                                        (9, 4, 'NONE', 'PARTICIPATING','MEMBER'),
-                                                                                        (10, 5, 'NONE', 'PARTICIPATING','MEMBER');
+INSERT INTO tbl_proj_member (user_id, proj_id, bookmark_status, participation_status) VALUES
+                                                                                        (1, 1, 'BOOKMARK', 'OWNER'),
+                                                                                        (2, 1, 'NONE','PENDING'),
+                                                                                        (3, 2, 'BOOKMARK','OWNER'),
+                                                                                        (4, 2, 'NONE','MEMBER'),
+                                                                                        (5, 3, 'BOOKMARK','OWNER'),
+                                                                                        (6, 4, 'BOOKMARK','OWNER'),
+                                                                                        (7, 5, 'BOOKMARK','OWNER'),
+                                                                                        (8, 3, 'NONE','PENDING'),
+                                                                                        (9, 4, 'NONE','MEMBER'),
+                                                                                        (10, 5, 'NONE','MEMBER');
 
 -- User Schedule 관계 데이터 생성
 INSERT INTO tbl_schedule_participant (user_id, schedule_id, participation_status) VALUES
