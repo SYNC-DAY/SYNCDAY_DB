@@ -66,12 +66,12 @@ CREATE TABLE `TBL_VCS_REPO` (
                                 `repo_id` BIGINT NOT NULL AUTO_INCREMENT,
                                 `repo_name` VARCHAR(255) NOT NULL,
                                 `url` VARCHAR(1023) NOT NULL,
-                                `vcs_proj_id` BIGINT NOT NULL,
+                                `vcs_proj_id` BIGINT,
                                 `workspace_id` BIGINT NOT NULL,
                                 `vcs_type` VARCHAR(255) NOT NULL,
                                 PRIMARY KEY (`repo_id`),
                                 CONSTRAINT `FK_REPO_VCS_PROJ` FOREIGN KEY (`vcs_proj_id`)
-                                    REFERENCES `TBL_VCS_PROJ` (`vcs_proj_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                                    REFERENCES `TBL_VCS_PROJ` (`vcs_proj_id`) ON DELETE SET NULL ON UPDATE CASCADE,
                                 CONSTRAINT `FK_REPO_WORKSPACE` FOREIGN KEY (`workspace_id`)
                                     REFERENCES `TBL_WORKSPACE` (`workspace_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
