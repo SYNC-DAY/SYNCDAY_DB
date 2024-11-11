@@ -44,7 +44,7 @@ INSERT INTO TBL_WORKSPACE (workspace_name, created_at, progress_status, proj_id)
                                                                                      ('HR 프로젝트', NOW(), 0, 5);
 
 -- Card Board 데이터 생성
-INSERT INTO TBL_CARD_BOARD (title, created_at, start_time, end_time, progress_status, workspace_id) VALUES
+INSERT INTO TBL_CARDBOARD (title, created_at, start_time, end_time, progress_status, workspace_id) VALUES
                                                                                                         ('앱 개발 스프린트 1', NOW(), '2024-01-01', '2024-01-31', 1, 1),
                                                                                                         ('앱 개발 스프린트 2', NOW(), '2024-02-01', '2024-02-29', 0, 1),
                                                                                                         ('API 개발 보드', NOW(), '2024-01-01', '2024-03-31', 1, 2),
@@ -70,7 +70,7 @@ INSERT INTO TBL_TAG (tag_name, color, workspace_id) VALUES
                                                              ('HR', '#FFC107', 8);
 
 -- Card 데이터 생성
-INSERT INTO TBL_CARD (title, content, created_at, card_board_id, tag_id, author, end_time, user_id) VALUES
+INSERT INTO TBL_CARD (title, content, created_at, cardboard_id, tag_id, author, end_time, user_id) VALUES
                                                                                                         ('로그인 기능 구현', '사용자 인증 및 로그인 프로세스 개발', NOW(), 1, 1, 1, '2024-01-15', 2),
                                                                                                         ('메인 화면 UI 개발', '앱 메인 화면 UI 컴포넌트 개발', NOW(), 1, 3, 1, '2024-01-20', 1),
                                                                                                         ('API 엔드포인트 설계', 'REST API 엔드포인트 설계 및 문서화', NOW(), 3, 5, 1, '2024-01-31', 1),
@@ -170,7 +170,7 @@ INSERT INTO TBL_TEAM_WORK (title, content, created_at, start_time, end_time, ass
                                                                                                                         ('연간 예산 계획', '2024년 예산 계획 수립', NOW(), '2024-01-02', '2024-01-31', 10, 'IN_PROGRESS', 8, 10);
 
 -- User Project 관계 데이터 생성
-INSERT INTO TBL_USER_PROJ (user_id, proj_id, bookmark_status, participation_status) VALUES
+INSERT INTO tbl_proj_member (user_id, proj_id, bookmark_status, participation_status) VALUES
                                                                                         (1, 1, 'BOOKMARK', 'PARTICIPATING'),
                                                                                         (2, 1, 'NONE', 'PARTICIPATING'),
                                                                                         (3, 2, 'BOOKMARK', 'PARTICIPATING'),
@@ -183,7 +183,7 @@ INSERT INTO TBL_USER_PROJ (user_id, proj_id, bookmark_status, participation_stat
                                                                                         (10, 5, 'NONE', 'PARTICIPATING');
 
 -- User Schedule 관계 데이터 생성
-INSERT INTO TBL_USER_SCHEDULE (user_id, schedule_id, participation_status) VALUES
+INSERT INTO tbl_schedule_participant (user_id, schedule_id, participation_status) VALUES
                                                                                (1, 1, 'ACCEPTED'),
                                                                                (2, 1, 'ACCEPTED'),
                                                                                (3, 2, 'ACCEPTED'),

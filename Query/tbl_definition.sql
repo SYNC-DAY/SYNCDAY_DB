@@ -115,8 +115,8 @@ CREATE TABLE `TBL_VCS_OBJ` (
                                    REFERENCES `TBL_VCS_ACCOUNT` (`vcs_user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
 
-CREATE TABLE `TBL_CARD_BOARD` (
-                                  `card_board_id` BIGINT NOT NULL AUTO_INCREMENT,
+CREATE TABLE `TBL_CARDBOARD` (
+                                  `CARDBOARD_id` BIGINT NOT NULL AUTO_INCREMENT,
                                   `title` VARCHAR(255) NOT NULL,
                                   `created_at` TIMESTAMP NOT NULL,
                                   `start_time` TIMESTAMP,
@@ -124,10 +124,10 @@ CREATE TABLE `TBL_CARD_BOARD` (
                                   `progress_status` TINYINT NOT NULL,
                                   `milestone_id` BIGINT,
                                   `workspace_id` BIGINT NOT NULL,
-                                  PRIMARY KEY (`card_board_id`),
-                                  CONSTRAINT `FK_CARD_BOARD_MILESTONE` FOREIGN KEY (`milestone_id`)
+                                  PRIMARY KEY (`CARDBOARD_id`),
+                                  CONSTRAINT `FK_CARDBOARD_MILESTONE` FOREIGN KEY (`milestone_id`)
                                       REFERENCES `TBL_VCS_MILESTONE` (`milestone_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-                                  CONSTRAINT `FK_CARD_BOARD_WORKSPACE` FOREIGN KEY (`workspace_id`)
+                                  CONSTRAINT `FK_CARDBOARD_WORKSPACE` FOREIGN KEY (`workspace_id`)
                                       REFERENCES `TBL_WORKSPACE` (`workspace_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
 
@@ -146,15 +146,15 @@ CREATE TABLE `TBL_CARD` (
                             `title` VARCHAR(255) NOT NULL,
                             `content` VARCHAR(1023),
                             `created_at` TIMESTAMP NOT NULL,
-                            `card_board_id` BIGINT NOT NULL,
+                            `CARDBOARD_id` BIGINT NOT NULL,
                             `tag_id` BIGINT,
                             `vcs_obj_id` BIGINT,
                             `author` BIGINT NOT NULL,
                             `end_time` TIMESTAMP,
                             `user_id` BIGINT,
                             PRIMARY KEY (`card_id`),
-                            CONSTRAINT `FK_CARD_BOARD` FOREIGN KEY (`card_board_id`)
-                                REFERENCES `TBL_CARD_BOARD` (`card_board_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                            CONSTRAINT `FK_CARDBOARD` FOREIGN KEY (`CARDBOARD_id`)
+                                REFERENCES `TBL_CARDBOARD` (`CARDBOARD_id`) ON DELETE CASCADE ON UPDATE CASCADE,
                             CONSTRAINT `FK_CARD_TAG` FOREIGN KEY (`tag_id`)
                                 REFERENCES `TBL_TAG` (`tag_id`) ON DELETE SET NULL ON UPDATE CASCADE,
                             CONSTRAINT `FK_CARD_VCS_OBJ` FOREIGN KEY (`vcs_obj_id`)
@@ -322,7 +322,7 @@ CREATE TABLE `TBL_TEAM_WORK` (
                                      REFERENCES `TBL_USER` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
 
-CREATE TABLE `TBL_USER_PROJ` (
+CREATE TABLE `TBL_PROJ_MEMBER` (
                                  `user_id` BIGINT NOT NULL,
                                  `proj_id` BIGINT NOT NULL,
                                  `bookmark_status` VARCHAR(255) NOT NULL,
@@ -334,7 +334,7 @@ CREATE TABLE `TBL_USER_PROJ` (
                                      REFERENCES `TBL_PROJ` (`proj_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
-CREATE TABLE `TBL_USER_SCHEDULE` (
+CREATE TABLE `TBL_SCHEDULE_PARTICIPANT` (
                                      `user_id` BIGINT NOT NULL,
                                      `schedule_id` BIGINT NOT NULL,
                                      `participation_status` VARCHAR(255),
