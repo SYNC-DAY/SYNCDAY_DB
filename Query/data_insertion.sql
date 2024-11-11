@@ -170,7 +170,7 @@ INSERT INTO TBL_TEAM_WORK (title, content, created_at, start_time, end_time, ass
                                                                                                                         ('연간 예산 계획', '2024년 예산 계획 수립', NOW(), '2024-01-02', '2024-01-31', 10, 'IN_PROGRESS', 8, 10);
 
 -- User Project 관계 데이터 생성
-INSERT INTO tbl_proj_member (user_id, proj_id, bookmark_status, participation_status, role) VALUES
+INSERT INTO tbl_proj_member (user_id, proj_id, bookmark_status, participation_status, proj_role) VALUES
                                                                                         (1, 1, 'BOOKMARK', 'PARTICIPATING', 'OWNER'),
                                                                                         (2, 1, 'NONE', 'PARTICIPATING','MEMBER'),
                                                                                         (3, 2, 'BOOKMARK', 'PARTICIPATING','OWNER'),
