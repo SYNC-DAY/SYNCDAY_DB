@@ -234,6 +234,7 @@ CREATE TABLE `TBL_SCHEDULE` (
                                 `content` VARCHAR(511),
                                 `start_time` TIMESTAMP NOT NULL,
                                 `end_time` TIMESTAMP NOT NULL,
+                                `update_time` TIMESTAMP NOT NULL,
                                 `public_status` VARCHAR(255) NOT NULL,
                                 `repeat_status` VARCHAR(255) NOT NULL,
                                 `repeat_property` VARCHAR(255),
