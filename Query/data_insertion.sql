@@ -122,12 +122,13 @@ INSERT INTO TBL_MEETINGROOM (team_id, meetingroom_name) VALUES
                                                             (5, '인사팀 회의실');
 
 -- Schedule 데이터 생성
-INSERT INTO TBL_SCHEDULE (title, content, start_time, end_time, public_status, repeat_status, repeat_property, meetingroom_id, user_id) VALUES
-                                                                                                                                            ('일일 스크럼', '개발팀 데일리 스크럼 미팅', '2024-01-02 10:00:00', '2024-01-02 10:30:00', 'PUBLIC', 'DAILY', 'WEEKDAY', 1, 1),
-                                                                                                                                            ('디자인 리뷰', '앱 디자인 검토 회의', '2024-01-03 14:00:00', '2024-01-03 15:00:00', 'PUBLIC', 'WEEKLY', 'WEDNESDAY', 2, 3),
-                                                                                                                                            ('마케팅 전략 회의', '분기별 마케팅 전략 회의', '2024-01-04 15:00:00', '2024-01-04 17:00:00', 'PUBLIC', 'MONTHLY', 'FIRST_MONDAY', 3, 5),
-                                                                                                                                            ('팀 정기 미팅', '기획팀 정기 회의', '2024-01-05 11:00:00', '2024-01-05 12:00:00', 'PRIVATE', 'WEEKLY', 'FRIDAY', 4, 6),
-                                                                                                                                            ('복지제도 회의', '직원 복지 개선 회의', '2024-01-08 13:00:00', '2024-01-08 14:00:00', 'PRIVATE', 'NONE', NULL, 5, 7);
+INSERT INTO TBL_SCHEDULE (title, content, start_time, end_time, update_time, public_status, repeat_status, repeat_property, meetingroom_id, user_id) VALUES
+                                                                                                                                                        ('일일 스크럼', '개발팀 데일리 스크럼 미팅', '2024-01-02 10:00:00', '2024-01-02 10:30:00', '2024-01-02 10:00:00', 'PUBLIC', 'DAILY', 'WEEKDAY', 1, 1),
+                                                                                                                                                        ('디자인 리뷰', '앱 디자인 검토 회의', '2024-01-03 14:00:00', '2024-01-03 15:00:00', '2024-01-03 14:00:00', 'PUBLIC', 'WEEKLY', 'WEDNESDAY', 2, 3),
+                                                                                                                                                        ('마케팅 전략 회의', '분기별 마케팅 전략 회의', '2024-01-04 15:00:00', '2024-01-04 17:00:00', '2024-01-04 15:00:00', 'PUBLIC', 'MONTHLY', 'FIRST_MONDAY', 3, 5),
+                                                                                                                                                        ('팀 정기 미팅', '기획팀 정기 회의', '2024-01-05 11:00:00', '2024-01-05 12:00:00', '2024-01-05 11:00:00', 'PRIVATE', 'WEEKLY', 'FRIDAY', 4, 6),
+                                                                                                                                                        ('복지제도 회의', '직원 복지 개선 회의', '2024-01-08 13:00:00', '2024-01-08 14:00:00', '2024-01-08 13:00:00', 'PRIVATE', 'NONE', NULL, 5, 7);
+
 
 -- Meeting Note 데이터 생성
 INSERT INTO TBL_MEETING_NOTE (schedule_id, title, content) VALUES
