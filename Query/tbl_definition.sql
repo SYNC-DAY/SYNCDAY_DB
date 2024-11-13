@@ -228,6 +228,23 @@ CREATE TABLE `TBL_MEETINGROOM` (
                                        REFERENCES `TBL_TEAM` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
 
+CREATE TABLE `TBL_SCHEDULE_REPEAT` (
+                                    `schedule_repeat_id` BIGINT NOT NULL,
+                                    `title` VARCHAR(255),
+                                    `content` VARCHAR(511),
+                                    `start_time` TIMESTAMP,
+                                    `end_time` TIMESTAMP,
+                                    `update_time` TIMESTAMP NOT NULL,
+                                    `public_status` VARCHAR(255) NOT NULL,  
+                                    `meeting_status` VARCHAR(255) NOT NULL,
+                                    `recurrence_pattern` VARCHAR(255) NOT NULL,
+                                    `user_id` BIGINT NOT NULL,
+                                    PRIMARY KEY (`schedule_repeat_id`),
+                                    CONSTRAINT `FK_SCHEDULE_REPEAT_USER` FOREIGN KEY (`user_id`)
+                                        REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
+
 CREATE TABLE `TBL_SCHEDULE` (
                                 `schedule_id` BIGINT NOT NULL AUTO_INCREMENT,
                                 `title` VARCHAR(255),
