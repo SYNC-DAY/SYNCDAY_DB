@@ -244,6 +244,17 @@ CREATE TABLE `TBL_SCHEDULE_REPEAT` (
                                         REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
+CREATE TABLE `TBL_SCHEDULE_REPEAT_PARTICIPANT` (
+                                     `user_id` BIGINT NOT NULL,
+                                     `schedule_repeat_id` BIGINT NOT NULL,
+                                     `participation_status` VARCHAR(255),
+                                     PRIMARY KEY (`user_id`, `schedule_repeat_id`),
+                                     CONSTRAINT `FK_SCHEDULE_REPEAT_PARTICIAPNT_USER` FOREIGN KEY (`user_id`)
+                                         REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                                     CONSTRAINT `FK_SCHEDULE_REPEAT_PRATICIPANT_SCHEDULE_REPAET` FOREIGN KEY (`schedule_repeat_id`)
+                                         REFERENCES `TBL_SCHEDULE_REPEAT` (`schedule_repeat_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
 
 CREATE TABLE `TBL_SCHEDULE` (
                                 `schedule_id` BIGINT NOT NULL AUTO_INCREMENT,
