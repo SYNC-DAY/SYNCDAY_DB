@@ -16,6 +16,8 @@ CREATE TABLE `TBL_USER` (
                             `email` VARCHAR(255) NOT NULL,
                             `password` VARCHAR(255) NOT NULL,
                             `phone_number` VARCHAR(255),
+                            `profile_photo` VARCHAR(1023),
+                            `join_year` TIMESTAMP,
                             `position` VARCHAR(255),
                             `team_id` BIGINT NOT NULL,
                             `last_access_time` TIMESTAMP,
