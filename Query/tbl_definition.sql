@@ -264,7 +264,7 @@ CREATE TABLE `TBL_SCHEDULE` (
                                 `end_time` TIMESTAMP NOT NULL,
                                 `update_time` TIMESTAMP NOT NULL,
                                 `public_status` VARCHAR(255) NOT NULL,
-                                `schedule_repeat_id` BIGINT,
+                                `schedule_repeat_id` BIGINT NULL,
                                 `repeat_order` BIGINT,
                                 `meeting_status` VARCHAR(255) NOT NULL,
                                 `meetingroom_id` BIGINT,
