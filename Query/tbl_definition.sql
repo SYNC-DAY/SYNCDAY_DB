@@ -253,7 +253,7 @@ CREATE TABLE `TBL_SCHEDULE` (
                                 `end_time` TIMESTAMP NOT NULL,
                                 `update_time` TIMESTAMP NOT NULL,
                                 `public_status` VARCHAR(255) NOT NULL,
-                                `repeat_id` BIGINT,
+                                `schedule_repeat_id` BIGINT,
                                 `repeat_order` BIGINT,
                                 `meeting_status` VARCHAR(255) NOT NULL,
                                 `meetingroom_id` BIGINT,
@@ -263,8 +263,8 @@ CREATE TABLE `TBL_SCHEDULE` (
                                     REFERENCES `TBL_MEETINGROOM` (`meetingroom_id`) ON DELETE SET NULL ON UPDATE CASCADE,
                                 CONSTRAINT `FK_SCHEDULE_USER` FOREIGN KEY (`user_id`)
                                     REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                CONSTRAINT `FK_SCHEDULE_REPEAT` FOREIGN KEY (`repeat_id`)
-                                    REFERENCES `TBL_SCHEDULE_REPEAT` (`repeat_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                                CONSTRAINT `FK_SCHEDULE_REPEAT` FOREIGN KEY (`schedule_repeat_id`)
+                                    REFERENCES `TBL_SCHEDULE_REPEAT` (`schedule_repeat_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
 
 CREATE TABLE `TBL_MEETING_NOTE` (
