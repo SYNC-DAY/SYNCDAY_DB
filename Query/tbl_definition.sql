@@ -1,398 +1,240 @@
-drop database if exists syncdaydb;
-create database syncdaydb;
+
 use syncdaydb;
+-- Team 데이터 생성
+INSERT INTO TBL_TEAM (team_name) VALUES
+                                     ('개발팀'),
+                                     ('디자인팀'),
+                                     ('마케팅팀'),
+                                     ('기획팀'),
+                                     ('인사팀'),
+                                     ('영업팀'),
+                                     ('고객지원팀'),
+                                     ('재무팀');
+
+-- User 데이터 생성
+INSERT INTO TBL_USER (username, email, password, phone_number, position, team_id, last_access_time) VALUES
+                                                                                                        ('김개발', 'kim.dev@syncday.com', SHA2('password123', 256), '010-1234-5678', '선임개발자', 1, NOW()),
+                                                                                                        ('이코딩', 'lee.code@syncday.com', SHA2('password123', 256), '010-2234-5678', '주니어개발자', 1, NOW()),
+                                                                                                        ('박디자인', 'park.design@syncday.com', SHA2('password123', 256), '010-3234-5678', '수석디자이너', 2, NOW()),
+                                                                                                        ('정그래픽', 'jung.graphic@syncday.com', SHA2('password123', 256), '010-4234-5678', '그래픽디자이너', 2, NOW()),
+                                                                                                        ('최마케팅', 'choi.marketing@syncday.com', SHA2('password123', 256), '010-5234-5678', '마케팅 팀장', 3, NOW()),
+                                                                                                        ('강기획', 'kang.plan@syncday.com', SHA2('password123', 256), '010-6234-5678', '기획 팀장', 4, NOW()),
+                                                                                                        ('윤인사', 'yoon.hr@syncday.com', SHA2('password123', 256), '010-7234-5678', 'HR 매니저', 5, NOW()),
+                                                                                                        ('임영업', 'im.sales@syncday.com', SHA2('password123', 256), '010-8234-5678', '영업 팀장', 6, NOW()),
+                                                                                                        ('한지원', 'han.support@syncday.com', SHA2('password123', 256), '010-9234-5678', '고객지원 매니저', 7, NOW()),
+                                                                                                        ('오재무', 'oh.finance@syncday.com', SHA2('password123', 256), '010-0234-5678', '재무 팀장', 8, NOW());
+
+-- Project 데이터 생성
+INSERT INTO TBL_PROJ (proj_name, start_time, end_time, created_at, progress_status, user_id) VALUES
+                                                                                                 ('SyncDay 모바일 앱 개발', '2024-01-01', '2024-06-30', NOW(), 1, 1),
+                                                                                                 ('웹사이트 리뉴얼', '2024-02-01', '2024-08-31', NOW(), 1, 3),
+                                                                                                 ('2024 마케팅 캠페인', '2024-03-01', '2024-12-31', NOW(), 0, 5),
+                                                                                                 ('신규 서비스 기획', '2024-04-01', '2024-09-30', NOW(), 0, 6),
+                                                                                                 ('직원 복지 개선 프로젝트', '2024-01-15', '2024-12-31', NOW(), 1, 7);
+
+-- Workspace 데이터 생성
+INSERT INTO TBL_WORKSPACE (workspace_name, created_at, progress_status, proj_id) VALUES
+                                                                                     ('모바일 앱 개발', NOW(), 1, 1),
+                                                                                     ('API 개발', NOW(), 0, 1),
+                                                                                     ('웹 프론트엔드', NOW(), 1, 2),
+                                                                                     ('웹 백엔드', NOW(), 0, 2),
+                                                                                     ('마케팅 기획', NOW(), 1, 3),
+                                                                                     ('콘텐츠 제작', NOW(), 0, 3),
+                                                                                     ('서비스 기획', NOW(), 1, 4),
+                                                                                     ('HR 프로젝트', NOW(), 0, 5);
+
+-- Card Board 데이터 생성
+INSERT INTO TBL_CARDBOARD (title, created_at, start_time, end_time, progress_status, workspace_id) VALUES
+                                                                                                        ('앱 개발 스프린트 1', NOW(), '2024-01-01', '2024-01-31', 1, 1),
+                                                                                                        ('앱 개발 스프린트 2', NOW(), '2024-02-01', '2024-02-29', 0, 1),
+                                                                                                        ('API 개발 보드', NOW(), '2024-01-01', '2024-03-31', 1, 2),
+                                                                                                        ('프론트엔드 개발', NOW(), '2024-02-01', '2024-04-30', 0, 3),
+                                                                                                        ('백엔드 개발', NOW(), '2024-02-01', '2024-04-30', 0, 4),
+                                                                                                        ('Q1 마케팅 계획', NOW(), '2024-01-01', '2024-03-31', 1, 5),
+                                                                                                        ('콘텐츠 캘린더', NOW(), '2024-01-01', '2024-12-31', 0, 6),
+                                                                                                        ('서비스 기획', NOW(), '2024-04-01', '2024-06-30', 0, 7),
+                                                                                                        ('복지 제도 개선', NOW(), '2024-01-15', '2024-06-30', 1, 8);
+
+-- Card Tag 데이터 생성
+INSERT INTO TBL_TAG (tag_name, color, workspace_id) VALUES
+                                                             ('기능개발', '#4CAF50', 1),
+                                                             ('버그수정', '#F44336', 1),
+                                                             ('디자인', '#2196F3', 1),
+                                                             ('문서화', '#FF9800', 1),
+                                                             ('API', '#9C27B0', 2),
+                                                             ('프론트엔드', '#3F51B5', 3),
+                                                             ('백엔드', '#795548', 4),
+                                                             ('마케팅', '#009688', 5),
+                                                             ('콘텐츠', '#FF4081', 6),
+                                                             ('기획', '#607D8B', 7),
+                                                             ('HR', '#FFC107', 8);
+
+-- Card 데이터 생성
+INSERT INTO TBL_CARD (title, content, created_at, cardboard_id, tag_id, author, end_time, user_id) VALUES
+                                                                                                        ('로그인 기능 구현', '사용자 인증 및 로그인 프로세스 개발', NOW(), 1, 1, 1, '2024-01-15', 2),
+                                                                                                        ('메인 화면 UI 개발', '앱 메인 화면 UI 컴포넌트 개발', NOW(), 1, 3, 1, '2024-01-20', 1),
+                                                                                                        ('API 엔드포인트 설계', 'REST API 엔드포인트 설계 및 문서화', NOW(), 3, 5, 1, '2024-01-31', 1),
+                                                                                                        ('반응형 레이아웃 구현', '모바일 대응 반응형 레이아웃 개발', NOW(), 4, 6, 3, '2024-02-15', 3),
+                                                                                                        ('SNS 마케팅 전략', '각 채널별 마케팅 전략 수립', NOW(), 6, 8, 5, '2024-01-31', 5);
+
+-- Card Attachments 데이터 생성
+INSERT INTO TBL_CARD_ATTACHMENTS (description, content, card_id) VALUES
+                                                                     ('기능 명세서', '로그인 기능 상세 명세 내용...', 1),
+                                                                     ('UI 디자인', '메인 화면 UI 시안 및 상세 규격...', 2),
+                                                                     ('API 문서', 'REST API 상세 설계 문서...', 3);
+
+-- Card Bookmark 데이터 생성
+INSERT INTO TBL_CARD_BOOKMARK (user_id, card_id) VALUES
+                                                     (1, 1),
+                                                     (2, 1),
+                                                     (1, 2),
+                                                     (3, 2),
+                                                     (1, 3);
+
+-- Card Comment 데이터 생성
+INSERT INTO TBL_CARD_COMMENT (content, created_at, updated_at, user_id, card_id) VALUES
+                                                                                     ('로그인 프로세스 검토 완료했습니다.', NOW(), NOW(), 2, 1),
+                                                                                     ('UI 디자인 수정사항 있습니다.', NOW(), NOW(), 3, 2),
+                                                                                     ('API 설계 리뷰 필요합니다.', NOW(), NOW(), 1, 3);
+
+-- Checklist 데이터 생성
+INSERT INTO TBL_CHECKLIST (title, card_id) VALUES
+                                               ('로그인 기능 체크리스트', 1),
+                                               ('UI 개발 체크리스트', 2),
+                                               ('API 개발 체크리스트', 3);
+
+-- Checklist Item 데이터 생성
+INSERT INTO TBL_CHECKLIST_ITEM (item_number, complete_status, content, card_id) VALUES
+                                                                                    (1, 'COMPLETE', '로그인 UI 구현', 1),
+                                                                                    (2, 'INCOMPLETE', '유효성 검사 구현', 1),
+                                                                                    (3, 'INCOMPLETE', '에러 처리 구현', 1),
+                                                                                    (1, 'COMPLETE', '레이아웃 구현', 2),
+                                                                                    (2, 'INCOMPLETE', '반응형 대응', 2),
+                                                                                    (1, 'COMPLETE', 'API 문서 작성', 3),
+                                                                                    (2, 'INCOMPLETE', '엔드포인트 구현', 3);
+
+-- Meetingroom 데이터 생성
+INSERT INTO TBL_MEETINGROOM (team_id, meetingroom_name) VALUES
+                                                            (1, '개발팀 회의실'),
+                                                            (2, '디자인팀 회의실'),
+                                                            (3, '마케팅팀 회의실'),
+                                                            (4, '기획팀 회의실'),
+                                                            (5, '인사팀 회의실');
+
+-- TBL_SCHEDULE에 더미 데이터 삽입
+INSERT INTO TBL_SCHEDULE (title, content, start_time, end_time, update_time, public_status, schedule_repeat_id, repeat_order, meeting_status, meetingroom_id, user_id) VALUES
+    ('일일 스크럼', '개발팀 데일리 스크럼 미팅', '2024-01-02 10:00:00', '2024-01-02 10:30:00', '2024-01-02 10:00:00', 'PUBLIC', NULL, 1, 'ACTIVE', 1, 1),
+    ('디자인 리뷰', '앱 디자인 검토 회의', '2024-01-03 14:00:00', '2024-01-03 15:00:00', '2024-01-03 14:00:00', 'PUBLIC', NULL, 1, 'ACTIVE', 2, 3),
+    ('마케팅 전략 회의', '분기별 마케팅 전략 회의', '2024-01-04 15:00:00', '2024-01-04 17:00:00', '2024-01-04 15:00:00', 'PUBLIC', NULL, 1, 'ACTIVE', 3, 5),
+    ('팀 정기 미팅', '기획팀 정기 회의', '2024-01-05 11:00:00', '2024-01-05 12:00:00', '2024-01-05 11:00:00', 'PRIVATE', NULL, 1, 'ACTIVE', 4, 6),
+    ('복지제도 회의', '직원 복지 개선 회의', '2024-01-08 13:00:00', '2024-01-08 14:00:00', '2024-01-08 13:00:00', 'PRIVATE', NULL, NULL, 'INACTIVE', 5, 7);
+
+-- Meeting Note 데이터 생성
+INSERT INTO TBL_MEETING_NOTE (schedule_id, title, content) VALUES
+                                                               (1, '2024-01-02 데일리 스크럼', '1. 진행상황 공유\n2. 이슈 사항 논의\n3. 다음 작업 계획'),
+                                                               (2, '앱 디자인 검토 회의록', '1. UI 디자인 리뷰\n2. 수정사항 정리\n3. 다음 일정 조율'),
+                                                               (3, 'Q1 마케팅 전략 회의록', '1. Q1 마케팅 목표 설정\n2. 채널별 전략 수립\n3. 예산 계획');
+
+-- Team Board 데이터 생성
+INSERT INTO TBL_TEAM_BOARD (team_id, board_title) VALUES
+                                                      (1, '개발팀 공지사항'),
+                                                      (2, '디자인팀 공지사항'),
+                                                      (3, '마케팅팀 공지사항'),
+                                                      (4, '기획팀 공지사항'),
+                                                      (5, '인사팀 공지사항');
+
+-- Team Post 데이터 생성
+INSERT INTO TBL_TEAM_POST (title, content, created_at, updated_at, user_id, team_board_id) VALUES
+                                                                                               ('1월 개발 일정', '1월 개발 일정 및 마일스톤 공유드립니다.', NOW(), NOW(), 1, 1),
+                                                                                               ('디자인 가이드라인 업데이트', '디자인 시스템 가이드라인이 업데이트되었습니다.', NOW(), NOW(), 3, 2),
+                                                                                               ('Q1 마케팅 계획', '2024년 Q1 마케팅 실행 계획입니다.', NOW(), NOW(), 5, 3),
+                                                                                               ('서비스 로드맵', '2024년 서비스 로드맵 공유드립니다.', NOW(), NOW(), 6, 4),
+                                                                                               ('복지제도 개선안', '새로운 복지제도 안내드립니다.', NOW(), NOW(), 7, 5);
+
+-- Team Comment 데이터 생성
+INSERT INTO TBL_TEAM_COMMENT (created_at, updated_at, team_post_id, author) VALUES
+                                                                                (NOW(), NOW(), 1, 2),
+                                                                                (NOW(), NOW(), 2, 4),
+                                                                                (NOW(), NOW(), 3, 5),
+                                                                                (NOW(), NOW(), 4, 6),
+                                                                                (NOW(), NOW(), 5, 7);
+
+-- Team Work 데이터 생성 (이어서)
+INSERT INTO TBL_TEAM_WORK (title, content, created_at, start_time, end_time, assignee_id, status, team_id, user_id) VALUES
+                                                                                                                        ('메인 페이지 디자인', '웹사이트 메인 페이지 디자인 작업', NOW(), '2024-01-03', '2024-01-20', 3, 'IN_PROGRESS', 2, 3),
+                                                                                                                        ('SNS 콘텐츠 제작', '1월 SNS 콘텐츠 기획 및 제작', NOW(), '2024-01-04', '2024-01-25', 5, 'TODO', 3, 5),
+                                                                                                                        ('서비스 기획안 작성', '신규 서비스 기획 문서 작성', NOW(), '2024-01-05', '2024-01-31', 6, 'TODO', 4, 6),
+                                                                                                                        ('직원 만족도 조사', '분기별 직원 만족도 조사 실시', NOW(), '2024-01-08', '2024-01-19', 7, 'TODO', 5, 7),
+                                                                                                                        ('영업 보고서 작성', '12월 영업 실적 보고서 작성', NOW(), '2024-01-02', '2024-01-10', 8, 'IN_PROGRESS', 6, 8),
+                                                                                                                        ('고객 피드백 분석', '4분기 고객 피드백 분석 보고서', NOW(), '2024-01-03', '2024-01-17', 9, 'TODO', 7, 9),
+                                                                                                                        ('연간 예산 계획', '2024년 예산 계획 수립', NOW(), '2024-01-02', '2024-01-31', 10, 'IN_PROGRESS', 8, 10);
+
+-- User Project 관계 데이터 생성
+INSERT INTO tbl_proj_member (user_id, proj_id, bookmark_status, participation_status) VALUES
+                                                                                        (1, 1, 'BOOKMARK', 'OWNER'),
+                                                                                        (2, 1, 'NONE','PENDING'),
+                                                                                        (3, 2, 'BOOKMARK','OWNER'),
+                                                                                        (4, 2, 'NONE','MEMBER'),
+                                                                                        (5, 3, 'BOOKMARK','OWNER'),
+                                                                                        (6, 4, 'BOOKMARK','OWNER'),
+                                                                                        (7, 5, 'BOOKMARK','OWNER'),
+                                                                                        (8, 3, 'NONE','PENDING'),
+                                                                                        (9, 4, 'NONE','MEMBER'),
+                                                                                        (10, 5, 'NONE','MEMBER');
+
+-- User Schedule 관계 데이터 생성
+INSERT INTO tbl_schedule_participant (user_id, schedule_id, participation_status) VALUES
+                                                                               (1, 1, 'ACCEPTED'),
+                                                                               (2, 1, 'ACCEPTED'),
+                                                                               (3, 2, 'ACCEPTED'),
+                                                                               (4, 2, 'ACCEPTED'),
+                                                                               (5, 3, 'ACCEPTED'),
+                                                                               (6, 4, 'ACCEPTED'),
+                                                                               (7, 5, 'ACCEPTED'),
+                                                                               (8, 3, 'PENDING'),
+                                                                               (9, 4, 'PENDING'),
+                                                                               (10, 5, 'ACCEPTED');
+
+-- Team Schedule 관계 데이터 생성
+INSERT INTO TBL_TEAM_SCHEDULE (team_id, schedule_id) VALUES
+                                                         (1, 1),
+                                                         (2, 2),
+                                                         (3, 3),
+                                                         (4, 4),
+                                                         (5, 5);
+
+-- Workspace 북마크 데이터 생성
+INSERT INTO `tbl_workspace_bookmark` (user_id, workspace_id) VALUES
+                                                     (1, 1),
+                                                     (1, 2),
+                                                     (2, 1),
+                                                     (3, 3),
+                                                     (3, 4),
+                                                     (4, 3),
+                                                     (5, 5),
+                                                     (5, 6),
+                                                     (6, 7),
+                                                     (7, 8);
+
+-- Project Schedule 관계 데이터 생성
+INSERT INTO `tbl_proj_schedule` (project_id, schedule_id) VALUES
+                                                    (1, 1),
+                                                    (1, 2),
+                                                    (2, 2),
+                                                    (2, 3),
+                                                    (3, 3),
+                                                    (3, 4),
+                                                    (4, 4),
+                                                    (4, 5),
+                                                    (5, 5);
 
 
--- Create tables with UTF8 and auto increment
-CREATE TABLE `TBL_TEAM` (
-                            `team_id` BIGINT NOT NULL AUTO_INCREMENT,
-                            `team_name` VARCHAR(255) NOT NULL,
-                            PRIMARY KEY (`team_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_USER` (
-                            `user_id` BIGINT NOT NULL AUTO_INCREMENT,
-                            `username` VARCHAR(255) NOT NULL,
-                            `email` VARCHAR(255) NOT NULL,
-                            `password` VARCHAR(255) NOT NULL,
-                            `phone_number` VARCHAR(255),
-                            `position` VARCHAR(255),
-                            `team_id` BIGINT NOT NULL,
-                            `last_access_time` TIMESTAMP,
-                            PRIMARY KEY (`user_id`),
-                            CONSTRAINT `FK_USER_TEAM` FOREIGN KEY (`team_id`)
-                                REFERENCES `TBL_TEAM` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_PROJ` (
-                            `proj_id` BIGINT NOT NULL AUTO_INCREMENT,
-                            `proj_name` VARCHAR(255) NOT NULL,
-                            `start_time` TIMESTAMP,
-                            `end_time` TIMESTAMP,
-                            `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                            `progress_status` TINYINT NOT NULL DEFAULT 0,
-                            `user_id` BIGINT NOT NULL,
-                            PRIMARY KEY (`proj_id`),
-                            CONSTRAINT `FK_PROJ_USER` FOREIGN KEY (`user_id`)
-                                REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_VCS_PROJ` (
-                                `vcs_proj_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                `title` VARCHAR(255) NOT NULL,
-                                `url` VARCHAR(1023) NOT NULL,
-                                `proj_id` BIGINT NOT NULL,
-                                `vcs_type` VARCHAR(255) NOT NULL,
-                                PRIMARY KEY (`vcs_proj_id`),
-                                CONSTRAINT `FK_VCS_PROJ_PROJ` FOREIGN KEY (`proj_id`)
-                                    REFERENCES `TBL_PROJ` (`proj_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_WORKSPACE` (
-                                 `workspace_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                 `workspace_name` VARCHAR(255) NOT NULL,
-                                 `created_at` TIMESTAMP NOT NULL,
-                                 `progress_status` TINYINT NOT NULL,
-                                 `vcs_proj_id` BIGINT,
-                                 `proj_id` BIGINT,
-                                 PRIMARY KEY (`workspace_id`),
-                                 CONSTRAINT `FK_WORKSPACE_VCS_PROJ` FOREIGN KEY (`vcs_proj_id`)
-                                     REFERENCES `TBL_VCS_PROJ` (`vcs_proj_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-                                 CONSTRAINT `FK_WORKSPACE_PROJ` FOREIGN KEY (`proj_id`)
-                                     REFERENCES `TBL_PROJ` (`proj_id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_VCS_REPO` (
-                                `repo_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                `repo_name` VARCHAR(255) NOT NULL,
-                                `url` VARCHAR(1023) NOT NULL,
-                                `vcs_proj_id` BIGINT NOT NULL,
-                                `workspace_id` BIGINT NOT NULL,
-                                `vcs_type` VARCHAR(255) NOT NULL,
-                                PRIMARY KEY (`repo_id`),
-                                CONSTRAINT `FK_REPO_VCS_PROJ` FOREIGN KEY (`vcs_proj_id`)
-                                    REFERENCES `TBL_VCS_PROJ` (`vcs_proj_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                CONSTRAINT `FK_REPO_WORKSPACE` FOREIGN KEY (`workspace_id`)
-                                    REFERENCES `TBL_WORKSPACE` (`workspace_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_VCS_MILESTONE` (
-                                     `milestone_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                     `milestone_name` VARCHAR(255) NOT NULL,
-                                     `progress_status` TINYINT NOT NULL,
-                                     `url` VARCHAR(1023) NOT NULL,
-                                     `repo_id` BIGINT NOT NULL,
-                                     PRIMARY KEY (`milestone_id`),
-                                     CONSTRAINT `FK_MILESTONE_REPO` FOREIGN KEY (`repo_id`)
-                                         REFERENCES `TBL_VCS_REPO` (`repo_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_VCS_ACCOUNT` (
-                                   `vcs_user_id` VARCHAR(255) NOT NULL,
-                                   `vcs_email` VARCHAR(255) NOT NULL,
-                                   `vcs_username` VARCHAR(255) NOT NULL,
-                                   `vcs_access_token` VARCHAR(1023) NOT NULL,
-                                   `user_id` BIGINT NOT NULL,
-    `vcs_type` VARCHAR(255) NOT NULL,
-                                   PRIMARY KEY (`vcs_user_id`),
-                                   CONSTRAINT `FK_VCS_ACCOUNT_USER` FOREIGN KEY (`user_id`)
-                                       REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_VCS_OBJ` (
-                               `vcs_obj_id` BIGINT NOT NULL AUTO_INCREMENT,
-                               `vcs_obj_type` VARCHAR(255) NOT NULL,
-                               `vcs_obj_title` VARCHAR(255) NOT NULL,
-                               `vcs_obj_content` VARCHAR(255) NOT NULL,
-                               `url` VARCHAR(1023) NOT NULL,
-                               `vcs_obj_status` VARCHAR(255) NOT NULL,
-                               `repo_id` BIGINT NOT NULL,
-                               `vcs_user_id` VARCHAR(255) NOT NULL,
-                               PRIMARY KEY (`vcs_obj_id`),
-                               CONSTRAINT `FK_VCS_OBJ_REPO` FOREIGN KEY (`repo_id`)
-                                   REFERENCES `TBL_VCS_REPO` (`repo_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                               CONSTRAINT `FK_VCS_OBJ_USER` FOREIGN KEY (`vcs_user_id`)
-                                   REFERENCES `TBL_VCS_ACCOUNT` (`vcs_user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_CARDBOARD` (
-                                  `CARDBOARD_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                  `title` VARCHAR(255) NOT NULL,
-                                  `created_at` TIMESTAMP NOT NULL,
-                                  `start_time` TIMESTAMP,
-                                  `end_time` TIMESTAMP,
-                                  `progress_status` TINYINT NOT NULL,
-                                  `milestone_id` BIGINT,
-                                  `workspace_id` BIGINT NOT NULL,
-                                  PRIMARY KEY (`CARDBOARD_id`),
-                                  CONSTRAINT `FK_CARDBOARD_MILESTONE` FOREIGN KEY (`milestone_id`)
-                                      REFERENCES `TBL_VCS_MILESTONE` (`milestone_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-                                  CONSTRAINT `FK_CARDBOARD_WORKSPACE` FOREIGN KEY (`workspace_id`)
-                                      REFERENCES `TBL_WORKSPACE` (`workspace_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_TAG` (
-                                `tag_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                `tag_name` VARCHAR(255) NOT NULL,
-                                `color` VARCHAR(255) NOT NULL,
-                                `workspace_id` BIGINT NOT NULL,
-                                PRIMARY KEY (`tag_id`),
-                                CONSTRAINT `FK_TAG_WORKSPACE` FOREIGN KEY (`workspace_id`)
-                                    REFERENCES `TBL_WORKSPACE` (`workspace_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_CARD` (
-                            `card_id` BIGINT NOT NULL AUTO_INCREMENT,
-                            `title` VARCHAR(255) NOT NULL,
-                            `content` VARCHAR(1023),
-                            `created_at` TIMESTAMP NOT NULL,
-                            `CARDBOARD_id` BIGINT NOT NULL,
-                            `tag_id` BIGINT,
-                            `vcs_obj_id` BIGINT,
-                            `author` BIGINT NOT NULL,
-                            `end_time` TIMESTAMP,
-                            `user_id` BIGINT,
-                            PRIMARY KEY (`card_id`),
-                            CONSTRAINT `FK_CARDBOARD` FOREIGN KEY (`CARDBOARD_id`)
-                                REFERENCES `TBL_CARDBOARD` (`CARDBOARD_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                            CONSTRAINT `FK_CARD_TAG` FOREIGN KEY (`tag_id`)
-                                REFERENCES `TBL_TAG` (`tag_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-                            CONSTRAINT `FK_CARD_VCS_OBJ` FOREIGN KEY (`vcs_obj_id`)
-                                REFERENCES `TBL_VCS_OBJ` (`vcs_obj_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-                            CONSTRAINT `FK_CARD_AUTHOR` FOREIGN KEY (`author`)
-                                REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                            CONSTRAINT `FK_CARD_USER` FOREIGN KEY (`user_id`)
-                                REFERENCES `TBL_USER` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_CARD_ATTACHMENTS` (
-                                        `attachment_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                        `description` VARCHAR(255),
-                                        `content` TEXT NOT NULL,
-                                        `card_id` BIGINT NOT NULL,
-                                        PRIMARY KEY (`attachment_id`),
-                                        CONSTRAINT `FK_ATTACHMENT_CARD` FOREIGN KEY (`card_id`)
-                                            REFERENCES `TBL_CARD` (`card_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_CARD_BOOKMARK` (
-                                     `user_id` BIGINT NOT NULL,
-                                     `card_id` BIGINT NOT NULL,
-                                     PRIMARY KEY (`user_id`, `card_id`),
-                                     CONSTRAINT `FK_BOOKMARK_USER` FOREIGN KEY (`user_id`)
-                                         REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                     CONSTRAINT `FK_BOOKMARK_CARD` FOREIGN KEY (`card_id`)
-                                         REFERENCES `TBL_CARD` (`card_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-
-CREATE TABLE `TBL_CARD_COMMENT` (
-                                    `card_comment_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                    `content` VARCHAR(1023) NOT NULL,
-                                    `created_at` TIMESTAMP NOT NULL,
-                                    `updated_at` TIMESTAMP NOT NULL,
-                                    `user_id` BIGINT NOT NULL,
-                                    `card_id` BIGINT NOT NULL,
-                                    PRIMARY KEY (`card_comment_id`),
-                                    CONSTRAINT `FK_COMMENT_USER` FOREIGN KEY (`user_id`)
-                                        REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                    CONSTRAINT `FK_COMMENT_CARD` FOREIGN KEY (`card_id`)
-                                        REFERENCES `TBL_CARD` (`card_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_CHECKLIST` (
-                                 `checklist_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                 `title` VARCHAR(255) NOT NULL,
-                                 `card_id` BIGINT NOT NULL,
-                                 PRIMARY KEY (`checklist_id`),
-                                 CONSTRAINT `FK_CHECKLIST_CARD` FOREIGN KEY (`card_id`)
-                                     REFERENCES `TBL_CARD` (`card_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_CHECKLIST_ITEM` (
-                                      `item_number` TINYINT NOT NULL,
-                                      `complete_status` VARCHAR(255) NOT NULL,
-                                      `content` VARCHAR(511) NOT NULL,
-                                      `card_id` BIGINT NOT NULL,
-                                      PRIMARY KEY (`card_id`,`item_number`),
-                                      CONSTRAINT `FK_CHECKLIST_ITEM_CARD` FOREIGN KEY (`card_id`)
-                                          REFERENCES `TBL_CARD` (`card_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_MEETINGROOM` (
-                                   `meetingroom_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                   `team_id` BIGINT NOT NULL,
-                                   `meetingroom_name` VARCHAR(255),
-                                   PRIMARY KEY (`meetingroom_id`),
-                                   CONSTRAINT `FK_MEETINGROOM_TEAM` FOREIGN KEY (`team_id`)
-                                       REFERENCES `TBL_TEAM` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_SCHEDULE_REPEAT` (
-                                    `schedule_repeat_id` BIGINT NOT NULL,
-                                    `title` VARCHAR(255),
-                                    `content` VARCHAR(511),
-                                    `start_time` TIMESTAMP,
-                                    `end_time` TIMESTAMP,
-                                    `update_time` TIMESTAMP NOT NULL,
-                                    `public_status` VARCHAR(255) NOT NULL,  
-                                    `meeting_status` VARCHAR(255) NOT NULL,
-                                    `recurrence_pattern` VARCHAR(255) NOT NULL,
-                                    `user_id` BIGINT NOT NULL,
-                                    PRIMARY KEY (`schedule_repeat_id`),
-                                    CONSTRAINT `FK_SCHEDULE_REPEAT_USER` FOREIGN KEY (`user_id`)
-                                        REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_SCHEDULE_REPEAT_PARTICIPANT` (
-                                     `user_id` BIGINT NOT NULL,
-                                     `schedule_repeat_id` BIGINT NOT NULL,
-                                     `participation_status` VARCHAR(255),
-                                     PRIMARY KEY (`user_id`, `schedule_repeat_id`),
-                                     CONSTRAINT `FK_SCHEDULE_REPEAT_PARTICIAPNT_USER` FOREIGN KEY (`user_id`)
-                                         REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                     CONSTRAINT `FK_SCHEDULE_REPEAT_PRATICIPANT_SCHEDULE_REPAET` FOREIGN KEY (`schedule_repeat_id`)
-                                         REFERENCES `TBL_SCHEDULE_REPEAT` (`schedule_repeat_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-
-CREATE TABLE `TBL_SCHEDULE` (
-                                `schedule_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                `title` VARCHAR(255),
-                                `content` VARCHAR(511),
-                                `start_time` TIMESTAMP NOT NULL,
-                                `end_time` TIMESTAMP NOT NULL,
-                                `update_time` TIMESTAMP NOT NULL,
-                                `public_status` VARCHAR(255) NOT NULL,
-                                `schedule_repeat_id` BIGINT NULL,
-                                `repeat_order` BIGINT,
-                                `meeting_status` VARCHAR(255) NOT NULL,
-                                `meetingroom_id` BIGINT,
-                                `user_id` BIGINT NOT NULL,
-                                PRIMARY KEY (`schedule_id`),
-                                CONSTRAINT `FK_SCHEDULE_MEETINGROOM` FOREIGN KEY (`meetingroom_id`)
-                                    REFERENCES `TBL_MEETINGROOM` (`meetingroom_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-                                CONSTRAINT `FK_SCHEDULE_USER` FOREIGN KEY (`user_id`)
-                                    REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                CONSTRAINT `FK_SCHEDULE_REPEAT` FOREIGN KEY (`schedule_repeat_id`)
-                                    REFERENCES `TBL_SCHEDULE_REPEAT` (`schedule_repeat_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_MEETING_NOTE` (
-                                    `schedule_id` BIGINT NOT NULL,
-                                    `title` VARCHAR(1023),
-                                    `content` TEXT,
-                                    PRIMARY KEY (`schedule_id`),
-                                    CONSTRAINT `FK_MEETING_NOTE_SCHEDULE` FOREIGN KEY (`schedule_id`)
-                                        REFERENCES `TBL_SCHEDULE` (`schedule_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_TEAM_BOARD` (
-                                  `team_board_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                  `team_id` BIGINT NOT NULL,
-                                  `board_title` VARCHAR(255) NOT NULL,
-                                  PRIMARY KEY (`team_board_id`),
-                                  CONSTRAINT `FK_TEAM_BOARD_TEAM` FOREIGN KEY (`team_id`)
-                                      REFERENCES `TBL_TEAM` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_TEAM_POST` (
-                                 `team_post_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                 `title` VARCHAR(255) NOT NULL,
-                                 `content` TEXT NOT NULL,
-                                 `created_at` TIMESTAMP NOT NULL,
-                                 `updated_at` TIMESTAMP NOT NULL,
-                                 `user_id` BIGINT NOT NULL,
-                                 `team_board_id` BIGINT NOT NULL,
-                                 PRIMARY KEY (`team_post_id`),
-                                 CONSTRAINT `FK_TEAM_POST_USER` FOREIGN KEY (`user_id`)
-                                     REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                 CONSTRAINT `FK_TEAM_POST_BOARD` FOREIGN KEY (`team_board_id`)
-                                     REFERENCES `TBL_TEAM_BOARD` (`team_board_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_TEAM_COMMENT` (
-                                    `team_comment_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                    `created_at` TIMESTAMP NOT NULL,
-                                    `updated_at` TIMESTAMP NOT NULL,
-                                    `team_post_id` BIGINT NOT NULL,
-                                    `author` BIGINT NOT NULL,
-                                    PRIMARY KEY (`team_comment_id`),
-                                    CONSTRAINT `FK_TEAM_COMMENT_POST` FOREIGN KEY (`team_post_id`)
-                                        REFERENCES `TBL_TEAM_POST` (`team_post_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                    CONSTRAINT `FK_TEAM_COMMENT_AUTHOR` FOREIGN KEY (`author`)
-                                        REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_TEAM_SCHEDULE` (
-                                     `team_id` BIGINT NOT NULL,
-                                     `schedule_id` BIGINT NOT NULL,
-                                     PRIMARY KEY (`team_id`, `schedule_id`),
-                                     CONSTRAINT `FK_TEAM_SCHEDULE_TEAM` FOREIGN KEY (`team_id`)
-                                         REFERENCES `TBL_TEAM` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                     CONSTRAINT `FK_TEAM_SCHEDULE_SCHEDULE` FOREIGN KEY (`schedule_id`)
-                                         REFERENCES `TBL_SCHEDULE` (`schedule_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_TEAM_WORK` (
-                                 `team_work_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                 `title` VARCHAR(255) NOT NULL,
-                                 `content` VARCHAR(1023) NOT NULL,
-                                 `created_at` TIMESTAMP NOT NULL,
-                                 `start_time` TIMESTAMP,
-                                 `end_time` TIMESTAMP NOT NULL,
-                                 `assignee_id` BIGINT,
-                                 `status` VARCHAR(255) NOT NULL,
-                                 `team_id` BIGINT NOT NULL,
-                                 `user_id` BIGINT NOT NULL,
-                                 PRIMARY KEY (`team_work_id`),
-                                 CONSTRAINT `FK_TEAM_WORK_TEAM` FOREIGN KEY (`team_id`)
-                                     REFERENCES `TBL_TEAM` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                 CONSTRAINT `FK_TEAM_WORK_USER` FOREIGN KEY (`user_id`)
-                                     REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                 CONSTRAINT `FK_TEAM_WORK_ASSIGNEE` FOREIGN KEY (`assignee_id`)
-                                     REFERENCES `TBL_USER` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_PROJ_MEMBER` (
-                                 `user_id` BIGINT NOT NULL,
-                                 `proj_id` BIGINT NOT NULL,
-                                 `bookmark_status` VARCHAR(255) NOT NULL,
-                                 `participation_status` VARCHAR(255) NOT NULL,
-                                 PRIMARY KEY (`user_id`, `proj_id`),
-                                 CONSTRAINT `FK_USER_PROJ_USER` FOREIGN KEY (`user_id`)
-                                     REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                 CONSTRAINT `FK_USER_PROJ_PROJ` FOREIGN KEY (`proj_id`)
-                                     REFERENCES `TBL_PROJ` (`proj_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_SCHEDULE_PARTICIPANT` (
-                                     `user_id` BIGINT NOT NULL,
-                                     `schedule_id` BIGINT NOT NULL,
-                                     `participation_status` VARCHAR(255),
-                                     PRIMARY KEY (`user_id`, `schedule_id`),
-                                     CONSTRAINT `FK_USER_SCHEDULE_USER` FOREIGN KEY (`user_id`)
-                                         REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                     CONSTRAINT `FK_USER_SCHEDULE_SCHEDULE` FOREIGN KEY (`schedule_id`)
-                                         REFERENCES `TBL_SCHEDULE` (`schedule_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_WORKSPACE_BOOKMARK` (
-                              `user_id` BIGINT NOT NULL,
-                              `workspace_id` BIGINT NOT NULL,
-                              PRIMARY KEY (`user_id`, `workspace_id`),
-                              CONSTRAINT `FK_WORKSPACE_BOOKMARK_USER` FOREIGN KEY (`user_id`)
-                                  REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                              CONSTRAINT `FK_WORKSPACE_BOOKMARK_WORKSPACE` FOREIGN KEY (`workspace_id`)
-                                  REFERENCES `TBL_WORKSPACE` (`workspace_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_PROJ_SCHEDULE` (
-                           `project_id` BIGINT NOT NULL,
-                           `schedule_id` BIGINT NOT NULL,
-                           PRIMARY KEY (`project_id`, `schedule_id`),
-                           CONSTRAINT `FK_PROJ_SCHEDULE_PROJ` FOREIGN KEY (`project_id`)
-                               REFERENCES `TBL_PROJ` (`proj_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                           CONSTRAINT `FK_PROJ_SCHEDULE_SCHEDULE` FOREIGN KEY (`schedule_id`)
-                               REFERENCES `TBL_SCHEDULE` (`schedule_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+-- Team Work 데이터 생성 (이어서)
+INSERT INTO TBL_TEAM_WORK (title, content, created_at, start_time, end_time, assignee_id, status, team_id, user_id) VALUES
+                                                                                                                        ('메인 페이지 디자인', '웹사이트 메인 페이지 디자인 작업', NOW(), '2024-01-03', '2024-01-20', 3, 'IN_PROGRESS', 2, 3),
+                                                                                                                        ('SNS 콘텐츠 제작', '1월 SNS 콘텐츠 기획 및 제작', NOW(), '2024-01-04', '2024-01-25', 5, 'TODO', 3, 5),
+                                                                                                                        ('서비스 기획안 작성', '신규 서비스 기획 문서 작성', NOW(), '2024-01-05', '2024-01-31', 6, 'TODO', 4, 6),
+                                                                                                                        ('직원 만족도 조사', '분기별 직원 만족도 조사 실시', NOW(), '2024-01-08', '2024-01-19', 7, 'TODO', 5, 7),
+                                                                                                                        ('영업 보고서 작성', '12월 영업 실적 보고서 작성', NOW(), '2024-01-02', '2024-01-10', 8, 'IN_PROGRESS', 6, 8),
+                                                                                                                        ('고객 피드백 분석', '4분기 고객 피드백 분석 보고서', NOW(), '2024-01-03', '2024-01-17', 9, 'TODO', 7, 9),
+                                                                                                                        ('연간 예산 계획', '2024년 예산 계획 수립', NOW(), '2024-01-02', '2024-01-31', 10, 'IN_PROGRESS', 8, 10);
