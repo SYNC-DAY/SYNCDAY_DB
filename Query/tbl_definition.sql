@@ -224,7 +224,9 @@ CREATE TABLE `TBL_CHECKLIST_ITEM` (
 CREATE TABLE `TBL_MEETINGROOM` (
                                    `meetingroom_id` BIGINT NOT NULL AUTO_INCREMENT,
                                    `team_id` BIGINT NOT NULL,
+                                   `meetingroom_place` VARCHAR(255),
                                    `meetingroom_name` VARCHAR(255),
+                                   `meetingroom_capacity` INT,
                                    PRIMARY KEY (`meetingroom_id`),
                                    CONSTRAINT `FK_MEETINGROOM_TEAM` FOREIGN KEY (`team_id`)
                                        REFERENCES `TBL_TEAM` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
