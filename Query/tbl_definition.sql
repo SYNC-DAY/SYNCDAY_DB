@@ -231,7 +231,7 @@ CREATE TABLE `TBL_MEETINGROOM` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
 
 CREATE TABLE `TBL_SCHEDULE_REPEAT` (
-                                    `schedule_repeat_id` BIGINT NOT NULL,
+                                    `schedule_repeat_id` BIGINT NOT NULL AUTO_INCREMENT,
                                     `title` VARCHAR(255),
                                     `content` VARCHAR(511),
                                     `start_time` TIMESTAMP,
