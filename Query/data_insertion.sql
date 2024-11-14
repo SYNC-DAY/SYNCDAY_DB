@@ -114,12 +114,13 @@ INSERT INTO TBL_CHECKLIST_ITEM (item_number, complete_status, content, card_id) 
                                                                                     (2, 'INCOMPLETE', '엔드포인트 구현', 3);
 
 -- Meetingroom 데이터 생성
-INSERT INTO TBL_MEETINGROOM (team_id, meetingroom_name) VALUES
-                                                            (1, '개발팀 회의실'),
-                                                            (2, '디자인팀 회의실'),
-                                                            (3, '마케팅팀 회의실'),
-                                                            (4, '기획팀 회의실'),
-                                                            (5, '인사팀 회의실');
+INSERT INTO TBL_MEETINGROOM (team_id, meetingroom_place, meetingroom_name, meetingroom_capacity) VALUES
+                                                            (1, '개발팀', 'RM101', 20),
+                                                            (2, '디자인팀', 'RM101', 15),
+                                                            (3, '마케팅팀', 'RM101', 25),
+                                                            (4, '기획팀', 'RM101', 18),
+                                                            (5, '인사팀', 'RM101', 12),
+                                                            (5, '인사팀', 'RM102', 30);
 
 -- TBL_SCHEDULE에 더미 데이터 삽입
 INSERT INTO TBL_SCHEDULE (title, content, start_time, end_time, update_time, public_status, schedule_repeat_id, repeat_order, meeting_status, meetingroom_id, user_id) VALUES
