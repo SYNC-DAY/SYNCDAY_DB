@@ -238,11 +238,21 @@ CREATE TABLE `TBL_SCHEDULE_REPEAT` (
                                     `update_time` TIMESTAMP NOT NULL,
                                     `public_status` VARCHAR(255) NOT NULL,  
                                     `meeting_status` VARCHAR(255) NOT NULL,
-                                    `recurrence_pattern` VARCHAR(255) NOT NULL,
+                                    `recurrence_type` VARCHAR(255) NOT NULL,
+                                    `personal_recurrence_unit` VARCHAR(255),
+                                    `personal_recurrence_interval` INT,
+                                    `personal_recurrence_selected_days` INT,
+                                    `personal_monthly_type` VARCHAR(255),
                                     `user_id` BIGINT NOT NULL,
                                     PRIMARY KEY (`schedule_repeat_id`),
                                     CONSTRAINT `FK_SCHEDULE_REPEAT_USER` FOREIGN KEY (`user_id`)
-                                        REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                                        REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                                    CHECK (public_status IN ('PUBLIC', 'PRIVATE')),
+                                    CHECK (meeting_status IN ('ACTIVE', 'INACTIVE')),
+                                    CHECK (recurrence_type IN 
+                                        ('EVERYDAY', 'EVERY_WEEK_DAY','EVERY_MONTH_DAY','EVERY_YEAR_DAY','ALL_WORK_DAY','PERSONAL')),
+                                    CHECK (personal_monthly_type IN ('EVERY_DAY', 'EVERY_WEEK_DAY'))
+
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 CREATE TABLE `TBL_SCHEDULE_REPEAT_PARTICIPANT` (
