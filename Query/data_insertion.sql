@@ -12,17 +12,17 @@ INSERT INTO TBL_TEAM (team_name) VALUES
                                      ('재무팀');
 
 -- User 데이터 생성
-INSERT INTO TBL_USER (username, email, password, phone_number, position, team_id, last_access_time) VALUES
-                                                                                                        ('김개발', 'kim.dev@syncday.com', SHA2('password123', 256), '010-1234-5678', '선임개발자', 1, NOW()),
-                                                                                                        ('이코딩', 'lee.code@syncday.com', SHA2('password123', 256), '010-2234-5678', '주니어개발자', 1, NOW()),
-                                                                                                        ('박디자인', 'park.design@syncday.com', SHA2('password123', 256), '010-3234-5678', '수석디자이너', 2, NOW()),
-                                                                                                        ('정그래픽', 'jung.graphic@syncday.com', SHA2('password123', 256), '010-4234-5678', '그래픽디자이너', 2, NOW()),
-                                                                                                        ('최마케팅', 'choi.marketing@syncday.com', SHA2('password123', 256), '010-5234-5678', '마케팅 팀장', 3, NOW()),
-                                                                                                        ('강기획', 'kang.plan@syncday.com', SHA2('password123', 256), '010-6234-5678', '기획 팀장', 4, NOW()),
-                                                                                                        ('윤인사', 'yoon.hr@syncday.com', SHA2('password123', 256), '010-7234-5678', 'HR 매니저', 5, NOW()),
-                                                                                                        ('임영업', 'im.sales@syncday.com', SHA2('password123', 256), '010-8234-5678', '영업 팀장', 6, NOW()),
-                                                                                                        ('한지원', 'han.support@syncday.com', SHA2('password123', 256), '010-9234-5678', '고객지원 매니저', 7, NOW()),
-                                                                                                        ('오재무', 'oh.finance@syncday.com', SHA2('password123', 256), '010-0234-5678', '재무 팀장', 8, NOW());
+INSERT INTO TBL_USER (username, email, password, phone_number, profile_photo, join_year, position, team_id, last_access_time) VALUES
+                                                                                                                                  ('김개발', 'kim.dev@syncday.com', SHA2('password123', 256), '010-1234-5678', 'https://i.namu.wiki/i/Kvz8qpAPelibP5ze5oLc4D1bN3BsNzhrmHH-vUcb7I4x2RsGgkjyoZFBmhyWuw_tYxBw7BmNbOSF-RsidX5C-4I9Ve19GKX3xwBbUpQMazlRMKz-eexlm3hWHq3JVovkvvqeC8X7FFEdcCitl8-mfQ.webp', '2020-03-02 09:00:00', '선임개발자', 1, NOW()),
+                                                                                                                                  ('이코딩', 'lee.code@syncday.com', SHA2('password123', 256), '010-2234-5678', 'https://i.namu.wiki/i/7b972-jyc12aqgoBbPt0EIMYplnF0570Uxn_5G32-3r1fhHuJLr3uIdP1Q_8jiycoHa9ZjD1aThcxemxHwyhsTTp3vJtw4SirwhZ-y8T2rwdn7MU6-xjimTj4dCGbjdDFcrG4HiuFY6MduyLPAUiKQ.webp', '2021-06-15 09:00:00', '주니어개발자', 1, NOW()),
+                                                                                                                                  ('박디자인', 'park.design@syncday.com', SHA2('password123', 256), '010-3234-5678', 'https://i.namu.wiki/i/EN5llJjxki4j9ZFteGARZviU-ES64FmDWO6mTXFCpN4jc-6BZ61142eedJZvFVgA3e7J-D8j4V-D48ka2HEDmTqSrrcoGXSnkKzrRLLrsnCdG1yiS_1CON0vuOXrDknJW5nDrJ99EvSht5RNWVwi0A.webp', '2022-09-01 09:00:00', '수석디자이너', 2, NOW()),
+                                                                                                                                  ('정그래픽', 'jung.graphic@syncday.com', SHA2('password123', 256), '010-4234-5678', 'https://i.namu.wiki/i/ItxcDH3fIMndf5FTXYsOhCLEv6wXbflb-LxQpXzCNqo3z8r-5vOVpmhbrpheJoOuBtgLfI1u8FxxywXpOHDn-SsPfflpcl3xTyeWXD3qi4hB-zbwY20CoMrJLIe70kKNN3lTDp7Cma3EKScJSPdbnA.webp', '2021-11-08 09:00:00', '그래픽디자이너', 2, NOW()),
+                                                                                                                                  ('최마케팅', 'choi.marketing@syncday.com', SHA2('password123', 256), '010-5234-5678', 'https://i.namu.wiki/i/TdxqW16FlJKunFTp3Qt-e2RSi_aQxm3qWPZd0zhcRbQnVPzeAGA_8AKKxcL0xaAfEvFeX-AILB2PSuy7Xbqy1qMf0KJDXWn4vw1dYE8tG3Cvx_Rfm7AXOdobqXZ_4TPmknCFSXW-pAIn-7lsd70ADQ.webp', '2023-01-16 09:00:00', '마케팅 팀장', 3, NOW()),
+                                                                                                                                  ('강기획', 'kang.plan@syncday.com', SHA2('password123', 256), '010-6234-5678', 'https://i.namu.wiki/i/Kvz8qpAPelibP5ze5oLc4D1bN3BsNzhrmHH-vUcb7I4x2RsGgkjyoZFBmhyWuw_tYxBw7BmNbOSF-RsidX5C-4I9Ve19GKX3xwBbUpQMazlRMKz-eexlm3hWHq3JVovkvvqeC8X7FFEdcCitl8-mfQ.webp', '2020-03-02 09:00:00', '기획 팀장', 4, NOW()),
+                                                                                                                                  ('윤인사', 'yoon.hr@syncday.com', SHA2('password123', 256), '010-7234-5678', 'https://i.namu.wiki/i/Kvz8qpAPelibP5ze5oLc4D1bN3BsNzhrmHH-vUcb7I4x2RsGgkjyoZFBmhyWuw_tYxBw7BmNbOSF-RsidX5C-4I9Ve19GKX3xwBbUpQMazlRMKz-eexlm3hWHq3JVovkvvqeC8X7FFEdcCitl8-mfQ.webp', '2020-03-02 09:00:00', 'HR 매니저', 5, NOW()),
+                                                                                                                                  ('임영업', 'im.sales@syncday.com', SHA2('password123', 256), '010-8234-5678', 'https://i.namu.wiki/i/Kvz8qpAPelibP5ze5oLc4D1bN3BsNzhrmHH-vUcb7I4x2RsGgkjyoZFBmhyWuw_tYxBw7BmNbOSF-RsidX5C-4I9Ve19GKX3xwBbUpQMazlRMKz-eexlm3hWHq3JVovkvvqeC8X7FFEdcCitl8-mfQ.webp', '2020-03-02 09:00:00', '영업 팀장', 6, NOW()),
+                                                                                                                                  ('한지원', 'han.support@syncday.com', SHA2('password123', 256), '010-9234-5678', 'https://i.namu.wiki/i/Kvz8qpAPelibP5ze5oLc4D1bN3BsNzhrmHH-vUcb7I4x2RsGgkjyoZFBmhyWuw_tYxBw7BmNbOSF-RsidX5C-4I9Ve19GKX3xwBbUpQMazlRMKz-eexlm3hWHq3JVovkvvqeC8X7FFEdcCitl8-mfQ.webp', '2020-03-02 09:00:00', '고객지원 매니저', 7, NOW()),
+                                                                                                                                  ('오재무', 'oh.finance@syncday.com', SHA2('password123', 256), '010-0234-5678', 'https://i.namu.wiki/i/Kvz8qpAPelibP5ze5oLc4D1bN3BsNzhrmHH-vUcb7I4x2RsGgkjyoZFBmhyWuw_tYxBw7BmNbOSF-RsidX5C-4I9Ve19GKX3xwBbUpQMazlRMKz-eexlm3hWHq3JVovkvvqeC8X7FFEdcCitl8-mfQ.webp', '2020-03-02 09:00:00', '재무 팀장', 8, NOW());
 
 -- Project 데이터 생성
 INSERT INTO TBL_PROJ (proj_name, start_time, end_time, created_at, progress_status, user_id) VALUES
@@ -45,37 +45,37 @@ INSERT INTO TBL_WORKSPACE (workspace_name, created_at, progress_status, proj_id)
 
 -- Card Board 데이터 생성
 INSERT INTO TBL_CARDBOARD (title, created_at, start_time, end_time, progress_status, workspace_id) VALUES
-                                                                                                        ('앱 개발 스프린트 1', NOW(), '2024-01-01', '2024-01-31', 1, 1),
-                                                                                                        ('앱 개발 스프린트 2', NOW(), '2024-02-01', '2024-02-29', 0, 1),
-                                                                                                        ('API 개발 보드', NOW(), '2024-01-01', '2024-03-31', 1, 2),
-                                                                                                        ('프론트엔드 개발', NOW(), '2024-02-01', '2024-04-30', 0, 3),
-                                                                                                        ('백엔드 개발', NOW(), '2024-02-01', '2024-04-30', 0, 4),
-                                                                                                        ('Q1 마케팅 계획', NOW(), '2024-01-01', '2024-03-31', 1, 5),
-                                                                                                        ('콘텐츠 캘린더', NOW(), '2024-01-01', '2024-12-31', 0, 6),
-                                                                                                        ('서비스 기획', NOW(), '2024-04-01', '2024-06-30', 0, 7),
-                                                                                                        ('복지 제도 개선', NOW(), '2024-01-15', '2024-06-30', 1, 8);
+                                                                                                       ('앱 개발 스프린트 1', NOW(), '2024-01-01', '2024-01-31', 1, 1),
+                                                                                                       ('앱 개발 스프린트 2', NOW(), '2024-02-01', '2024-02-29', 0, 1),
+                                                                                                       ('API 개발 보드', NOW(), '2024-01-01', '2024-03-31', 1, 2),
+                                                                                                       ('프론트엔드 개발', NOW(), '2024-02-01', '2024-04-30', 0, 3),
+                                                                                                       ('백엔드 개발', NOW(), '2024-02-01', '2024-04-30', 0, 4),
+                                                                                                       ('Q1 마케팅 계획', NOW(), '2024-01-01', '2024-03-31', 1, 5),
+                                                                                                       ('콘텐츠 캘린더', NOW(), '2024-01-01', '2024-12-31', 0, 6),
+                                                                                                       ('서비스 기획', NOW(), '2024-04-01', '2024-06-30', 0, 7),
+                                                                                                       ('복지 제도 개선', NOW(), '2024-01-15', '2024-06-30', 1, 8);
 
 -- Card Tag 데이터 생성
 INSERT INTO TBL_TAG (tag_name, color, workspace_id) VALUES
-                                                             ('기능개발', '#4CAF50', 1),
-                                                             ('버그수정', '#F44336', 1),
-                                                             ('디자인', '#2196F3', 1),
-                                                             ('문서화', '#FF9800', 1),
-                                                             ('API', '#9C27B0', 2),
-                                                             ('프론트엔드', '#3F51B5', 3),
-                                                             ('백엔드', '#795548', 4),
-                                                             ('마케팅', '#009688', 5),
-                                                             ('콘텐츠', '#FF4081', 6),
-                                                             ('기획', '#607D8B', 7),
-                                                             ('HR', '#FFC107', 8);
+                                                        ('기능개발', '#4CAF50', 1),
+                                                        ('버그수정', '#F44336', 1),
+                                                        ('디자인', '#2196F3', 1),
+                                                        ('문서화', '#FF9800', 1),
+                                                        ('API', '#9C27B0', 2),
+                                                        ('프론트엔드', '#3F51B5', 3),
+                                                        ('백엔드', '#795548', 4),
+                                                        ('마케팅', '#009688', 5),
+                                                        ('콘텐츠', '#FF4081', 6),
+                                                        ('기획', '#607D8B', 7),
+                                                        ('HR', '#FFC107', 8);
 
 -- Card 데이터 생성
 INSERT INTO TBL_CARD (title, content, created_at, cardboard_id, tag_id, author, end_time, user_id) VALUES
-                                                                                                        ('로그인 기능 구현', '사용자 인증 및 로그인 프로세스 개발', NOW(), 1, 1, 1, '2024-01-15', 2),
-                                                                                                        ('메인 화면 UI 개발', '앱 메인 화면 UI 컴포넌트 개발', NOW(), 1, 3, 1, '2024-01-20', 1),
-                                                                                                        ('API 엔드포인트 설계', 'REST API 엔드포인트 설계 및 문서화', NOW(), 3, 5, 1, '2024-01-31', 1),
-                                                                                                        ('반응형 레이아웃 구현', '모바일 대응 반응형 레이아웃 개발', NOW(), 4, 6, 3, '2024-02-15', 3),
-                                                                                                        ('SNS 마케팅 전략', '각 채널별 마케팅 전략 수립', NOW(), 6, 8, 5, '2024-01-31', 5);
+                                                                                                       ('로그인 기능 구현', '사용자 인증 및 로그인 프로세스 개발', NOW(), 1, 1, 1, '2024-01-15', 2),
+                                                                                                       ('메인 화면 UI 개발', '앱 메인 화면 UI 컴포넌트 개발', NOW(), 1, 3, 1, '2024-01-20', 1),
+                                                                                                       ('API 엔드포인트 설계', 'REST API 엔드포인트 설계 및 문서화', NOW(), 3, 5, 1, '2024-01-31', 1),
+                                                                                                       ('반응형 레이아웃 구현', '모바일 대응 반응형 레이아웃 개발', NOW(), 4, 6, 3, '2024-02-15', 3),
+                                                                                                       ('SNS 마케팅 전략', '각 채널별 마케팅 전략 수립', NOW(), 6, 8, 5, '2024-01-31', 5);
 
 -- Card Attachments 데이터 생성
 INSERT INTO TBL_CARD_ATTACHMENTS (description, content, card_id) VALUES
@@ -114,21 +114,35 @@ INSERT INTO TBL_CHECKLIST_ITEM (item_number, complete_status, content, card_id) 
                                                                                     (2, 'INCOMPLETE', '엔드포인트 구현', 3);
 
 -- Meetingroom 데이터 생성
-INSERT INTO TBL_MEETINGROOM (team_id, meetingroom_name) VALUES
-                                                            (1, '개발팀 회의실'),
-                                                            (2, '디자인팀 회의실'),
-                                                            (3, '마케팅팀 회의실'),
-                                                            (4, '기획팀 회의실'),
-                                                            (5, '인사팀 회의실');
+INSERT INTO TBL_MEETINGROOM (meetingroom_place, meetingroom_name, meetingroom_capacity) VALUES
+                                                                                            ('모모빌딩', 'RM101', 20),
+                                                                                            ('여의도 한강공원', 'RM101', 15),
+                                                                                            ('SFC빌딩', 'RM101', 25),
+                                                                                            ('여의도 한강공원', 'RM201', 18),
+                                                                                            ('SFC빌딩', 'RM201', 12),
+                                                                                            ('모모빌딩', 'RM102', 30);
 
--- Schedule 데이터 생성
-INSERT INTO TBL_SCHEDULE (title, content, start_time, end_time, public_status, repeat_status, repeat_property, meetingroom_id, user_id) VALUES
-                                                                                                                                            ('일일 스크럼', '개발팀 데일리 스크럼 미팅', '2024-01-02 10:00:00', '2024-01-02 10:30:00', 'PUBLIC', 'DAILY', 'WEEKDAY', 1, 1),
-                                                                                                                                            ('디자인 리뷰', '앱 디자인 검토 회의', '2024-01-03 14:00:00', '2024-01-03 15:00:00', 'PUBLIC', 'WEEKLY', 'WEDNESDAY', 2, 3),
-                                                                                                                                            ('마케팅 전략 회의', '분기별 마케팅 전략 회의', '2024-01-04 15:00:00', '2024-01-04 17:00:00', 'PUBLIC', 'MONTHLY', 'FIRST_MONDAY', 3, 5),
-                                                                                                                                            ('팀 정기 미팅', '기획팀 정기 회의', '2024-01-05 11:00:00', '2024-01-05 12:00:00', 'PRIVATE', 'WEEKLY', 'FRIDAY', 4, 6),
-                                                                                                                                            ('복지제도 회의', '직원 복지 개선 회의', '2024-01-08 13:00:00', '2024-01-08 14:00:00', 'PRIVATE', 'NONE', NULL, 5, 7);
+-- Meetingroom Reservation 더미 데이터 생성
+INSERT INTO TBL_MEETINGROOM_RESERVATION (user_id, meetingroom_id, start_time, end_time) VALUES
+                                                                                            (1, 1, '2024-11-18 09:00:00', '2024-11-18 11:00:00'),
+                                                                                            (2, 2, '2024-11-18 10:00:00', '2024-11-18 12:00:00'),
+                                                                                            (3, 3, '2024-11-18 13:00:00', '2024-11-18 15:00:00'),
+                                                                                            (4, 4, '2024-11-18 09:30:00', '2024-11-18 11:30:00'),
+                                                                                            (5, 5, '2024-11-18 14:00:00', '2024-11-18 16:00:00'),
+                                                                                            (6, 1, '2024-11-19 09:00:00', '2024-11-19 11:00:00'),
+                                                                                            (7, 2, '2024-11-19 12:00:00', '2024-11-19 14:00:00'),
+                                                                                            (8, 3, '2024-11-19 09:30:00', '2024-11-19 11:30:00'),
+                                                                                            (9, 4, '2024-11-19 15:00:00', '2024-11-19 17:00:00'),
+                                                                                            (10, 5, '2024-11-19 08:00:00', '2024-11-19 10:00:00');
 
+
+-- TBL_SCHEDULE에 더미 데이터 삽입
+INSERT INTO TBL_SCHEDULE (title, content, start_time, end_time, update_time, public_status, schedule_repeat_id, repeat_order, meeting_status, meetingroom_id, user_id) VALUES
+                                                                                                                                                                           ('일일 스크럼', '개발팀 데일리 스크럼 미팅', '2024-01-02 10:00:00', '2024-01-02 10:30:00', '2024-01-02 10:00:00', 'PUBLIC', NULL, 1, 'ACTIVE', 1, 1),
+                                                                                                                                                                           ('디자인 리뷰', '앱 디자인 검토 회의', '2024-01-03 14:00:00', '2024-01-03 15:00:00', '2024-01-03 14:00:00', 'PUBLIC', NULL, 1, 'ACTIVE', 2, 3),
+                                                                                                                                                                           ('마케팅 전략 회의', '분기별 마케팅 전략 회의', '2024-01-04 15:00:00', '2024-01-04 17:00:00', '2024-01-04 15:00:00', 'PUBLIC', NULL, 1, 'ACTIVE', 3, 5),
+                                                                                                                                                                           ('팀 정기 미팅', '기획팀 정기 회의', '2024-01-05 11:00:00', '2024-01-05 12:00:00', '2024-01-05 11:00:00', 'PRIVATE', NULL, 1, 'ACTIVE', 4, 6),
+                                                                                                                                                                           ('복지제도 회의', '직원 복지 개선 회의', '2024-01-08 13:00:00', '2024-01-08 14:00:00', '2024-01-08 13:00:00', 'PRIVATE', NULL, NULL, 'INACTIVE', 5, 7);
 -- Meeting Note 데이터 생성
 INSERT INTO TBL_MEETING_NOTE (schedule_id, title, content) VALUES
                                                                (1, '2024-01-02 데일리 스크럼', '1. 진행상황 공유\n2. 이슈 사항 논의\n3. 다음 작업 계획'),
@@ -171,29 +185,29 @@ INSERT INTO TBL_TEAM_WORK (title, content, created_at, start_time, end_time, ass
 
 -- User Project 관계 데이터 생성
 INSERT INTO tbl_proj_member (user_id, proj_id, bookmark_status, participation_status) VALUES
-                                                                                        (1, 1, 'BOOKMARK', 'OWNER'),
-                                                                                        (2, 1, 'NONE','PENDING'),
-                                                                                        (3, 2, 'BOOKMARK','OWNER'),
-                                                                                        (4, 2, 'NONE','MEMBER'),
-                                                                                        (5, 3, 'BOOKMARK','OWNER'),
-                                                                                        (6, 4, 'BOOKMARK','OWNER'),
-                                                                                        (7, 5, 'BOOKMARK','OWNER'),
-                                                                                        (8, 3, 'NONE','PENDING'),
-                                                                                        (9, 4, 'NONE','MEMBER'),
-                                                                                        (10, 5, 'NONE','MEMBER');
+                                                                                          (1, 1, 'BOOKMARK', 'OWNER'),
+                                                                                          (2, 1, 'NONE','PENDING'),
+                                                                                          (3, 2, 'BOOKMARK','OWNER'),
+                                                                                          (4, 2, 'NONE','MEMBER'),
+                                                                                          (5, 3, 'BOOKMARK','OWNER'),
+                                                                                          (6, 4, 'BOOKMARK','OWNER'),
+                                                                                          (7, 5, 'BOOKMARK','OWNER'),
+                                                                                          (8, 3, 'NONE','PENDING'),
+                                                                                          (9, 4, 'NONE','MEMBER'),
+                                                                                          (10, 5, 'NONE','MEMBER');
 
 -- User Schedule 관계 데이터 생성
 INSERT INTO tbl_schedule_participant (user_id, schedule_id, participation_status) VALUES
-                                                                               (1, 1, 'ACCEPTED'),
-                                                                               (2, 1, 'ACCEPTED'),
-                                                                               (3, 2, 'ACCEPTED'),
-                                                                               (4, 2, 'ACCEPTED'),
-                                                                               (5, 3, 'ACCEPTED'),
-                                                                               (6, 4, 'ACCEPTED'),
-                                                                               (7, 5, 'ACCEPTED'),
-                                                                               (8, 3, 'PENDING'),
-                                                                               (9, 4, 'PENDING'),
-                                                                               (10, 5, 'ACCEPTED');
+                                                                                      (1, 1, 'ACCEPTED'),
+                                                                                      (2, 1, 'ACCEPTED'),
+                                                                                      (3, 2, 'ACCEPTED'),
+                                                                                      (4, 2, 'ACCEPTED'),
+                                                                                      (5, 3, 'ACCEPTED'),
+                                                                                      (6, 4, 'ACCEPTED'),
+                                                                                      (7, 5, 'ACCEPTED'),
+                                                                                      (8, 3, 'PENDING'),
+                                                                                      (9, 4, 'PENDING'),
+                                                                                      (10, 5, 'ACCEPTED');
 
 -- Team Schedule 관계 데이터 생성
 INSERT INTO TBL_TEAM_SCHEDULE (team_id, schedule_id) VALUES
@@ -205,28 +219,28 @@ INSERT INTO TBL_TEAM_SCHEDULE (team_id, schedule_id) VALUES
 
 -- Workspace 북마크 데이터 생성
 INSERT INTO `tbl_workspace_bookmark` (user_id, workspace_id) VALUES
-                                                     (1, 1),
-                                                     (1, 2),
-                                                     (2, 1),
-                                                     (3, 3),
-                                                     (3, 4),
-                                                     (4, 3),
-                                                     (5, 5),
-                                                     (5, 6),
-                                                     (6, 7),
-                                                     (7, 8);
+                                                                 (1, 1),
+                                                                 (1, 2),
+                                                                 (2, 1),
+                                                                 (3, 3),
+                                                                 (3, 4),
+                                                                 (4, 3),
+                                                                 (5, 5),
+                                                                 (5, 6),
+                                                                 (6, 7),
+                                                                 (7, 8);
 
 -- Project Schedule 관계 데이터 생성
 INSERT INTO `tbl_proj_schedule` (project_id, schedule_id) VALUES
-                                                    (1, 1),
-                                                    (1, 2),
-                                                    (2, 2),
-                                                    (2, 3),
-                                                    (3, 3),
-                                                    (3, 4),
-                                                    (4, 4),
-                                                    (4, 5),
-                                                    (5, 5);
+                                                              (1, 1),
+                                                              (1, 2),
+                                                              (2, 2),
+                                                              (2, 3),
+                                                              (3, 3),
+                                                              (3, 4),
+                                                              (4, 4),
+                                                              (4, 5),
+                                                              (5, 5);
 
 
 -- Team Work 데이터 생성 (이어서)

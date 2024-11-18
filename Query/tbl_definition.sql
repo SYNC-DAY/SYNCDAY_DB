@@ -16,6 +16,8 @@ CREATE TABLE `TBL_USER` (
                             `email` VARCHAR(255) NOT NULL,
                             `password` VARCHAR(255) NOT NULL,
                             `phone_number` VARCHAR(255),
+                            `profile_photo` VARCHAR(1023),
+                            `join_year` TIMESTAMP,
                             `position` VARCHAR(255),
                             `team_id` BIGINT NOT NULL,
                             `last_access_time` TIMESTAMP,
@@ -220,30 +222,87 @@ CREATE TABLE `TBL_CHECKLIST_ITEM` (
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 CREATE TABLE `TBL_MEETINGROOM` (
-                                   `meetingroom_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                   `team_id` BIGINT NOT NULL,
-                                   `meetingroom_name` VARCHAR(255),
-                                   PRIMARY KEY (`meetingroom_id`),
-                                   CONSTRAINT `FK_MEETINGROOM_TEAM` FOREIGN KEY (`team_id`)
-                                       REFERENCES `TBL_TEAM` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                                      `meetingroom_id` BIGINT NOT NULL AUTO_INCREMENT,
+                                      `meetingroom_place` VARCHAR(255),
+                                      `meetingroom_name` VARCHAR(255),
+                                      `meetingroom_capacity` INT,
+                                      PRIMARY KEY (`meetingroom_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+
+
+CREATE TABLE `TBL_MEETINGROOM_RESERVATION` (
+    					`meetingroom_reservation_id` BIGINT NOT NULL AUTO_INCREMENT, 
+    					`user_id` BIGINT NOT NULL,                      
+    					`meetingroom_id` BIGINT NOT NULL,              
+    					`start_time` TIMESTAMP NOT NULL,               
+    					`end_time` TIMESTAMP NOT NULL,                  
+					PRIMARY KEY (`meetingroom_reservation_id`),
+    					CONSTRAINT `FK_RESERVATION_USER` FOREIGN KEY (`user_id`)
+        					REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    					CONSTRAINT `FK_RESERVATION_MEETINGROOM` FOREIGN KEY (`meetingroom_id`)
+        					REFERENCES `TBL_MEETINGROOM` (`meetingroom_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+
+
+CREATE TABLE `TBL_SCHEDULE_REPEAT` (
+                                    `schedule_repeat_id` BIGINT NOT NULL AUTO_INCREMENT,
+                                    `title` VARCHAR(255),
+                                    `content` VARCHAR(511),
+                                    `start_time` TIMESTAMP,
+                                    `end_time` TIMESTAMP,
+                                    `update_time` TIMESTAMP NOT NULL,
+                                    `public_status` VARCHAR(255) NOT NULL,  
+                                    `meeting_status` VARCHAR(255) NOT NULL,
+				    `repeat_end` TIMESTAMP,
+                                    `recurrence_type` VARCHAR(255) NOT NULL,
+                                    `personal_recurrence_unit` VARCHAR(255),
+                                    `personal_recurrence_interval` INT,
+                                    `personal_recurrence_selected_days` INT,
+                                    `personal_monthly_type` VARCHAR(255),
+                                    `user_id` BIGINT NOT NULL,
+                                    PRIMARY KEY (`schedule_repeat_id`),
+                                    CONSTRAINT `FK_SCHEDULE_REPEAT_USER` FOREIGN KEY (`user_id`)
+                                        REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                                    CHECK (public_status IN ('PUBLIC', 'PRIVATE')),
+                                    CHECK (meeting_status IN ('ACTIVE', 'INACTIVE')),
+                                    CHECK (recurrence_type IN 
+                                        ('EVERYDAY', 'EVERY_WEEK_DAY','EVERY_MONTH_DAY','EVERY_YEAR_DAY','ALL_WORK_DAY','PERSONAL')),
+                                    CHECK (personal_monthly_type IN ('EVERY_DAY', 'EVERY_WEEK_DAY'))
+
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
+CREATE TABLE `TBL_SCHEDULE_REPEAT_PARTICIPANT` (
+                                     `user_id` BIGINT NOT NULL,
+                                     `schedule_repeat_id` BIGINT NOT NULL,
+                                     `participation_status` VARCHAR(255),
+                                     PRIMARY KEY (`user_id`, `schedule_repeat_id`),
+                                     CONSTRAINT `FK_SCHEDULE_REPEAT_PARTICIAPNT_USER` FOREIGN KEY (`user_id`)
+                                         REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                                     CONSTRAINT `FK_SCHEDULE_REPEAT_PRATICIPANT_SCHEDULE_REPAET` FOREIGN KEY (`schedule_repeat_id`)
+                                         REFERENCES `TBL_SCHEDULE_REPEAT` (`schedule_repeat_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
 
 CREATE TABLE `TBL_SCHEDULE` (
                                 `schedule_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                `title` VARCHAR(255) NOT NULL,
+                                `title` VARCHAR(255),
                                 `content` VARCHAR(511),
                                 `start_time` TIMESTAMP NOT NULL,
                                 `end_time` TIMESTAMP NOT NULL,
+                                `update_time` TIMESTAMP NOT NULL,
                                 `public_status` VARCHAR(255) NOT NULL,
-                                `repeat_status` VARCHAR(255) NOT NULL,
-                                `repeat_property` VARCHAR(255),
+                                `schedule_repeat_id` BIGINT NULL,
+                                `repeat_order` BIGINT,
+                                `meeting_status` VARCHAR(255) NOT NULL,
                                 `meetingroom_id` BIGINT,
                                 `user_id` BIGINT NOT NULL,
                                 PRIMARY KEY (`schedule_id`),
                                 CONSTRAINT `FK_SCHEDULE_MEETINGROOM` FOREIGN KEY (`meetingroom_id`)
                                     REFERENCES `TBL_MEETINGROOM` (`meetingroom_id`) ON DELETE SET NULL ON UPDATE CASCADE,
                                 CONSTRAINT `FK_SCHEDULE_USER` FOREIGN KEY (`user_id`)
-                                    REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                                    REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                                CONSTRAINT `FK_SCHEDULE_REPEAT` FOREIGN KEY (`schedule_repeat_id`)
+                                    REFERENCES `TBL_SCHEDULE_REPEAT` (`schedule_repeat_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
 
 CREATE TABLE `TBL_MEETING_NOTE` (
