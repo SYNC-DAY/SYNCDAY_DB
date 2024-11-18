@@ -238,6 +238,7 @@ CREATE TABLE `TBL_SCHEDULE_REPEAT` (
                                     `update_time` TIMESTAMP NOT NULL,
                                     `public_status` VARCHAR(255) NOT NULL,  
                                     `meeting_status` VARCHAR(255) NOT NULL,
+				    `repeat_end` TIMESTAMP,
                                     `recurrence_type` VARCHAR(255) NOT NULL,
                                     `personal_recurrence_unit` VARCHAR(255),
                                     `personal_recurrence_interval` INT,
