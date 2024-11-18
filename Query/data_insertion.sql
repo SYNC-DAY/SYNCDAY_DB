@@ -122,6 +122,19 @@ INSERT INTO TBL_MEETINGROOM (meetingroom_place, meetingroom_name, meetingroom_ca
                                                                                             ('SFC빌딩', 'RM201', 12),
                                                                                             ('모모빌딩', 'RM102', 30);
 
+-- Meetingroom Reservation 더미 데이터 생성
+INSERT INTO TBL_MEETINGROOM_RESERVATION (user_id, meetingroom_id, start_time, end_time) VALUES
+                                                                                            (1, 1, '2024-11-18 09:00:00', '2024-11-18 11:00:00'),
+                                                                                            (2, 2, '2024-11-18 10:00:00', '2024-11-18 12:00:00'),
+                                                                                            (3, 3, '2024-11-18 13:00:00', '2024-11-18 15:00:00'),
+                                                                                            (4, 4, '2024-11-18 09:30:00', '2024-11-18 11:30:00'),
+                                                                                            (5, 5, '2024-11-18 14:00:00', '2024-11-18 16:00:00'),
+                                                                                            (6, 1, '2024-11-19 09:00:00', '2024-11-19 11:00:00'),
+                                                                                            (7, 2, '2024-11-19 12:00:00', '2024-11-19 14:00:00'),
+                                                                                            (8, 3, '2024-11-19 09:30:00', '2024-11-19 11:30:00'),
+                                                                                            (9, 4, '2024-11-19 15:00:00', '2024-11-19 17:00:00'),
+                                                                                            (10, 5, '2024-11-19 08:00:00', '2024-11-19 10:00:00');
+
 
 -- TBL_SCHEDULE에 더미 데이터 삽입
 INSERT INTO TBL_SCHEDULE (title, content, start_time, end_time, update_time, public_status, schedule_repeat_id, repeat_order, meeting_status, meetingroom_id, user_id) VALUES
