@@ -90,7 +90,7 @@ INSERT INTO TBL_CARD_BOOKMARK (user_id, card_id) VALUES
                                                      (2, 2);
 
 -- 연결 테이블 데이터
-INSERT INTO TBL_USER_PROJ (bookmark_status, participation_status, proj_id, user_id) VALUES
+INSERT INTO tbl_proj_member (bookmark_status, participation_status, proj_id, user_id) VALUES
                                                                                         ('BOOKMARKED', 'ACTIVE', 1, 1),
                                                                                         ('NOT_BOOKMARKED', 'ACTIVE', 1, 2),
                                                                                         ('BOOKMARKED', 'ACTIVE', 2, 3);
