@@ -230,20 +230,6 @@ CREATE TABLE `TBL_MEETINGROOM` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
 
 
-CREATE TABLE `TBL_MEETINGROOM_RESERVATION` (
-    					`meetingroom_reservation_id` BIGINT NOT NULL AUTO_INCREMENT, 
-    					`user_id` BIGINT NOT NULL,                      
-    					`meetingroom_id` BIGINT NOT NULL,              
-    					`start_time` TIMESTAMP NOT NULL,               
-    					`end_time` TIMESTAMP NOT NULL,                  
-					PRIMARY KEY (`meetingroom_reservation_id`),
-    					CONSTRAINT `FK_RESERVATION_USER` FOREIGN KEY (`user_id`)
-        					REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    					CONSTRAINT `FK_RESERVATION_MEETINGROOM` FOREIGN KEY (`meetingroom_id`)
-        					REFERENCES `TBL_MEETINGROOM` (`meetingroom_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-
 CREATE TABLE `TBL_SCHEDULE_REPEAT` (
                                     `schedule_repeat_id` BIGINT NOT NULL AUTO_INCREMENT,
                                     `title` VARCHAR(255),
@@ -303,6 +289,19 @@ CREATE TABLE `TBL_SCHEDULE` (
                                     REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
                                 CONSTRAINT `FK_SCHEDULE_REPEAT` FOREIGN KEY (`schedule_repeat_id`)
                                     REFERENCES `TBL_SCHEDULE_REPEAT` (`schedule_repeat_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+
+CREATE TABLE `TBL_MEETINGROOM_RESERVATION` (
+                                               `meetingroom_reservation_id` BIGINT NOT NULL AUTO_INCREMENT,
+                                               `meeting_time` TIMESTAMP NOT NULL,
+                                               `meetingroom_id` BIGINT NOT NULL,
+                                               `schedule_id` BIGINT NOT NULL,
+                                               PRIMARY KEY (`meetingroom_reservation_id`),
+                                               CONSTRAINT `FK_RESERVATION_MEETINGROOM` FOREIGN KEY (`meetingroom_id`)
+                                                   REFERENCES `TBL_MEETINGROOM` (`meetingroom_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                                               CONSTRAINT `FK_RESERVATION_SCHEDULE` FOREIGN KEY (`schedule_id`)
+                                                   REFERENCES `TBL_SCHEDULE` (`schedule_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                                               UNIQUE (`meetingroom_id`, `meeting_time`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
 
 CREATE TABLE `TBL_MEETING_NOTE` (
