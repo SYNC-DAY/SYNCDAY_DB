@@ -1,425 +1,292 @@
-drop database if exists syncdaydb;
-create database syncdaydb;
-use syncdaydb;
+DROP DATABASE IF EXISTS syncdaydb;
+CREATE DATABASE syncdaydb
+    DEFAULT CHARACTER SET UTF8
+    DEFAULT COLLATE UTF8_GENERAL_CI;
+USE syncdaydb;
 
+SET SESSION storage_engine = InnoDB;
+SET SESSION AUTO_INCREMENT_INCREMENT = 1;
 
--- Create tables with UTF8 and auto increment
-CREATE TABLE `TBL_TEAM` (
-                            `team_id` BIGINT NOT NULL AUTO_INCREMENT,
-                            `team_name` VARCHAR(255) NOT NULL,
-                            PRIMARY KEY (`team_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+-- 1. 독립적인 기본 테이블
+CREATE TABLE TBL_TEAM
+(
+    team_id   BIGINT       NOT NULL AUTO_INCREMENT COMMENT '팀ID',
+    team_name VARCHAR(255) NOT NULL COMMENT '팀 이름',
+    PRIMARY KEY (team_id)
+) COMMENT = '팀';
 
-CREATE TABLE `TBL_USER` (
-                            `user_id` BIGINT NOT NULL AUTO_INCREMENT,
-                            `username` VARCHAR(255) NOT NULL,
-                            `email` VARCHAR(255) NOT NULL,
-                            `password` VARCHAR(255) NOT NULL,
-                            `phone_number` VARCHAR(255),
-                            `profile_photo` VARCHAR(1023),
-                            `join_year` TIMESTAMP,
-                            `position` VARCHAR(255),
-                            `team_id` BIGINT NOT NULL,
-                            `last_access_time` TIMESTAMP,
-                            PRIMARY KEY (`user_id`),
-                            CONSTRAINT `FK_USER_TEAM` FOREIGN KEY (`team_id`)
-                                REFERENCES `TBL_TEAM` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+CREATE TABLE TBL_PROJ
+(
+    proj_id         BIGINT       NOT NULL AUTO_INCREMENT COMMENT '프로젝트ID',
+    proj_name       VARCHAR(255) NOT NULL COMMENT '프로젝트명',
+    start_time      TIMESTAMP COMMENT '시작시각',
+    end_time        TIMESTAMP COMMENT '종료시각',
+    created_at      TIMESTAMP    NOT NULL COMMENT '생성시각',
+    progress_status TINYINT      NOT NULL COMMENT '진척도',
+    vcs_type        VARCHAR(255) COMMENT 'VCS 프로젝트 타입',
+    vcs_proj_url    VARCHAR(511) COMMENT 'VCS URL',
+    PRIMARY KEY (proj_id)
+) COMMENT = '프로젝트';
 
-CREATE TABLE `TBL_PROJ` (
-                            `proj_id` BIGINT NOT NULL AUTO_INCREMENT,
-                            `proj_name` VARCHAR(255) NOT NULL,
-                            `start_time` TIMESTAMP,
-                            `end_time` TIMESTAMP,
-                            `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                            `progress_status` TINYINT NOT NULL DEFAULT 0,
-                            `user_id` BIGINT NOT NULL,
-                            PRIMARY KEY (`proj_id`),
-                            CONSTRAINT `FK_PROJ_USER` FOREIGN KEY (`user_id`)
-                                REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+-- 2. TBL_TEAM을 참조하는 테이블
+CREATE TABLE TBL_USER
+(
+    user_id           BIGINT       NOT NULL AUTO_INCREMENT COMMENT '회원ID',
+    username          VARCHAR(255) NOT NULL COMMENT '회원명',
+    email             VARCHAR(255) NOT NULL COMMENT '이메일',
+    password          VARCHAR(255) NOT NULL COMMENT '비밀번호',
+    phone_number      VARCHAR(255) COMMENT '전화번호',
+    position          VARCHAR(255) COMMENT '직급',
+    team_id           BIGINT       NOT NULL COMMENT '팀ID',
+    last_activated_at TIMESTAMP COMMENT '마지막 접속시간',
+    PRIMARY KEY (user_id),
+    FOREIGN KEY (team_id) REFERENCES TBL_TEAM (team_id)
+) COMMENT = '회원';
 
-CREATE TABLE `TBL_VCS_PROJ` (
-                                `vcs_proj_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                `title` VARCHAR(255) NOT NULL,
-                                `url` VARCHAR(1023) NOT NULL,
-                                `proj_id` BIGINT NOT NULL,
-                                `vcs_type` VARCHAR(255) NOT NULL,
-                                PRIMARY KEY (`vcs_proj_id`),
-                                CONSTRAINT `FK_VCS_PROJ_PROJ` FOREIGN KEY (`proj_id`)
-                                    REFERENCES `TBL_PROJ` (`proj_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+CREATE TABLE TBL_MEETINGROOM
+(
+    meetingroom_id   BIGINT NOT NULL AUTO_INCREMENT COMMENT '회의실ID',
+    team_id          BIGINT NOT NULL COMMENT '팀ID',
+    meetingroom_name VARCHAR(255) COMMENT '회의실 이름',
+    PRIMARY KEY (meetingroom_id),
+    FOREIGN KEY (team_id) REFERENCES TBL_TEAM (team_id)
+) COMMENT = '회의실';
 
-CREATE TABLE `TBL_WORKSPACE` (
-                                 `workspace_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                 `workspace_name` VARCHAR(255) NOT NULL,
-                                 `created_at` TIMESTAMP NOT NULL,
-                                 `progress_status` TINYINT NOT NULL,
-                                 `vcs_proj_id` BIGINT,
-                                 `proj_id` BIGINT,
-                                 PRIMARY KEY (`workspace_id`),
-                                 CONSTRAINT `FK_WORKSPACE_VCS_PROJ` FOREIGN KEY (`vcs_proj_id`)
-                                     REFERENCES `TBL_VCS_PROJ` (`vcs_proj_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-                                 CONSTRAINT `FK_WORKSPACE_PROJ` FOREIGN KEY (`proj_id`)
-                                     REFERENCES `TBL_PROJ` (`proj_id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+-- 3. TBL_MEETINGROOM과 TBL_USER를 참조하는 테이블
+CREATE TABLE TBL_SCHEDULE
+(
+    schedule_id     BIGINT       NOT NULL AUTO_INCREMENT COMMENT '일정ID',
+    title           VARCHAR(255) NOT NULL COMMENT '제목',
+    content         VARCHAR(511) COMMENT '내용',
+    start_time      TIMESTAMP    NOT NULL COMMENT '시작시각',
+    end_time        TIMESTAMP    NOT NULL COMMENT '종료시각',
+    public_status   VARCHAR(255) NOT NULL COMMENT '공개여부',
+    repeat_status   VARCHAR(255) NOT NULL COMMENT '반복여부',
+    repeat_property VARCHAR(255) COMMENT '반복속성',
+    meetingroom_id  BIGINT COMMENT '회의실ID',
+    user_id         BIGINT       NOT NULL COMMENT '호스트ID',
+    PRIMARY KEY (schedule_id),
+    FOREIGN KEY (meetingroom_id) REFERENCES TBL_MEETINGROOM (meetingroom_id),
+    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id)
+) COMMENT = '일정';
 
-CREATE TABLE `TBL_VCS_REPO` (
-                                `repo_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                `repo_name` VARCHAR(255) NOT NULL,
-                                `url` VARCHAR(1023) NOT NULL,
-                                `vcs_proj_id` BIGINT,
-                                `workspace_id` BIGINT NOT NULL,
-                                `vcs_type` VARCHAR(255) NOT NULL,
-                                PRIMARY KEY (`repo_id`),
-                                CONSTRAINT `FK_REPO_VCS_PROJ` FOREIGN KEY (`vcs_proj_id`)
-                                    REFERENCES `TBL_VCS_PROJ` (`vcs_proj_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-                                CONSTRAINT `FK_REPO_WORKSPACE` FOREIGN KEY (`workspace_id`)
-                                    REFERENCES `TBL_WORKSPACE` (`workspace_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+-- 4. TBL_PROJ를 참조하는 테이블
+CREATE TABLE TBL_WORKSPACE
+(
+    workspace_id    BIGINT       NOT NULL AUTO_INCREMENT COMMENT '워크스페이스ID',
+    workspace_name  VARCHAR(255) NOT NULL COMMENT '워크스페이스이름',
+    created_at      TIMESTAMP    NOT NULL COMMENT '생성시각',
+    progress_status TINYINT      NOT NULL COMMENT '진척도',
+    proj_id         BIGINT       NOT NULL COMMENT '프로젝트ID',
+    vcs_type        VARCHAR(255) COMMENT 'VCS 타입',
+    vcs_repo_url    VARCHAR(511) COMMENT 'VCS 저장소 URL',
+    PRIMARY KEY (workspace_id),
+    FOREIGN KEY (proj_id) REFERENCES TBL_PROJ (proj_id)
+) COMMENT = '워크스페이스';
 
-CREATE TABLE `TBL_VCS_MILESTONE` (
-                                     `milestone_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                     `milestone_name` VARCHAR(255) NOT NULL,
-                                     `progress_status` TINYINT NOT NULL,
-                                     `url` VARCHAR(1023) NOT NULL,
-                                     `repo_id` BIGINT NOT NULL,
-                                     PRIMARY KEY (`milestone_id`),
-                                     CONSTRAINT `FK_MILESTONE_REPO` FOREIGN KEY (`repo_id`)
-                                         REFERENCES `TBL_VCS_REPO` (`repo_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+-- 5. TBL_WORKSPACE를 참조하는 테이블
+CREATE TABLE TBL_CARD_TAG
+(
+    tag_id       BIGINT       NOT NULL AUTO_INCREMENT COMMENT '태그ID',
+    tag_name     VARCHAR(255) NOT NULL COMMENT '태그명',
+    color        VARCHAR(255) NOT NULL COMMENT '색깔',
+    workspace_id BIGINT       NOT NULL COMMENT '워크스페이스ID',
+    PRIMARY KEY (tag_id),
+    FOREIGN KEY (workspace_id) REFERENCES TBL_WORKSPACE (workspace_id)
+) COMMENT = '카드태그';
 
-CREATE TABLE `TBL_VCS_ACCOUNT` (
-                                   `vcs_account_id` VARCHAR(255) NOT NULL,
-                                   `vcs_email` VARCHAR(255) NOT NULL,
-                                   `vcs_username` VARCHAR(255) NOT NULL,
-                                   `vcs_access_token` VARCHAR(1023) NOT NULL,
-                                   `user_id` BIGINT NOT NULL,
-                                    `vcs_type` VARCHAR(255) NOT NULL,
-                                   PRIMARY KEY (`vcs_account_id`),
-                                   CONSTRAINT `FK_VCS_ACCOUNT_USER` FOREIGN KEY (`user_id`)
-                                       REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+CREATE TABLE TBL_CARD_BOARD
+(
+    card_board_id     BIGINT       NOT NULL AUTO_INCREMENT COMMENT '카드보드ID',
+    title             VARCHAR(255) NOT NULL COMMENT '이름',
+    created_at        TIMESTAMP    NOT NULL COMMENT '생성시각',
+    start_time        TIMESTAMP COMMENT '시작시각',
+    end_time          TIMESTAMP COMMENT '종료시각',
+    progress_status   TINYINT      NOT NULL COMMENT '진척도',
+    vcs_type          VARCHAR(255) COMMENT 'VCS 타입',
+    vcs_milestone_url VARCHAR(511) COMMENT 'VCS 마일스톤 URL',
+    workspace_id      BIGINT       NOT NULL COMMENT '워크스페이스ID',
+    PRIMARY KEY (card_board_id),
+    FOREIGN KEY (workspace_id) REFERENCES TBL_WORKSPACE (workspace_id)
+) COMMENT = '카드보드';
 
-CREATE TABLE `TBL_VCS_OBJ` (
-                               `vcs_obj_id` BIGINT NOT NULL AUTO_INCREMENT,
-                               `vcs_obj_type` VARCHAR(255) NOT NULL,
-                               `vcs_obj_title` VARCHAR(255) NOT NULL,
-                               `vcs_obj_content` VARCHAR(255) NOT NULL,
-                               `url` VARCHAR(1023) NOT NULL,
-                               `vcs_obj_status` VARCHAR(255) NOT NULL,
-                               `repo_id` BIGINT NOT NULL,
-                               `vcs_account_id` VARCHAR(255) NOT NULL,
-                               PRIMARY KEY (`vcs_obj_id`),
-                               CONSTRAINT `FK_VCS_OBJ_REPO` FOREIGN KEY (`repo_id`)
-                                   REFERENCES `TBL_VCS_REPO` (`repo_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                               CONSTRAINT `FK_VCS_OBJ_USER` FOREIGN KEY (`vcs_account_id`)
-                                   REFERENCES `TBL_VCS_ACCOUNT` (`vcs_account_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+-- 6. TBL_CARD_BOARD, TBL_CARD_TAG, TBL_USER를 참조하는 테이블
+CREATE TABLE TBL_CARD
+(
+    card_id         BIGINT       NOT NULL AUTO_INCREMENT COMMENT '카드ID',
+    title           VARCHAR(255) NOT NULL COMMENT '제목',
+    content         TEXT COMMENT '내용',
+    created_at      TIMESTAMP    NOT NULL COMMENT '생성시각',
+    start_time      TIMESTAMP COMMENT '시작시각',
+    end_time        TIMESTAMP COMMENT '마감시각',
+    vcs_object_type VARCHAR(255) COMMENT 'VCS 객체 종류',
+    vcs_object_url  VARCHAR(511) COMMENT 'VCS 객체 URL',
+    card_board_id   BIGINT       NOT NULL COMMENT '카드보드ID',
+    tag_id          BIGINT COMMENT '태그ID',
+    created_by      BIGINT       NOT NULL COMMENT '작성자ID',
+    assignee        BIGINT COMMENT '담당자 ID',
+    PRIMARY KEY (card_id),
+    FOREIGN KEY (card_board_id) REFERENCES TBL_CARD_BOARD (card_board_id),
+    FOREIGN KEY (tag_id) REFERENCES TBL_CARD_TAG (tag_id),
+    FOREIGN KEY (created_by) REFERENCES TBL_USER (user_id),
+    FOREIGN KEY (assignee) REFERENCES TBL_USER (user_id)
+) COMMENT = '카드';
 
-CREATE TABLE `TBL_CARDBOARD` (
-                                  `CARDBOARD_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                  `title` VARCHAR(255) NOT NULL,
-                                  `created_at` TIMESTAMP NOT NULL,
-                                  `start_time` TIMESTAMP,
-                                  `end_time` TIMESTAMP,
-                                  `progress_status` TINYINT NOT NULL,
-                                  `milestone_id` BIGINT,
-                                  `workspace_id` BIGINT NOT NULL,
-                                  PRIMARY KEY (`CARDBOARD_id`),
-                                  CONSTRAINT `FK_CARDBOARD_MILESTONE` FOREIGN KEY (`milestone_id`)
-                                      REFERENCES `TBL_VCS_MILESTONE` (`milestone_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-                                  CONSTRAINT `FK_CARDBOARD_WORKSPACE` FOREIGN KEY (`workspace_id`)
-                                      REFERENCES `TBL_WORKSPACE` (`workspace_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+-- 7. TBL_CARD를 참조하는 테이블들
+CREATE TABLE TBL_CARD_ATTACHMENTS
+(
+    attachment_id BIGINT        NOT NULL AUTO_INCREMENT COMMENT '첨부파일ID',
+    description   VARCHAR(1023) COMMENT '설명',
+    content       VARCHAR(1023) NOT NULL COMMENT '내용',
+    card_id       BIGINT        NOT NULL COMMENT '카드ID',
+    PRIMARY KEY (attachment_id),
+    FOREIGN KEY (card_id) REFERENCES TBL_CARD (card_id)
+) COMMENT = '카드 첨부파일';
 
-CREATE TABLE `TBL_TAG` (
-                                `tag_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                `tag_name` VARCHAR(255) NOT NULL,
-                                `color` VARCHAR(255) NOT NULL,
-                                `workspace_id` BIGINT NOT NULL,
-                                PRIMARY KEY (`tag_id`),
-                                CONSTRAINT `FK_TAG_WORKSPACE` FOREIGN KEY (`workspace_id`)
-                                    REFERENCES `TBL_WORKSPACE` (`workspace_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+CREATE TABLE TBL_CARD_BOOKMARK
+(
+    card_bookmark_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '카드북마크ID',
+    user_id          BIGINT NOT NULL COMMENT '회원ID',
+    card_id          BIGINT NOT NULL COMMENT '카드ID',
+    PRIMARY KEY (card_bookmark_id),
+    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id),
+    FOREIGN KEY (card_id) REFERENCES TBL_CARD (card_id)
+) COMMENT = '카드 북마크';
 
-CREATE TABLE `TBL_CARD` (
-                            `card_id` BIGINT NOT NULL AUTO_INCREMENT,
-                            `title` VARCHAR(255) NOT NULL,
-                            `content` VARCHAR(1023),
-                            `created_at` TIMESTAMP NOT NULL,
-                            `CARDBOARD_id` BIGINT NOT NULL,
-                            `tag_id` BIGINT,
-                            `vcs_obj_id` BIGINT,
-                            `author` BIGINT NOT NULL,
-                            `end_time` TIMESTAMP,
-                            `user_id` BIGINT,
-                            PRIMARY KEY (`card_id`),
-                            CONSTRAINT `FK_CARDBOARD` FOREIGN KEY (`CARDBOARD_id`)
-                                REFERENCES `TBL_CARDBOARD` (`CARDBOARD_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                            CONSTRAINT `FK_CARD_TAG` FOREIGN KEY (`tag_id`)
-                                REFERENCES `TBL_TAG` (`tag_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-                            CONSTRAINT `FK_CARD_VCS_OBJ` FOREIGN KEY (`vcs_obj_id`)
-                                REFERENCES `TBL_VCS_OBJ` (`vcs_obj_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-                            CONSTRAINT `FK_CARD_AUTHOR` FOREIGN KEY (`author`)
-                                REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                            CONSTRAINT `FK_CARD_USER` FOREIGN KEY (`user_id`)
-                                REFERENCES `TBL_USER` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+CREATE TABLE TBL_CARD_COMMENT
+(
+    card_comment_id BIGINT        NOT NULL AUTO_INCREMENT COMMENT '댓글ID',
+    content         VARCHAR(1023) NOT NULL COMMENT '댓글 내용',
+    created_at      TIMESTAMP     NOT NULL COMMENT '생성시각',
+    updated_at      TIMESTAMP     NOT NULL COMMENT '수정시각',
+    user_id         BIGINT        NOT NULL COMMENT '회원ID',
+    card_id         BIGINT        NOT NULL COMMENT '카드ID',
+    PRIMARY KEY (card_comment_id),
+    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id),
+    FOREIGN KEY (card_id) REFERENCES TBL_CARD (card_id)
+) COMMENT = '카드 댓글';
 
-CREATE TABLE `TBL_CARD_ATTACHMENTS` (
-                                        `attachment_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                        `description` VARCHAR(255),
-                                        `content` TEXT NOT NULL,
-                                        `card_id` BIGINT NOT NULL,
-                                        PRIMARY KEY (`attachment_id`),
-                                        CONSTRAINT `FK_ATTACHMENT_CARD` FOREIGN KEY (`card_id`)
-                                            REFERENCES `TBL_CARD` (`card_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+CREATE TABLE TBL_CHECKLIST
+(
+    checklist_id BIGINT        NOT NULL AUTO_INCREMENT COMMENT '체크리스트 ID',
+    card_id      BIGINT        NOT NULL COMMENT '카드ID',
+    content      VARCHAR(1023) NOT NULL COMMENT '내용',
+    status       VARCHAR(255)  NOT NULL COMMENT '상태',
+    PRIMARY KEY (checklist_id),
+    FOREIGN KEY (card_id) REFERENCES TBL_CARD (card_id)
+) COMMENT = '체크리스트';
 
-CREATE TABLE `TBL_CARD_BOOKMARK` (
-                                     `user_id` BIGINT NOT NULL,
-                                     `card_id` BIGINT NOT NULL,
-                                     PRIMARY KEY (`user_id`, `card_id`),
-                                     CONSTRAINT `FK_BOOKMARK_USER` FOREIGN KEY (`user_id`)
-                                         REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                     CONSTRAINT `FK_BOOKMARK_CARD` FOREIGN KEY (`card_id`)
-                                         REFERENCES `TBL_CARD` (`card_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+-- 8. TBL_SCHEDULE을 참조하는 테이블
+CREATE TABLE TBL_MEETING_NOTE
+(
+    schedule_id BIGINT NOT NULL COMMENT '일정ID',
+    title       VARCHAR(1023) COMMENT '제목',
+    content     TEXT COMMENT '내용',
+    PRIMARY KEY (schedule_id),
+    FOREIGN KEY (schedule_id) REFERENCES TBL_SCHEDULE (schedule_id)
+) COMMENT = '회의록';
 
+-- 9. 팀 관련 테이블들
+CREATE TABLE TBL_TEAM_BOARD
+(
+    team_board_id BIGINT       NOT NULL AUTO_INCREMENT COMMENT '팀게시판ID',
+    team_id       BIGINT       NOT NULL COMMENT '팀ID',
+    board_title   VARCHAR(255) NOT NULL COMMENT '게시판이름',
+    PRIMARY KEY (team_board_id),
+    FOREIGN KEY (team_id) REFERENCES TBL_TEAM (team_id)
+) COMMENT = '팀 게시판';
 
-CREATE TABLE `TBL_CARD_COMMENT` (
-                                    `card_comment_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                    `content` VARCHAR(1023) NOT NULL,
-                                    `created_at` TIMESTAMP NOT NULL,
-                                    `updated_at` TIMESTAMP NOT NULL,
-                                    `user_id` BIGINT NOT NULL,
-                                    `card_id` BIGINT NOT NULL,
-                                    PRIMARY KEY (`card_comment_id`),
-                                    CONSTRAINT `FK_COMMENT_USER` FOREIGN KEY (`user_id`)
-                                        REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                    CONSTRAINT `FK_COMMENT_CARD` FOREIGN KEY (`card_id`)
-                                        REFERENCES `TBL_CARD` (`card_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+CREATE TABLE TBL_TEAM_POST
+(
+    team_post_id  BIGINT       NOT NULL AUTO_INCREMENT COMMENT '팀 게시글ID',
+    title         VARCHAR(255) NOT NULL COMMENT '제목',
+    content       TEXT         NOT NULL COMMENT '내용',
+    created_at    TIMESTAMP    NOT NULL COMMENT '생성시각',
+    updated_at    TIMESTAMP    NOT NULL COMMENT '수정시각',
+    user_id       BIGINT       NOT NULL COMMENT '작성자ID',
+    team_board_id BIGINT       NOT NULL COMMENT '팀게시판ID',
+    PRIMARY KEY (team_post_id),
+    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id),
+    FOREIGN KEY (team_board_id) REFERENCES TBL_TEAM_BOARD (team_board_id)
+) COMMENT = '팀 게시글';
 
-CREATE TABLE `TBL_CHECKLIST` (
-                                 `checklist_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                 `title` VARCHAR(255) NOT NULL,
-                                 `card_id` BIGINT NOT NULL,
-                                 PRIMARY KEY (`checklist_id`),
-                                 CONSTRAINT `FK_CHECKLIST_CARD` FOREIGN KEY (`card_id`)
-                                     REFERENCES `TBL_CARD` (`card_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+CREATE TABLE TBL_TEAM_COMMENT
+(
+    team_comment_id BIGINT    NOT NULL AUTO_INCREMENT COMMENT '팀 댓글ID',
+    created_at      TIMESTAMP NOT NULL COMMENT '생성시각',
+    updated_at      TIMESTAMP NOT NULL COMMENT '수정시각',
+    team_post_id    BIGINT    NOT NULL COMMENT '팀 게시글ID',
+    created_by      BIGINT    NOT NULL COMMENT '작성자ID',
+    PRIMARY KEY (team_comment_id),
+    FOREIGN KEY (team_post_id) REFERENCES TBL_TEAM_POST (team_post_id),
+    FOREIGN KEY (created_by) REFERENCES TBL_USER (user_id)
+) COMMENT = '팀 댓글';
 
-CREATE TABLE `TBL_CHECKLIST_ITEM` (
-                                      `item_number` TINYINT NOT NULL,
-                                      `complete_status` VARCHAR(255) NOT NULL,
-                                      `content` VARCHAR(511) NOT NULL,
-                                      `card_id` BIGINT NOT NULL,
-                                      PRIMARY KEY (`card_id`,`item_number`),
-                                      CONSTRAINT `FK_CHECKLIST_ITEM_CARD` FOREIGN KEY (`card_id`)
-                                          REFERENCES `TBL_CARD` (`card_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+-- 10. 연결 테이블들
+CREATE TABLE TBL_TEAM_SCHEDULE
+(
+    team_id     BIGINT NOT NULL COMMENT '팀ID',
+    schedule_id BIGINT NOT NULL COMMENT '일정ID',
+    PRIMARY KEY (team_id, schedule_id),
+    FOREIGN KEY (team_id) REFERENCES TBL_TEAM (team_id),
+    FOREIGN KEY (schedule_id) REFERENCES TBL_SCHEDULE (schedule_id)
+) COMMENT = '팀-일정';
 
-CREATE TABLE `TBL_MEETINGROOM` (
-                                      `meetingroom_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                      `meetingroom_place` VARCHAR(255),
-                                      `meetingroom_name` VARCHAR(255),
-                                      `meetingroom_capacity` INT,
-                                      PRIMARY KEY (`meetingroom_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+CREATE TABLE TBL_PROJ_SCHEDULE
+(
+    project_id  BIGINT NOT NULL COMMENT '프로젝트ID',
+    schedule_id BIGINT NOT NULL COMMENT '일정ID',
+    PRIMARY KEY (project_id, schedule_id),
+    FOREIGN KEY (project_id) REFERENCES TBL_PROJ (proj_id),
+    FOREIGN KEY (schedule_id) REFERENCES TBL_SCHEDULE (schedule_id)
+) COMMENT = '프로젝트-일정';
 
+CREATE TABLE TBL_USER_SCHEDULE
+(
+    user_id     BIGINT NOT NULL COMMENT '회원ID',
+    schedule_id BIGINT NOT NULL COMMENT '일정ID',
+    status      VARCHAR(255) COMMENT '참여상태',
+    PRIMARY KEY (user_id, schedule_id),
+    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id),
+    FOREIGN KEY (schedule_id) REFERENCES TBL_SCHEDULE (schedule_id)
+) COMMENT = '회원-일정';
 
-CREATE TABLE `TBL_MEETINGROOM_RESERVATION` (
-    					`meetingroom_reservation_id` BIGINT NOT NULL AUTO_INCREMENT, 
-    					`user_id` BIGINT NOT NULL,                      
-    					`meetingroom_id` BIGINT NOT NULL,              
-    					`start_time` TIMESTAMP NOT NULL,               
-    					`end_time` TIMESTAMP NOT NULL,                  
-					PRIMARY KEY (`meetingroom_reservation_id`),
-    					CONSTRAINT `FK_RESERVATION_USER` FOREIGN KEY (`user_id`)
-        					REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    					CONSTRAINT `FK_RESERVATION_MEETINGROOM` FOREIGN KEY (`meetingroom_id`)
-        					REFERENCES `TBL_MEETINGROOM` (`meetingroom_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+CREATE TABLE TBL_USER_PROJ
+(
+    proj_member_id       BIGINT       NOT NULL AUTO_INCREMENT COMMENT '프로젝트멤버ID',
+    bookmark_status      VARCHAR(255) NOT NULL COMMENT '북마크여부',
+    participation_status VARCHAR(255) NOT NULL COMMENT '참여상태',
+    proj_id              BIGINT       NOT NULL COMMENT '프로젝트ID',
+    user_id              BIGINT       NOT NULL COMMENT '회원ID',
+    PRIMARY KEY (proj_member_id),
+    FOREIGN KEY (proj_id) REFERENCES TBL_PROJ (proj_id),
+    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id)
+) COMMENT = '회원-프로젝트';
 
+CREATE TABLE TBL_WORKSPACE_BOOKMARK
+(
+    workspace_bookmark_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '워크스페이스 북마크ID',
+    workspace_id          BIGINT NOT NULL COMMENT '워크스페이스ID',
+    user_id               BIGINT NOT NULL COMMENT '회원ID',
+    PRIMARY KEY (workspace_bookmark_id),
+    FOREIGN KEY (workspace_id) REFERENCES TBL_WORKSPACE (workspace_id),
+    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id)
+) COMMENT = '워크스페이스 북마크';
 
-CREATE TABLE `TBL_SCHEDULE_REPEAT` (
-                                    `schedule_repeat_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                    `title` VARCHAR(255),
-                                    `content` VARCHAR(511),
-                                    `start_time` TIMESTAMP,
-                                    `end_time` TIMESTAMP,
-                                    `update_time` TIMESTAMP NOT NULL,
-                                    `public_status` VARCHAR(255) NOT NULL,  
-                                    `meeting_status` VARCHAR(255) NOT NULL,
-				    `repeat_end` TIMESTAMP,
-                                    `recurrence_type` VARCHAR(255) NOT NULL,
-                                    `personal_recurrence_unit` VARCHAR(255),
-                                    `personal_recurrence_interval` INT,
-                                    `personal_recurrence_selected_days` INT,
-                                    `personal_monthly_type` VARCHAR(255),
-                                    `user_id` BIGINT NOT NULL,
-                                    PRIMARY KEY (`schedule_repeat_id`),
-                                    CONSTRAINT `FK_SCHEDULE_REPEAT_USER` FOREIGN KEY (`user_id`)
-                                        REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                    CHECK (public_status IN ('PUBLIC', 'PRIVATE')),
-                                    CHECK (meeting_status IN ('ACTIVE', 'INACTIVE')),
-                                    CHECK (recurrence_type IN 
-                                        ('EVERYDAY', 'EVERY_WEEK_DAY','EVERY_MONTH_DAY','EVERY_YEAR_DAY','ALL_WORK_DAY','PERSONAL')),
-                                    CHECK (personal_monthly_type IN ('EVERY_DAY', 'EVERY_WEEK_DAY'))
-
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_SCHEDULE_REPEAT_PARTICIPANT` (
-                                     `user_id` BIGINT NOT NULL,
-                                     `schedule_repeat_id` BIGINT NOT NULL,
-                                     `participation_status` VARCHAR(255),
-                                     PRIMARY KEY (`user_id`, `schedule_repeat_id`),
-                                     CONSTRAINT `FK_SCHEDULE_REPEAT_PARTICIAPNT_USER` FOREIGN KEY (`user_id`)
-                                         REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                     CONSTRAINT `FK_SCHEDULE_REPEAT_PRATICIPANT_SCHEDULE_REPAET` FOREIGN KEY (`schedule_repeat_id`)
-                                         REFERENCES `TBL_SCHEDULE_REPEAT` (`schedule_repeat_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-
-CREATE TABLE `TBL_SCHEDULE` (
-                                `schedule_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                `title` VARCHAR(255),
-                                `content` VARCHAR(511),
-                                `start_time` TIMESTAMP NOT NULL,
-                                `end_time` TIMESTAMP NOT NULL,
-                                `update_time` TIMESTAMP NOT NULL,
-                                `public_status` VARCHAR(255) NOT NULL,
-                                `schedule_repeat_id` BIGINT NULL,
-                                `repeat_order` BIGINT,
-                                `meeting_status` VARCHAR(255) NOT NULL,
-                                `meetingroom_id` BIGINT,
-                                `user_id` BIGINT NOT NULL,
-                                PRIMARY KEY (`schedule_id`),
-                                CONSTRAINT `FK_SCHEDULE_MEETINGROOM` FOREIGN KEY (`meetingroom_id`)
-                                    REFERENCES `TBL_MEETINGROOM` (`meetingroom_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-                                CONSTRAINT `FK_SCHEDULE_USER` FOREIGN KEY (`user_id`)
-                                    REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                CONSTRAINT `FK_SCHEDULE_REPEAT` FOREIGN KEY (`schedule_repeat_id`)
-                                    REFERENCES `TBL_SCHEDULE_REPEAT` (`schedule_repeat_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_MEETING_NOTE` (
-                                    `schedule_id` BIGINT NOT NULL,
-                                    `title` VARCHAR(1023),
-                                    `content` TEXT,
-                                    PRIMARY KEY (`schedule_id`),
-                                    CONSTRAINT `FK_MEETING_NOTE_SCHEDULE` FOREIGN KEY (`schedule_id`)
-                                        REFERENCES `TBL_SCHEDULE` (`schedule_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_TEAM_BOARD` (
-                                  `team_board_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                  `team_id` BIGINT NOT NULL,
-                                  `board_title` VARCHAR(255) NOT NULL,
-                                  PRIMARY KEY (`team_board_id`),
-                                  CONSTRAINT `FK_TEAM_BOARD_TEAM` FOREIGN KEY (`team_id`)
-                                      REFERENCES `TBL_TEAM` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_TEAM_POST` (
-                                 `team_post_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                 `title` VARCHAR(255) NOT NULL,
-                                 `content` TEXT NOT NULL,
-                                 `created_at` TIMESTAMP NOT NULL,
-                                 `updated_at` TIMESTAMP NOT NULL,
-                                 `user_id` BIGINT NOT NULL,
-                                 `team_board_id` BIGINT NOT NULL,
-                                 PRIMARY KEY (`team_post_id`),
-                                 CONSTRAINT `FK_TEAM_POST_USER` FOREIGN KEY (`user_id`)
-                                     REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                 CONSTRAINT `FK_TEAM_POST_BOARD` FOREIGN KEY (`team_board_id`)
-                                     REFERENCES `TBL_TEAM_BOARD` (`team_board_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_TEAM_COMMENT` (
-                                    `team_comment_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                    `created_at` TIMESTAMP NOT NULL,
-                                    `updated_at` TIMESTAMP NOT NULL,
-                                    `team_post_id` BIGINT NOT NULL,
-                                    `author` BIGINT NOT NULL,
-                                    PRIMARY KEY (`team_comment_id`),
-                                    CONSTRAINT `FK_TEAM_COMMENT_POST` FOREIGN KEY (`team_post_id`)
-                                        REFERENCES `TBL_TEAM_POST` (`team_post_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                    CONSTRAINT `FK_TEAM_COMMENT_AUTHOR` FOREIGN KEY (`author`)
-                                        REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_TEAM_SCHEDULE` (
-                                     `team_id` BIGINT NOT NULL,
-                                     `schedule_id` BIGINT NOT NULL,
-                                     PRIMARY KEY (`team_id`, `schedule_id`),
-                                     CONSTRAINT `FK_TEAM_SCHEDULE_TEAM` FOREIGN KEY (`team_id`)
-                                         REFERENCES `TBL_TEAM` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                     CONSTRAINT `FK_TEAM_SCHEDULE_SCHEDULE` FOREIGN KEY (`schedule_id`)
-                                         REFERENCES `TBL_SCHEDULE` (`schedule_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_TEAM_WORK` (
-                                 `team_work_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                 `title` VARCHAR(255) NOT NULL,
-                                 `content` VARCHAR(1023) NOT NULL,
-                                 `created_at` TIMESTAMP NOT NULL,
-                                 `start_time` TIMESTAMP,
-                                 `end_time` TIMESTAMP NOT NULL,
-                                 `assignee_id` BIGINT,
-                                 `status` VARCHAR(255) NOT NULL,
-                                 `team_id` BIGINT NOT NULL,
-                                 `user_id` BIGINT NOT NULL,
-                                 PRIMARY KEY (`team_work_id`),
-                                 CONSTRAINT `FK_TEAM_WORK_TEAM` FOREIGN KEY (`team_id`)
-                                     REFERENCES `TBL_TEAM` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                 CONSTRAINT `FK_TEAM_WORK_USER` FOREIGN KEY (`user_id`)
-                                     REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                 CONSTRAINT `FK_TEAM_WORK_ASSIGNEE` FOREIGN KEY (`assignee_id`)
-                                     REFERENCES `TBL_USER` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_PROJ_MEMBER` (
-                                 `user_id` BIGINT NOT NULL,
-                                 `proj_id` BIGINT NOT NULL,
-                                 `bookmark_status` VARCHAR(255) NOT NULL,
-                                 `participation_status` VARCHAR(255) NOT NULL,
-                                 PRIMARY KEY (`user_id`, `proj_id`),
-                                 CONSTRAINT `FK_USER_PROJ_USER` FOREIGN KEY (`user_id`)
-                                     REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                 CONSTRAINT `FK_USER_PROJ_PROJ` FOREIGN KEY (`proj_id`)
-                                     REFERENCES `TBL_PROJ` (`proj_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_SCHEDULE_PARTICIPANT` (
-                                     `user_id` BIGINT NOT NULL,
-                                     `schedule_id` BIGINT NOT NULL,
-                                     `participation_status` VARCHAR(255),
-                                     PRIMARY KEY (`user_id`, `schedule_id`),
-                                     CONSTRAINT `FK_USER_SCHEDULE_USER` FOREIGN KEY (`user_id`)
-                                         REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                     CONSTRAINT `FK_USER_SCHEDULE_SCHEDULE` FOREIGN KEY (`schedule_id`)
-                                         REFERENCES `TBL_SCHEDULE` (`schedule_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_WORKSPACE_BOOKMARK` (
-                              `user_id` BIGINT NOT NULL,
-                              `workspace_id` BIGINT NOT NULL,
-                              PRIMARY KEY (`user_id`, `workspace_id`),
-                              CONSTRAINT `FK_WORKSPACE_BOOKMARK_USER` FOREIGN KEY (`user_id`)
-                                  REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                              CONSTRAINT `FK_WORKSPACE_BOOKMARK_WORKSPACE` FOREIGN KEY (`workspace_id`)
-                                  REFERENCES `TBL_WORKSPACE` (`workspace_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-CREATE TABLE `TBL_PROJ_SCHEDULE` (
-                           `project_id` BIGINT NOT NULL,
-                           `schedule_id` BIGINT NOT NULL,
-                           PRIMARY KEY (`project_id`, `schedule_id`),
-                           CONSTRAINT `FK_PROJ_SCHEDULE_PROJ` FOREIGN KEY (`project_id`)
-                               REFERENCES `TBL_PROJ` (`proj_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                           CONSTRAINT `FK_PROJ_SCHEDULE_SCHEDULE` FOREIGN KEY (`schedule_id`)
-                               REFERENCES `TBL_SCHEDULE` (`schedule_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+CREATE TABLE TBL_TEAM_WORK
+(
+    team_work_id BIGINT        NOT NULL AUTO_INCREMENT COMMENT '팀업무ID',
+    title        VARCHAR(255)  NOT NULL COMMENT '팀업무제목',
+    content      VARCHAR(1023) NOT NULL COMMENT '팀 업무 내용',
+    created_at   TIMESTAMP     NOT NULL COMMENT '생성시각',
+    start_time   TIMESTAMP COMMENT '시작시각',
+    end_time     TIMESTAMP     NOT NULL COMMENT '종료시각',
+    assignee_id  BIGINT COMMENT '담당자ID',
+    status       VARCHAR(255)  NOT NULL COMMENT 'status',
+    team_id      BIGINT        NOT NULL COMMENT '팀ID',
+    created_by   BIGINT        NOT NULL COMMENT '작성자ID',
+    PRIMARY KEY (team_work_id),
+    FOREIGN KEY (assignee_id) REFERENCES TBL_USER (user_id),
+    FOREIGN KEY (team_id) REFERENCES TBL_TEAM (team_id),
+    FOREIGN KEY (created_by) REFERENCES TBL_USER (user_id)
+) COMMENT = '팀 업무';
