@@ -321,7 +321,9 @@ CREATE TABLE TBL_PROJ_MEMBER
     proj_id              BIGINT       NOT NULL COMMENT '프로젝트ID',
     user_id              BIGINT       NOT NULL COMMENT '회원ID',
     PRIMARY KEY (proj_member_id),
-    FOREIGN KEY (proj_id) REFERENCES TBL_PROJ (proj_id),
+    CHECK ( participation_status IN ('MEMBER','OWNER','PENDING') ),
+    CHECK ( bookmark_status IN ('BOOKMARKED','NOT_BOOKMARKED') ),
+        FOREIGN KEY (proj_id) REFERENCES TBL_PROJ (proj_id),
     FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id)
 ) COMMENT = '회원-프로젝트';
 

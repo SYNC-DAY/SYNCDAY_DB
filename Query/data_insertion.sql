@@ -164,9 +164,9 @@ VALUES (1, 1),
 
 -- 연결 테이블 데이터
 INSERT INTO tbl_proj_member (bookmark_status, participation_status, proj_id, user_id)
-VALUES ('BOOKMARKED', 'ACTIVE', 1, 1),
-       ('NOT_BOOKMARKED', 'ACTIVE', 1, 2),
-       ('BOOKMARKED', 'ACTIVE', 2, 3);
+VALUES ('BOOKMARKED', 'OWNER', 1, 1),
+       ('NOT_BOOKMARKED', 'MEMBER', 1, 2),
+       ('BOOKMARKED', 'PENDING', 2, 3);
 
 INSERT INTO TBL_USER_SCHEDULE (user_id, schedule_id, status)
 VALUES (1, 1, 'CONFIRMED'),
