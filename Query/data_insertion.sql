@@ -53,13 +53,13 @@ VALUES ('긴급', '#FF0000', 1),
        ('검토필요', '#0000FF', 2);
 
 -- 카드보드 데이터
-INSERT INTO TBL_CARD_BOARD (title, created_at, start_time, end_time, progress_status, workspace_id)
+INSERT INTO TBL_CARDBOARD (title, created_at, start_time, end_time, progress_status, workspace_id)
 VALUES ('스프린트 1', NOW(), '2024-03-01 00:00:00', '2024-03-15 23:59:59', 40, 1),
        ('스프린트 2', NOW(), '2024-03-16 00:00:00', '2024-03-31 23:59:59', 20, 1),
        ('디자인 작업', NOW(), '2024-03-01 00:00:00', '2024-03-31 23:59:59', 30, 2);
 
 -- 카드 데이터
-INSERT INTO TBL_CARD (title, content, created_at, start_time, end_time, card_board_id, tag_id, created_by, assignee)
+INSERT INTO TBL_CARD (title, content, created_at, start_time, end_time, cardboard_id, tag_id, created_by, assignee)
 VALUES ('로그인 기능 구현', '스프링 시큐리티를 이용한 로그인 기능 구현', NOW(), '2024-03-01 00:00:00', '2024-03-07 23:59:59', 1, 1, 1, 1),
        ('메인 페이지 디자인', '반응형 메인 페이지 디자인 작업', NOW(), '2024-03-08 00:00:00', '2024-03-14 23:59:59', 3, 3, 2, 2),
        ('API 문서화', 'Swagger를 이용한 API 문서화 작업', NOW(), '2024-03-16 00:00:00', '2024-03-22 23:59:59', 2, 4, 1, 1);
@@ -165,7 +165,7 @@ VALUES (1, 1),
 -- 연결 테이블 데이터
 INSERT INTO tbl_proj_member (bookmark_status, participation_status, proj_id, user_id)
 VALUES ('BOOKMARKED', 'OWNER', 1, 1),
-       ('NOT_BOOKMARKED', 'MEMBER', 1, 2),
+       ('NONE', 'MEMBER', 1, 2),
        ('BOOKMARKED', 'PENDING', 2, 3);
 
 INSERT INTO TBL_USER_SCHEDULE (user_id, schedule_id, status)

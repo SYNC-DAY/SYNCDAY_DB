@@ -20,15 +20,15 @@ VALUES
 INSERT INTO TBL_PROJ_MEMBER (bookmark_status, participation_status, proj_id, user_id)
 VALUES
     ('BOOKMARKED', 'OWNER', 4, 1),    -- 김개발이 모바일 앱 프로젝트 소유자
-    ('NOT_BOOKMARKED', 'MEMBER', 4, 2), -- 이코딩이 모바일 앱 프로젝트 멤버
+    ('NONE', 'MEMBER', 4, 2), -- 이코딩이 모바일 앱 프로젝트 멤버
     ('BOOKMARKED', 'OWNER', 5, 1),    -- 김개발이 API 서버 프로젝트 소유자
-    ('NOT_BOOKMARKED', 'MEMBER', 5, 2), -- 이코딩이 API 서버 프로젝트 멤버
+    ('NONE', 'MEMBER', 5, 2), -- 이코딩이 API 서버 프로젝트 멤버
     ('BOOKMARKED', 'OWNER', 6, 3),    -- 박디자인이 디자인 시스템 프로젝트 소유자
-    ('NOT_BOOKMARKED', 'MEMBER', 6, 4), -- 정그래픽이 디자인 시스템 프로젝트 멤버
+    ('NONE', 'MEMBER', 6, 4), -- 정그래픽이 디자인 시스템 프로젝트 멤버
     ('BOOKMARKED', 'OWNER', 7, 5);    -- 최마케팅이 마케팅 캠페인 프로젝트 소유자
 
 -- Additional Card Board Data
-INSERT INTO TBL_CARD_BOARD (title, created_at, start_time, end_time, progress_status, workspace_id)
+INSERT INTO TBL_CARDBOARD (title, created_at, start_time, end_time, progress_status, workspace_id)
 VALUES
     ('모바일 앱 1차 개발', NOW(), '2024-02-01 00:00:00', '2024-03-31 23:59:59', 15, 4),
     ('API 개발 Sprint 1', NOW(), '2024-01-15 00:00:00', '2024-02-15 23:59:59', 80, 5),
@@ -46,7 +46,7 @@ VALUES
     ('기획', '#FFFF00', 9);
 
 -- Additional Card Data
-INSERT INTO TBL_CARD (title, content, created_at, start_time, end_time, card_board_id, tag_id, created_by, assignee)
+INSERT INTO TBL_CARD (title, content, created_at, start_time, end_time, cardboard_id, tag_id, created_by, assignee)
 VALUES
     ('로그인 화면 구현', '모바일 앱 로그인 화면 UI/UX 구현', NOW(), '2024-02-01 00:00:00', '2024-02-15 23:59:59', 4, 1, 1, 2),
     ('회원가입 API 개발', 'REST API 엔드포인트 구현 및 문서화', NOW(), '2024-01-15 00:00:00', '2024-01-31 23:59:59', 5, 3, 1, 1),
@@ -101,11 +101,11 @@ INSERT INTO TBL_PROJ_MEMBER (bookmark_status, participation_status, proj_id, use
 VALUES
 -- 백엔드 시스템 개선 프로젝트
 ('BOOKMARKED', 'OWNER', @backend_proj_id, 1),    -- 김개발: 소유자
-('NOT_BOOKMARKED', 'MEMBER', @backend_proj_id, 2), -- 이코딩: 멤버
+('NONE', 'MEMBER', @backend_proj_id, 2), -- 이코딩: 멤버
 -- 신규 서비스 개발 프로젝트
 ('BOOKMARKED', 'OWNER', @new_service_proj_id, 1),    -- 김개발: 소유자
-('NOT_BOOKMARKED', 'MEMBER', @new_service_proj_id, 2), -- 이코딩: 멤버
-('NOT_BOOKMARKED', 'MEMBER', @new_service_proj_id, 3), -- 박디자인: 멤버
+('NONE', 'MEMBER', @new_service_proj_id, 2), -- 이코딩: 멤버
+('NONE', 'MEMBER', @new_service_proj_id, 3), -- 박디자인: 멤버
 -- 레거시 시스템 마이그레이션 프로젝트
 ('BOOKMARKED', 'OWNER', @migration_proj_id, 1);     -- 김개발: 소유자
 
@@ -166,7 +166,7 @@ SET @refactoring_tag_id = LAST_INSERT_ID();
 SET @documentation_tag_id = LAST_INSERT_ID() + 1;
 
 -- 카드보드 생성
-INSERT INTO TBL_CARD_BOARD (title, created_at, start_time, end_time, progress_status, workspace_id)
+INSERT INTO TBL_CARDBOARD (title, created_at, start_time, end_time, progress_status, workspace_id)
 VALUES
 -- 성능 최적화 워크스페이스의 카드보드들
 ('캐시 시스템 개선', NOW(), '2024-01-01 00:00:00', '2024-02-29 23:59:59', 45, @performance_workspace_id),
@@ -175,7 +175,7 @@ VALUES
 SET @cache_board_id = LAST_INSERT_ID();
 SET @db_board_id = LAST_INSERT_ID() + 1;
 
-INSERT INTO TBL_CARD_BOARD (title, created_at, start_time, end_time, progress_status, workspace_id)
+INSERT INTO TBL_CARDBOARD (title, created_at, start_time, end_time, progress_status, workspace_id)
 VALUES
 -- API 리팩토링 워크스페이스의 카드보드들
 ('API 구조 개선', NOW(), '2024-01-15 00:00:00', '2024-03-15 23:59:59', 30, @api_workspace_id),
@@ -185,7 +185,7 @@ SET @api_structure_board_id = LAST_INSERT_ID();
 SET @api_doc_board_id = LAST_INSERT_ID() + 1;
 
 -- 카드 생성
-INSERT INTO TBL_CARD (title, content, created_at, start_time, end_time, card_board_id, tag_id, created_by, assignee)
+INSERT INTO TBL_CARD (title, content, created_at, start_time, end_time, cardboard_id, tag_id, created_by, assignee)
 VALUES
 -- 캐시 시스템 개선 카드보드의 카드들
 ('Redis 캐시 도입', '주요 API 응답 속도 개선을 위한 Redis 캐시 도입', NOW(), '2024-01-01 00:00:00', '2024-01-15 23:59:59', @cache_board_id, @performance_tag_id, 1, 1),
@@ -194,7 +194,7 @@ VALUES
 SET @redis_card_id = LAST_INSERT_ID();
 SET @cache_invalidation_card_id = LAST_INSERT_ID() + 1;
 
-INSERT INTO TBL_CARD (title, content, created_at, start_time, end_time, card_board_id, tag_id, created_by, assignee)
+INSERT INTO TBL_CARD (title, content, created_at, start_time, end_time, cardboard_id, tag_id, created_by, assignee)
 VALUES
 -- 데이터베이스 최적화 카드보드의 카드들
 ('인덱스 최적화', '주요 쿼리 성능 개선을 위한 인덱스 재설계', NOW(), '2024-02-01 00:00:00', '2024-02-15 23:59:59', @db_board_id, @performance_tag_id, 1, 1),

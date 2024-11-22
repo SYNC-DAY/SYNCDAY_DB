@@ -152,9 +152,9 @@ CREATE TABLE TBL_CARD_TAG
     FOREIGN KEY (workspace_id) REFERENCES TBL_WORKSPACE (workspace_id)
 ) COMMENT = '카드태그';
 
-CREATE TABLE TBL_CARD_BOARD
+CREATE TABLE TBL_CARDBOARD
 (
-    card_board_id     BIGINT       NOT NULL AUTO_INCREMENT COMMENT '카드보드ID',
+    cardboard_id     BIGINT       NOT NULL AUTO_INCREMENT COMMENT '카드보드ID',
     title             VARCHAR(255) NOT NULL COMMENT '이름',
     created_at        TIMESTAMP    NOT NULL COMMENT '생성시각',
     start_time        TIMESTAMP COMMENT '시작시각',
@@ -163,7 +163,7 @@ CREATE TABLE TBL_CARD_BOARD
     vcs_type          VARCHAR(255) COMMENT 'VCS 타입',
     vcs_milestone_url VARCHAR(511) COMMENT 'VCS 마일스톤 URL',
     workspace_id      BIGINT       NOT NULL COMMENT '워크스페이스ID',
-    PRIMARY KEY (card_board_id),
+    PRIMARY KEY (cardboard_id),
     FOREIGN KEY (workspace_id) REFERENCES TBL_WORKSPACE (workspace_id)
 ) COMMENT = '카드보드';
 
@@ -178,12 +178,12 @@ CREATE TABLE TBL_CARD
     end_time        TIMESTAMP COMMENT '마감시각',
     vcs_object_type VARCHAR(255) COMMENT 'VCS 객체 종류',
     vcs_object_url  VARCHAR(511) COMMENT 'VCS 객체 URL',
-    card_board_id   BIGINT       NOT NULL COMMENT '카드보드ID',
+    cardboard_id   BIGINT       NOT NULL COMMENT '카드보드ID',
     tag_id          BIGINT COMMENT '태그ID',
     created_by      BIGINT       NOT NULL COMMENT '작성자ID',
     assignee        BIGINT COMMENT '담당자 ID',
     PRIMARY KEY (card_id),
-    FOREIGN KEY (card_board_id) REFERENCES TBL_CARD_BOARD (card_board_id),
+    FOREIGN KEY (cardboard_id) REFERENCES TBL_CARDBOARD (cardboard_id),
     FOREIGN KEY (tag_id) REFERENCES TBL_CARD_TAG (tag_id),
     FOREIGN KEY (created_by) REFERENCES TBL_USER (user_id),
     FOREIGN KEY (assignee) REFERENCES TBL_USER (user_id)
@@ -322,7 +322,7 @@ CREATE TABLE TBL_PROJ_MEMBER
     user_id              BIGINT       NOT NULL COMMENT '회원ID',
     PRIMARY KEY (proj_member_id),
     CHECK ( participation_status IN ('MEMBER','OWNER','PENDING') ),
-    CHECK ( bookmark_status IN ('BOOKMARKED','NOT_BOOKMARKED') ),
+    CHECK ( bookmark_status IN ('BOOKMARKED','NONE') ),
         FOREIGN KEY (proj_id) REFERENCES TBL_PROJ (proj_id),
     FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id)
 ) COMMENT = '회원-프로젝트';
