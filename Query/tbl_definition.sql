@@ -106,7 +106,6 @@ CREATE TABLE `TBL_SCHEDULE` (
                                 `meeting_status` VARCHAR(255) NOT NULL,
                                 `meetingroom_id` BIGINT,
                                 `user_id` BIGINT NOT NULL,
-                                `notification_time` TIMESTAMP,
                                 PRIMARY KEY (`schedule_id`),
                                 CONSTRAINT `FK_SCHEDULE_MEETINGROOM` FOREIGN KEY (`meetingroom_id`)
                                     REFERENCES `TBL_MEETINGROOM` (`meetingroom_id`) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -309,6 +308,7 @@ CREATE TABLE TBL_USER_SCHEDULE
     user_id     BIGINT NOT NULL COMMENT '회원ID',
     schedule_id BIGINT NOT NULL COMMENT '일정ID',
     status      VARCHAR(255) COMMENT '참여상태',
+    notification_time TIMESTAMP COMMENT '알람시각',
     PRIMARY KEY (user_id, schedule_id),
     FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id),
     FOREIGN KEY (schedule_id) REFERENCES TBL_SCHEDULE (schedule_id)
