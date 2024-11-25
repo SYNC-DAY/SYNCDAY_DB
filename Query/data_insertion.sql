@@ -171,7 +171,8 @@ VALUES ('BOOKMARKED', 'OWNER', 1, 1),
 INSERT INTO TBL_USER_SCHEDULE (user_id, schedule_id, status, notification_time)
 VALUES (1, 1, 'ATTEND', null),
        (2, 1, 'ATTEND', null),
-       (1, 2, 'PENDING', null);
+       (1, 2, 'PENDING', null),
+       (2, 2, 'ATTEND', null);
 
 INSERT INTO TBL_TEAM_SCHEDULE (team_id, schedule_id)
 VALUES (1, 1),
