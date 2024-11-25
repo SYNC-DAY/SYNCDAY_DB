@@ -106,6 +106,7 @@ CREATE TABLE `TBL_SCHEDULE` (
                                 `meeting_status` VARCHAR(255) NOT NULL,
                                 `meetingroom_id` BIGINT,
                                 `user_id` BIGINT NOT NULL,
+                                `notification_time` TIMESTAMP,
                                 PRIMARY KEY (`schedule_id`),
                                 CONSTRAINT `FK_SCHEDULE_MEETINGROOM` FOREIGN KEY (`meetingroom_id`)
                                     REFERENCES `TBL_MEETINGROOM` (`meetingroom_id`) ON DELETE SET NULL ON UPDATE CASCADE,
