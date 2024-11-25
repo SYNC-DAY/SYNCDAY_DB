@@ -67,17 +67,17 @@ VALUES ('로그인 기능 구현', '스프링 시큐리티를 이용한 로그�
 
 -- TBL_SCHEDULE에 더미 데이터 삽입
 INSERT INTO TBL_SCHEDULE (title, content, start_time, end_time, update_time, public_status, schedule_repeat_id,
-                          repeat_order, meeting_status, meetingroom_id, user_id, notification_time)
+                          repeat_order, meeting_status, meetingroom_id, user_id)
 VALUES ('일일 스크럼', '개발팀 데일리 스크럼 미팅', '2024-01-02 10:00:00', '2024-01-02 10:30:00', '2024-01-02 10:00:00', 'PUBLIC', NULL,
-        1, 'ACTIVE', 1, 1, null),
+        1, 'ACTIVE', 1, 1),
        ('디자인 리뷰', '앱 디자인 검토 회의', '2024-01-03 14:00:00', '2024-01-03 15:00:00', '2024-01-03 14:00:00', 'PUBLIC', NULL, 1,
-        'ACTIVE', 2, 3, null),
+        'ACTIVE', 2, 3),
        ('마케팅 전략 회의', '분기별 마케팅 전략 회의', '2024-01-04 15:00:00', '2024-01-04 17:00:00', '2024-01-04 15:00:00', 'PUBLIC',
-        NULL, 1, 'ACTIVE', 3, 1, null),
+        NULL, 1, 'ACTIVE', 3, 1),
        ('팀 정기 미팅', '기획팀 정기 회의', '2024-01-05 11:00:00', '2024-01-05 12:00:00', '2024-01-05 11:00:00', 'PRIVATE', NULL, 1,
-        'ACTIVE', 4, 1, null),
+        'ACTIVE', 4, 1),
        ('복지제도 회의', '직원 복지 개선 회의', '2024-01-08 13:00:00', '2024-01-08 14:00:00', '2024-01-08 13:00:00', 'PRIVATE', NULL,
-        NULL, 'INACTIVE', 5, 1, null);
+        NULL, 'INACTIVE', 5, 1);
 -- TBL_MEETINGROOM_RESERVATION 더미데이터 생성
 INSERT INTO `TBL_MEETINGROOM_RESERVATION` (`meeting_time`, `meetingroom_id`, `schedule_id`)
 VALUES ('2024-01-03 14:00:00', 3, 2),
@@ -168,10 +168,10 @@ VALUES ('BOOKMARKED', 'OWNER', 1, 1),
        ('NONE', 'MEMBER', 1, 2),
        ('BOOKMARKED', 'PENDING', 2, 3);
 
-INSERT INTO TBL_USER_SCHEDULE (user_id, schedule_id, status)
-VALUES (1, 1, 'CONFIRMED'),
-       (2, 1, 'CONFIRMED'),
-       (1, 2, 'PENDING');
+INSERT INTO TBL_USER_SCHEDULE (user_id, schedule_id, status, notification_time)
+VALUES (1, 1, 'ATTEND', null),
+       (2, 1, 'ATTEND', null),
+       (1, 2, 'PENDING', null);
 
 INSERT INTO TBL_TEAM_SCHEDULE (team_id, schedule_id)
 VALUES (1, 1),
