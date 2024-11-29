@@ -35,15 +35,15 @@ VALUES ('모모빌딩', 'RM101', 20),
 
 -- 프로젝트 데이터
 INSERT INTO TBL_PROJ (proj_name, start_time, end_time, created_at, progress_status, vcs_type, vcs_proj_url)
-VALUES ('SyncDay 웹 개발', '2024-01-01 00:00:00', '2024-12-31 23:59:59', NOW(), 30, NULL, NULL),
-       ('모바일 앱 개발', '2024-03-01 00:00:00', '2024-09-30 23:59:59', NOW(), 10, NULL, NULL),
-       ('디자인 시스템 구축', '2024-02-01 00:00:00', '2024-08-31 23:59:59', NOW(), 20, NULL, NULL);
+VALUES ('SyncDay 웹 개발', '2024-01-01 00:00:00', '2024-12-31 23:59:59', NOW(), 30, 'GITHUB', NULL),
+       ('모바일 앱 개발', '2024-03-01 00:00:00', '2024-09-30 23:59:59', NOW(), 10, 'GITLAB', NULL),
+       ('디자인 시스템 구축', '2024-02-01 00:00:00', '2024-08-31 23:59:59', NOW(), 20, 'GITLAB', NULL);
 
 -- 워크스페이스 데이터
-INSERT INTO TBL_WORKSPACE (workspace_name, created_at, progress_status, proj_id, vcs_type, vcs_repo_url)
-VALUES ('SyncDay 백엔드', NOW(), 35, 1, NULL, NULL),
-       ('SyncDay 프론트엔드', NOW(), 25, 1, NULL, NULL),
-       ('모바일 UI/UX', NOW(), 15, 2, NULL, NULL);
+INSERT INTO TBL_WORKSPACE (workspace_name, created_at, progress_status, proj_id, vcs_type, vcs_repo_name, vcs_repo_url)
+VALUES ('SyncDay 백엔드', NOW(), 35, 1, 'GITHUB', 'SyncDay_Back', 'https://github.com/three-ping/SyncDay_Back'),
+       ('SyncDay 프론트엔드', NOW(), 25, 1, 'GITHUB', 'SyncDay_Front', 'https://github.com/three-ping/SyncDay_Front'),
+       ('SyncDay ES', NOW(), 15, 2, 'GITHUB', 'SyncDay_Docker', 'https://github.com/three-ping/SyncDay_Docker');
 
 -- 카드태그 데이터
 INSERT INTO TBL_CARD_TAG (tag_name, color, workspace_id)

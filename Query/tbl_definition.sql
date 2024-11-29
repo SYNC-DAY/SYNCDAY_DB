@@ -136,6 +136,7 @@ CREATE TABLE TBL_WORKSPACE
     progress_status TINYINT      NOT NULL COMMENT '진척도',
     proj_id         BIGINT       NOT NULL COMMENT '프로젝트ID',
     vcs_type        VARCHAR(255) COMMENT 'VCS 타입',
+    vcs_repo_name   VARCHAR(255) COMMENT 'VCS REPO 이름',
     vcs_repo_url    VARCHAR(511) COMMENT 'VCS 저장소 URL',
     PRIMARY KEY (workspace_id),
     FOREIGN KEY (proj_id) REFERENCES TBL_PROJ (proj_id)
