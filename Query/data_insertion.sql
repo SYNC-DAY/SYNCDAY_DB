@@ -109,12 +109,12 @@ INSERT INTO TBL_TEAM_POST (title, content, created_at, updated_at, user_id, team
                                                                                                ('복지제도 개선안', '새로운 복지제도 안내드립니다.', NOW(), NOW(), 7, 5);
 
 -- Team Comment 데이터 생성
-INSERT INTO TBL_TEAM_COMMENT (created_at, updated_at, team_post_id, author) VALUES
-                                                                                (NOW(), NOW(), 1, 2),
-                                                                                (NOW(), NOW(), 2, 4),
-                                                                                (NOW(), NOW(), 3, 5),
-                                                                                (NOW(), NOW(), 4, 6),
-                                                                                (NOW(), NOW(), 5, 7);
+INSERT INTO TBL_TEAM_COMMENT (content, created_at, updated_at, team_post_id, author) VALUES
+                                                                                ("테스트댓글 1번",NOW(), NOW(), 1, 2),
+                                                                                ("테스트댓글 2번",NOW(), NOW(), 2, 4),
+                                                                                ("테스트댓글 3번",NOW(), NOW(), 3, 5),
+                                                                                ("테스트댓글 4번",NOW(), NOW(), 4, 6),
+                                                                                ("테스트댓글 5번",NOW(), NOW(), 5, 7);
 
 
 
