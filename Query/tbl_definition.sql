@@ -272,14 +272,15 @@ CREATE TABLE `TBL_TEAM_POST` (
 
 CREATE TABLE `TBL_TEAM_COMMENT` (
                                     `team_comment_id` BIGINT NOT NULL AUTO_INCREMENT,
+                                    `content` TEXT NOT NULL,
                                     `created_at` TIMESTAMP NOT NULL,
                                     `updated_at` TIMESTAMP NOT NULL,
                                     `team_post_id` BIGINT NOT NULL,
-                                    `author` BIGINT NOT NULL,
+                                    `user_id` BIGINT NOT NULL,
                                     PRIMARY KEY (`team_comment_id`),
                                     CONSTRAINT `FK_TEAM_COMMENT_POST` FOREIGN KEY (`team_post_id`)
                                         REFERENCES `TBL_TEAM_POST` (`team_post_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                    CONSTRAINT `FK_TEAM_COMMENT_AUTHOR` FOREIGN KEY (`author`)
+                                    CONSTRAINT `FK_TEAM_COMMENT_AUTHOR` FOREIGN KEY (`user_id`)
                                         REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '팀 댓글';
 
