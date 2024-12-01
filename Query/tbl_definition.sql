@@ -139,7 +139,7 @@ CREATE TABLE TBL_WORKSPACE
     vcs_repo_name   VARCHAR(255) COMMENT 'VCS REPO 이름',
     vcs_repo_url    VARCHAR(511) COMMENT 'VCS 저장소 URL',
     PRIMARY KEY (workspace_id),
-    FOREIGN KEY (proj_id) REFERENCES TBL_PROJ (proj_id)
+    FOREIGN KEY (proj_id) REFERENCES TBL_PROJ (proj_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '워크스페이스';
 
 -- 5. TBL_WORKSPACE를 참조하는 테이블
@@ -150,7 +150,7 @@ CREATE TABLE TBL_CARD_TAG
     color        VARCHAR(255) NOT NULL COMMENT '색깔',
     workspace_id BIGINT       NOT NULL COMMENT '워크스페이스ID',
     PRIMARY KEY (tag_id),
-    FOREIGN KEY (workspace_id) REFERENCES TBL_WORKSPACE (workspace_id)
+    FOREIGN KEY (workspace_id) REFERENCES TBL_WORKSPACE (workspace_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '카드태그';
 
 CREATE TABLE TBL_CARDBOARD
@@ -165,7 +165,7 @@ CREATE TABLE TBL_CARDBOARD
     vcs_milestone_url VARCHAR(511) COMMENT 'VCS 마일스톤 URL',
     workspace_id      BIGINT       NOT NULL COMMENT '워크스페이스ID',
     PRIMARY KEY (cardboard_id),
-    FOREIGN KEY (workspace_id) REFERENCES TBL_WORKSPACE (workspace_id)
+    FOREIGN KEY (workspace_id) REFERENCES TBL_WORKSPACE (workspace_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '카드보드';
 
 -- 6. TBL_CARD_BOARD, TBL_CARD_TAG, TBL_USER를 참조하는 테이블
@@ -184,10 +184,10 @@ CREATE TABLE TBL_CARD
     created_by      BIGINT       NOT NULL COMMENT '작성자ID',
     assignee        BIGINT COMMENT '담당자 ID',
     PRIMARY KEY (card_id),
-    FOREIGN KEY (cardboard_id) REFERENCES TBL_CARDBOARD (cardboard_id),
-    FOREIGN KEY (tag_id) REFERENCES TBL_CARD_TAG (tag_id),
-    FOREIGN KEY (created_by) REFERENCES TBL_USER (user_id),
-    FOREIGN KEY (assignee) REFERENCES TBL_USER (user_id)
+    FOREIGN KEY (cardboard_id) REFERENCES TBL_CARDBOARD (cardboard_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES TBL_CARD_TAG (tag_id) ON DELETE SET NULL,
+    FOREIGN KEY (created_by) REFERENCES TBL_USER (user_id) ON DELETE CASCADE ON UPDATE CASCADE ,
+    FOREIGN KEY (assignee) REFERENCES TBL_USER (user_id) ON DELETE SET NULL
 ) COMMENT = '카드';
 
 -- 7. TBL_CARD를 참조하는 테이블들
@@ -198,7 +198,7 @@ CREATE TABLE TBL_CARD_ATTACHMENTS
     content       VARCHAR(1023) NOT NULL COMMENT '내용',
     card_id       BIGINT        NOT NULL COMMENT '카드ID',
     PRIMARY KEY (attachment_id),
-    FOREIGN KEY (card_id) REFERENCES TBL_CARD (card_id)
+    FOREIGN KEY (card_id) REFERENCES TBL_CARD (card_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '카드 첨부파일';
 
 CREATE TABLE TBL_CARD_BOOKMARK
@@ -207,8 +207,8 @@ CREATE TABLE TBL_CARD_BOOKMARK
     user_id          BIGINT NOT NULL COMMENT '회원ID',
     card_id          BIGINT NOT NULL COMMENT '카드ID',
     PRIMARY KEY (card_bookmark_id),
-    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id),
-    FOREIGN KEY (card_id) REFERENCES TBL_CARD (card_id)
+    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (card_id) REFERENCES TBL_CARD (card_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '카드 북마크';
 
 CREATE TABLE TBL_CARD_COMMENT
@@ -220,8 +220,8 @@ CREATE TABLE TBL_CARD_COMMENT
     user_id         BIGINT        NOT NULL COMMENT '회원ID',
     card_id         BIGINT        NOT NULL COMMENT '카드ID',
     PRIMARY KEY (card_comment_id),
-    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id),
-    FOREIGN KEY (card_id) REFERENCES TBL_CARD (card_id)
+    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (card_id) REFERENCES TBL_CARD (card_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '카드 댓글';
 
 CREATE TABLE TBL_CHECKLIST
@@ -231,7 +231,7 @@ CREATE TABLE TBL_CHECKLIST
     content      VARCHAR(1023) NOT NULL COMMENT '내용',
     status       VARCHAR(255)  NOT NULL COMMENT '상태',
     PRIMARY KEY (checklist_id),
-    FOREIGN KEY (card_id) REFERENCES TBL_CARD (card_id)
+    FOREIGN KEY (card_id) REFERENCES TBL_CARD (card_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '체크리스트';
 
 -- 8. TBL_SCHEDULE을 참조하는 테이블
@@ -301,7 +301,7 @@ CREATE TABLE TBL_PROJ_SCHEDULE
     project_id  BIGINT NOT NULL COMMENT '프로젝트ID',
     schedule_id BIGINT NOT NULL COMMENT '일정ID',
     PRIMARY KEY (project_id, schedule_id),
-    FOREIGN KEY (project_id) REFERENCES TBL_PROJ (proj_id),
+    FOREIGN KEY (project_id) REFERENCES TBL_PROJ (proj_id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (schedule_id) REFERENCES TBL_SCHEDULE (schedule_id)
 ) COMMENT = '프로젝트-일정';
 
@@ -326,9 +326,11 @@ CREATE TABLE TBL_PROJ_MEMBER
     PRIMARY KEY (proj_member_id),
     CHECK ( participation_status IN ('MEMBER','OWNER','PENDING') ),
     CHECK ( bookmark_status IN ('BOOKMARKED','NONE') ),
-        FOREIGN KEY (proj_id) REFERENCES TBL_PROJ (proj_id),
-    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id)
+        FOREIGN KEY (proj_id) REFERENCES TBL_PROJ (proj_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '회원-프로젝트';
+
+DROP TABLE IF EXISTS TBL_WORKSPACE_BOOKMARK;
 
 CREATE TABLE TBL_WORKSPACE_BOOKMARK
 (
@@ -336,8 +338,8 @@ CREATE TABLE TBL_WORKSPACE_BOOKMARK
     workspace_id          BIGINT NOT NULL COMMENT '워크스페이스ID',
     user_id               BIGINT NOT NULL COMMENT '회원ID',
     PRIMARY KEY (workspace_bookmark_id),
-    FOREIGN KEY (workspace_id) REFERENCES TBL_WORKSPACE (workspace_id),
-    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id)
+    FOREIGN KEY (workspace_id) REFERENCES TBL_WORKSPACE (workspace_id) ON DELETE CASCADE ON UPDATE CASCADE ,
+    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '워크스페이스 북마크';
 
 CREATE TABLE `TBL_TEAM_WORK` (
