@@ -136,6 +136,7 @@ CREATE TABLE TBL_WORKSPACE
     progress_status TINYINT      NOT NULL COMMENT '진척도',
     proj_id         BIGINT       NOT NULL COMMENT '프로젝트ID',
     vcs_type        VARCHAR(255) COMMENT 'VCS 타입',
+    vcs_repo_name   VARCHAR(255) COMMENT 'VCS REPO 이름',
     vcs_repo_url    VARCHAR(511) COMMENT 'VCS 저장소 URL',
     PRIMARY KEY (workspace_id),
     FOREIGN KEY (proj_id) REFERENCES TBL_PROJ (proj_id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -271,14 +272,15 @@ CREATE TABLE `TBL_TEAM_POST` (
 
 CREATE TABLE `TBL_TEAM_COMMENT` (
                                     `team_comment_id` BIGINT NOT NULL AUTO_INCREMENT,
+                                    `content` TEXT NOT NULL,
                                     `created_at` TIMESTAMP NOT NULL,
                                     `updated_at` TIMESTAMP NOT NULL,
                                     `team_post_id` BIGINT NOT NULL,
-                                    `author` BIGINT NOT NULL,
+                                    `user_id` BIGINT NOT NULL,
                                     PRIMARY KEY (`team_comment_id`),
                                     CONSTRAINT `FK_TEAM_COMMENT_POST` FOREIGN KEY (`team_post_id`)
                                         REFERENCES `TBL_TEAM_POST` (`team_post_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                    CONSTRAINT `FK_TEAM_COMMENT_AUTHOR` FOREIGN KEY (`author`)
+                                    CONSTRAINT `FK_TEAM_COMMENT_AUTHOR` FOREIGN KEY (`user_id`)
                                         REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '팀 댓글';
 
@@ -308,9 +310,10 @@ CREATE TABLE TBL_USER_SCHEDULE
     user_id     BIGINT NOT NULL COMMENT '회원ID',
     schedule_id BIGINT NOT NULL COMMENT '일정ID',
     status      VARCHAR(255) COMMENT '참여상태',
+    notification_time TIMESTAMP COMMENT '알람시각',
     PRIMARY KEY (user_id, schedule_id),
-    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id),
-    FOREIGN KEY (schedule_id) REFERENCES TBL_SCHEDULE (schedule_id)
+    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (schedule_id) REFERENCES TBL_SCHEDULE (schedule_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '회원-일정';
 
 CREATE TABLE TBL_PROJ_MEMBER

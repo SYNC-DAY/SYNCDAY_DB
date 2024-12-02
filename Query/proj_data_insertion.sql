@@ -3,18 +3,18 @@ INSERT INTO TBL_PROJ (proj_name, start_time, end_time, created_at, progress_stat
 VALUES
     ('SyncDay 모바일 앱', '2024-02-01 00:00:00', '2024-08-31 23:59:59', NOW(), 15, 'GITHUB', 'https://github.com/syncday/mobile-app'),
     ('SyncDay API 서버', '2024-01-15 00:00:00', '2024-07-31 23:59:59', NOW(), 25, 'GITLAB', 'https://gitlab.com/syncday/api-server'),
-    ('디자인 시스템 구축', '2024-03-01 00:00:00', '2024-06-30 23:59:59', NOW(), 5, NULL, NULL),
-    ('마케팅 캠페인', '2024-04-01 00:00:00', '2024-12-31 23:59:59', NOW(), 0, NULL, NULL);
+    ('디자인 시스템 구축', '2024-03-01 00:00:00', '2024-06-30 23:59:59', NOW(), 5, 'GITLAB', NULL),
+    ('마케팅 캠페인', '2024-04-01 00:00:00', '2024-12-31 23:59:59', NOW(), 0, 'GITHUB', NULL);
 
 -- Additional Workspace Data
-INSERT INTO TBL_WORKSPACE (workspace_name, created_at, progress_status, proj_id, vcs_type, vcs_repo_url)
+INSERT INTO TBL_WORKSPACE (workspace_name, created_at, progress_status, proj_id, vcs_type, vcs_repo_name, vcs_repo_url)
 VALUES
-    ('모바일 앱 개발', NOW(), 10, 4, 'GITHUB', 'https://github.com/syncday/mobile-app/repo1'),
-    ('API 개발', NOW(), 30, 5, 'GITLAB', 'https://gitlab.com/syncday/api-server/main'),
-    ('API 문서화', NOW(), 20, 5, NULL, NULL),
-    ('UI 컴포넌트', NOW(), 5, 6, NULL, NULL),
-    ('스타일 가이드', NOW(), 15, 6, NULL, NULL),
-    ('SNS 마케팅', NOW(), 0, 7, NULL, NULL);
+    ('모바일 앱 개발', NOW(), 10, 4, 'GITHUB', 'Mobile Repo', 'https://github.com/syncday/mobile-app/repo1'),
+    ('API 개발', NOW(), 30, 5, 'GITLAB', 'Api Repo', 'https://gitlab.com/syncday/api-server/main'),
+    ('MUDIUM DB', NOW(), 20, 5, 'GITHUB', 'MUDIUM_DB', 'https://github.com/three-ping/MUDIUM_DB'),
+    ('MUDIUM 프론트엔드', NOW(), 5, 6, 'GITHUB', 'MUDIUM_FRONT', 'https://github.com/three-ping/MUDIUM_Frontend'),
+    ('MUDIUM 백엔드', NOW(), 15, 6, 'GITHUB', 'MUDIUM_BACK', 'https://github.com/three-ping/MUDIUM_Backend'),
+    ('MUDIUM CI/CD', NOW(), 0, 7, 'GITHUB', 'MUDIUM_CI/CD', 'https://github.com/three-ping/MUDIUM_DevOps');
 
 -- Additional Project Member Data
 INSERT INTO TBL_PROJ_MEMBER (bookmark_status, participation_status, proj_id, user_id)
@@ -128,11 +128,11 @@ VALUES
 SET @auth_workspace_id = LAST_INSERT_ID();
 SET @payment_workspace_id = LAST_INSERT_ID() + 1;
 
-INSERT INTO TBL_WORKSPACE (workspace_name, created_at, progress_status, proj_id, vcs_type, vcs_repo_url)
+INSERT INTO TBL_WORKSPACE (workspace_name, created_at, progress_status, proj_id, vcs_type, vcs_repo_name, vcs_repo_url)
 VALUES
 -- 레거시 시스템 마이그레이션 프로젝트의 워크스페이스들
-('데이터 마이그레이션', NOW(), 25, @migration_proj_id, 'GITHUB', 'https://github.com/syncday/migration/data'),
-('서비스 전환', NOW(), 15, @migration_proj_id, 'GITHUB', 'https://github.com/syncday/migration/service');
+('데이터 마이그레이션', NOW(), 25, @migration_proj_id, 'GITHUB', 'DataMigration_Repo', 'https://github.com/syncday/migration/data'),
+('서비스 전환', NOW(), 15, @migration_proj_id, 'GITHUB', 'ServiceChange_Repo', 'https://github.com/syncday/migration/service');
 
 SET @data_migration_workspace_id = LAST_INSERT_ID();
 SET @service_migration_workspace_id = LAST_INSERT_ID() + 1;
