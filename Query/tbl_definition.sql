@@ -237,12 +237,12 @@ CREATE TABLE TBL_CHECKLIST
 -- 8. TBL_SCHEDULE을 참조하는 테이블
 CREATE TABLE TBL_MEETING_NOTE
 (
-                                    `schedule_id` BIGINT NOT NULL,
-                                    `title` VARCHAR(1023),
-                                    `content` TEXT,
-                                    PRIMARY KEY (`schedule_id`),
-                                    CONSTRAINT `FK_MEETING_NOTE_SCHEDULE` FOREIGN KEY (`schedule_id`)
-                                        REFERENCES `TBL_SCHEDULE` (`schedule_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    `schedule_id` BIGINT NOT NULL,
+    `title` VARCHAR(1023),
+    `content` TEXT,
+    PRIMARY KEY (`schedule_id`),
+    CONSTRAINT `FK_MEETING_NOTE_SCHEDULE` FOREIGN KEY (`schedule_id`)
+        REFERENCES `TBL_SCHEDULE` (`schedule_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '회의록';
 
 -- 9. 팀 관련 테이블들
@@ -326,7 +326,7 @@ CREATE TABLE TBL_PROJ_MEMBER
     PRIMARY KEY (proj_member_id),
     CHECK ( participation_status IN ('MEMBER','OWNER','PENDING') ),
     CHECK ( bookmark_status IN ('BOOKMARKED','NONE') ),
-        FOREIGN KEY (proj_id) REFERENCES TBL_PROJ (proj_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (proj_id) REFERENCES TBL_PROJ (proj_id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '회원-프로젝트';
 
@@ -361,3 +361,20 @@ CREATE TABLE `TBL_TEAM_WORK` (
                                  CONSTRAINT `FK_TEAM_WORK_ASSIGNEE` FOREIGN KEY (`assignee_id`)
                                      REFERENCES `TBL_USER` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) COMMENT = '팀 업무';
+
+CREATE TABLE TBL_VCS_ORGANIZATION (
+                                      id BIGINT NOT NULL AUTO_INCREMENT,
+                                      user_id BIGINT NOT NULL,
+                                      vcs_type VARCHAR(20) NOT NULL,
+                                      org_name VARCHAR(255) NOT NULL,
+                                      org_url VARCHAR(1023) NOT NULL,
+                                      avatar_url VARCHAR(1023),
+                                      vcs_org_id BIGINT NOT NULL,
+                                      installation_id BIGINT NOT NULL,
+                                      description TEXT,
+                                      status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+                                      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                      PRIMARY KEY (id),
+                                      FOREIGN KEY (user_id) REFERENCES TBL_USER(user_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
