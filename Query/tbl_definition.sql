@@ -362,11 +362,9 @@ CREATE TABLE `TBL_TEAM_WORK` (
                                      REFERENCES `TBL_USER` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) COMMENT = '팀 업무';
 
-
-Drop table if exists tbl_vcs_org;
+DROP TABLE IF EXISTS TBL_VCS_ORG;
 CREATE TABLE TBL_VCS_ORG (
                                       id BIGINT NOT NULL AUTO_INCREMENT,
-                                      user_id BIGINT NOT NULL,
                                       vcs_type VARCHAR(20) NOT NULL,
                                       org_name VARCHAR(255) NOT NULL,
                                       org_url VARCHAR(1023) NOT NULL,
@@ -377,6 +375,18 @@ CREATE TABLE TBL_VCS_ORG (
                                       status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
                                       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                       updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                                      PRIMARY KEY (id),
-                                      FOREIGN KEY (user_id) REFERENCES TBL_USER(user_id) ON DELETE CASCADE ON UPDATE CASCADE
+                                      PRIMARY KEY (id)
+);
+
+CREATE TABLE TBL_VCS_ORG_MEMBER (
+                                    id BIGINT NOT NULL AUTO_INCREMENT,
+                                    vcs_org_id BIGINT NOT NULL,
+                                    user_id BIGINT NOT NULL,
+                                    role VARCHAR(50) NOT NULL DEFAULT 'MEMBER',  -- OWNER, MEMBER
+                                    status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+                                    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                    PRIMARY KEY (id),
+                                    FOREIGN KEY (vcs_org_id) REFERENCES TBL_VCS_ORG(id) ON DELETE CASCADE ON UPDATE CASCADE,
+                                    FOREIGN KEY (user_id) REFERENCES TBL_USER(user_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
