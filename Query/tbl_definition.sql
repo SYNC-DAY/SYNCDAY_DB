@@ -362,7 +362,9 @@ CREATE TABLE `TBL_TEAM_WORK` (
                                      REFERENCES `TBL_USER` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) COMMENT = '팀 업무';
 
-CREATE TABLE TBL_VCS_ORGANIZATION (
+
+Drop table if exists tbl_vcs_org;
+CREATE TABLE TBL_VCS_ORG (
                                       id BIGINT NOT NULL AUTO_INCREMENT,
                                       user_id BIGINT NOT NULL,
                                       vcs_type VARCHAR(20) NOT NULL,
