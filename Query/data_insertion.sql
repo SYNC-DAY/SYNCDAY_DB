@@ -25,12 +25,12 @@ INSERT INTO TBL_USER (username, email, password, phone_number, profile_photo, jo
                                                                                                                                   ('오재무', 'oh.finance@syncday.com', SHA2('password123', 256), '010-0234-5678', 'https://i.namu.wiki/i/Kvz8qpAPelibP5ze5oLc4D1bN3BsNzhrmHH-vUcb7I4x2RsGgkjyoZFBmhyWuw_tYxBw7BmNbOSF-RsidX5C-4I9Ve19GKX3xwBbUpQMazlRMKz-eexlm3hWHq3JVovkvvqeC8X7FFEdcCitl8-mfQ.webp', '2020-03-02 09:00:00', '재무 팀장', 8, NOW());
 
 -- Project 데이터 생성
-INSERT INTO TBL_PROJ (proj_name, start_time, end_time, created_at, progress_status, user_id) VALUES
-                                                                                                 ('SyncDay 모바일 앱 개발', '2024-01-01', '2024-06-30', NOW(), 1, 1),
-                                                                                                 ('웹사이트 리뉴얼', '2024-02-01', '2024-08-31', NOW(), 1, 3),
-                                                                                                 ('2024 마케팅 캠페인', '2024-03-01', '2024-12-31', NOW(), 0, 5),
-                                                                                                 ('신규 서비스 기획', '2024-04-01', '2024-09-30', NOW(), 0, 6),
-                                                                                                 ('직원 복지 개선 프로젝트', '2024-01-15', '2024-12-31', NOW(), 1, 7);
+INSERT INTO TBL_PROJ (proj_name, start_time, end_time, created_at, progress_status) VALUES
+                                                                                                 ('SyncDay 모바일 앱 개발', '2024-01-01', '2024-06-30', NOW(),0),
+                                                                                                 ('웹사이트 리뉴얼', '2024-02-01', '2024-08-31', NOW(), 0),
+                                                                                                 ('2024 마케팅 캠페인', '2024-03-01', '2024-12-31', NOW(), 0),
+                                                                                                 ('신규 서비스 기획', '2024-04-01', '2024-09-30', NOW(), 0),
+                                                                                                 ('직원 복지 개선 프로젝트', '2024-01-15', '2024-12-31', NOW(),0);
 
 -- Workspace 데이터 생성
 INSERT INTO TBL_WORKSPACE (workspace_name, created_at, progress_status, proj_id) VALUES
@@ -70,7 +70,7 @@ INSERT INTO TBL_TAG (tag_name, color, workspace_id) VALUES
                                                         ('HR', '#FFC107', 8);
 
 -- Card 데이터 생성
-INSERT INTO TBL_CARD (title, content, created_at, cardboard_id, tag_id, author, end_time, user_id) VALUES
+INSERT INTO TBL_CARD (title, content, created_at, cardboard_id, tag_id, created_by, end_time, assignee) VALUES
                                                                                                        ('로그인 기능 구현', '사용자 인증 및 로그인 프로세스 개발', NOW(), 1, 1, 1, '2024-01-15', 2),
                                                                                                        ('메인 화면 UI 개발', '앱 메인 화면 UI 컴포넌트 개발', NOW(), 1, 3, 1, '2024-01-20', 1),
                                                                                                        ('API 엔드포인트 설계', 'REST API 엔드포인트 설계 및 문서화', NOW(), 3, 5, 1, '2024-01-31', 1),
@@ -97,21 +97,8 @@ INSERT INTO TBL_CARD_COMMENT (content, created_at, updated_at, user_id, card_id)
                                                                                      ('UI 디자인 수정사항 있습니다.', NOW(), NOW(), 3, 2),
                                                                                      ('API 설계 리뷰 필요합니다.', NOW(), NOW(), 1, 3);
 
--- Checklist 데이터 생성
-INSERT INTO TBL_CHECKLIST (title, card_id) VALUES
-                                               ('로그인 기능 체크리스트', 1),
-                                               ('UI 개발 체크리스트', 2),
-                                               ('API 개발 체크리스트', 3);
 
--- Checklist Item 데이터 생성
-INSERT INTO TBL_CHECKLIST_ITEM (item_number, complete_status, content, card_id) VALUES
-                                                                                    (1, 'COMPLETE', '로그인 UI 구현', 1),
-                                                                                    (2, 'INCOMPLETE', '유효성 검사 구현', 1),
-                                                                                    (3, 'INCOMPLETE', '에러 처리 구현', 1),
-                                                                                    (1, 'COMPLETE', '레이아웃 구현', 2),
-                                                                                    (2, 'INCOMPLETE', '반응형 대응', 2),
-                                                                                    (1, 'COMPLETE', 'API 문서 작성', 3),
-                                                                                    (2, 'INCOMPLETE', '엔드포인트 구현', 3);
+
 
 -- Meetingroom 데이터 생성
 INSERT INTO TBL_MEETINGROOM (meetingroom_place, meetingroom_name, meetingroom_capacity) VALUES
@@ -164,7 +151,7 @@ INSERT INTO TBL_TEAM_POST (title, content, created_at, updated_at, user_id, team
                                                                                                ('복지제도 개선안', '새로운 복지제도 안내드립니다.', NOW(), NOW(), 7, 5);
 
 -- Team Comment 데이터 생성
-INSERT INTO TBL_TEAM_COMMENT (created_at, updated_at, team_post_id, author) VALUES
+INSERT INTO TBL_TEAM_COMMENT (created_at, updated_at, team_post_id, user_id) VALUES
                                                                                 (NOW(), NOW(), 1, 2),
                                                                                 (NOW(), NOW(), 2, 4),
                                                                                 (NOW(), NOW(), 3, 5),
