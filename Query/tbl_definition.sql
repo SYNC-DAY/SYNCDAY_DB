@@ -237,12 +237,12 @@ CREATE TABLE TBL_CHECKLIST
 -- 8. TBL_SCHEDULE을 참조하는 테이블
 CREATE TABLE TBL_MEETING_NOTE
 (
-                                    `schedule_id` BIGINT NOT NULL,
-                                    `title` VARCHAR(1023),
-                                    `content` TEXT,
-                                    PRIMARY KEY (`schedule_id`),
-                                    CONSTRAINT `FK_MEETING_NOTE_SCHEDULE` FOREIGN KEY (`schedule_id`)
-                                        REFERENCES `TBL_SCHEDULE` (`schedule_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    `schedule_id` BIGINT NOT NULL,
+    `title` VARCHAR(1023),
+    `content` TEXT,
+    PRIMARY KEY (`schedule_id`),
+    CONSTRAINT `FK_MEETING_NOTE_SCHEDULE` FOREIGN KEY (`schedule_id`)
+        REFERENCES `TBL_SCHEDULE` (`schedule_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '회의록';
 
 -- 9. 팀 관련 테이블들
@@ -326,7 +326,7 @@ CREATE TABLE TBL_PROJ_MEMBER
     PRIMARY KEY (proj_member_id),
     CHECK ( participation_status IN ('MEMBER','OWNER','PENDING') ),
     CHECK ( bookmark_status IN ('BOOKMARKED','NONE') ),
-        FOREIGN KEY (proj_id) REFERENCES TBL_PROJ (proj_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (proj_id) REFERENCES TBL_PROJ (proj_id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '회원-프로젝트';
 
