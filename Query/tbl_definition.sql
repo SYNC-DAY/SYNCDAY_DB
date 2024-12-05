@@ -23,27 +23,61 @@ CREATE TABLE TBL_PROJ
     end_time        TIMESTAMP COMMENT '종료시각',
     created_at      TIMESTAMP    NOT NULL COMMENT '생성시각',
     progress_status TINYINT      NOT NULL COMMENT '진척도',
--- add installation foreign key
+    vcs_proj_url    VARCHAR(255),
+    vcs_type        VARCHAR(255),
     PRIMARY KEY (proj_id)
 ) COMMENT = '프로젝트';
 
 -- 2. TBL_TEAM을 참조하는 테이블
 CREATE TABLE `TBL_USER`
 (
-    `user_id`          BIGINT       NOT NULL AUTO_INCREMENT,
-    `username`         VARCHAR(255) NOT NULL,
-    `email`            VARCHAR(255) NOT NULL,
-    `password`         VARCHAR(255) NOT NULL,
-    `phone_number`     VARCHAR(255),
-    `profile_photo`    VARCHAR(1023),
-    `join_year`        TIMESTAMP,
-    `position`         VARCHAR(255),
-    `team_id`          BIGINT       NOT NULL,
-    `last_access_time` TIMESTAMP,
+    `user_id`                BIGINT       NOT NULL AUTO_INCREMENT,
+    `username`               VARCHAR(255) NOT NULL,
+    `email`                  VARCHAR(255) NOT NULL,
+    `password`               VARCHAR(255) NOT NULL,
+    `phone_number`           VARCHAR(255),
+    `profile_photo`          VARCHAR(1023),
+    `join_year`              TIMESTAMP,
+    `position`               VARCHAR(255),
+    `team_id`                BIGINT       NOT NULL,
+    `last_activated_at`      TIMESTAMP,
     PRIMARY KEY (`user_id`),
     CONSTRAINT `FK_USER_TEAM` FOREIGN KEY (`team_id`)
         REFERENCES `TBL_TEAM` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '회원';
+
+CREATE TABLE TBL_GITHUB_ORG (
+                                github_org_id BIGINT NOT NULL,
+                                encrypted_installation_id TEXT NOT NULL, -- installation_id 암호화 저장
+                                org_login VARCHAR(255) NOT NULL,
+                                org_type ENUM('USER', 'ORGANIZATION') NOT NULL,
+                                installed_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                avatar_url VARCHAR(1023),
+                                status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+                                vcs_org_url VARCHAR(1023) NOT NULL,
+                                last_synced_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                PRIMARY KEY (github_org_id),
+                                UNIQUE INDEX idx_org_login (org_login),
+                                INDEX idx_org_type (org_type),
+                                CONSTRAINT check_status CHECK (status IN ('ACTIVE', 'INACTIVE', 'SUSPENDED'))
+) COMMENT = 'GH organization information';
+
+-- Organization Member 테이블
+CREATE TABLE TBL_GITHUB_ORG_MEMBER (
+                                       user_id BIGINT NOT NULL,
+                                       github_org_id BIGINT NOT NULL,
+                                       github_username VARCHAR(255) NOT NULL,
+                                       membership_state ENUM ('ACTIVE', 'PENDING') NOT NULL,
+                                       role ENUM ('ADMIN', 'MEMBER') NOT NULL,
+                                       last_synced_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                       connected_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                       PRIMARY KEY (user_id, github_org_id),
+                                       FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id) ON DELETE CASCADE,
+                                       FOREIGN KEY (github_org_id) REFERENCES TBL_GITHUB_ORG (github_org_id) ON DELETE CASCADE,
+                                       UNIQUE INDEX idx_github_username_per_org (github_org_id, github_username),
+                                       INDEX idx_github_username (github_username)
+) COMMENT = 'User-GH organization relationship';
+
 CREATE TABLE `TBL_MEETINGROOM`
 (
     `meetingroom_id`       BIGINT NOT NULL AUTO_INCREMENT,
@@ -372,33 +406,7 @@ CREATE TABLE `TBL_TEAM_WORK`
 ) COMMENT = '팀 업무';
 
 
-DROP TABLE IF EXISTS TBL_VCS_INSTALLATION;
-CREATE TABLE TBL_VCS_INSTALLATION
-(
-    id              BIGINT        NOT NULL AUTO_INCREMENT,
-    user_id         BIGINT        NOT NULL COMMENT 'User who installed the app',
-    vcs_type        VARCHAR(20)   NOT NULL,
-    vcs_org_login       VARCHAR(255)  NOT NULL,
-    vcs_org_url         VARCHAR(1023) NOT NULL,
-    avatar_url      VARCHAR(1023),
-    vcs_org_id      BIGINT        NOT NULL,
-    vcs_org_type    VARCHAR(255)  NOT NULL check ( vcs_org_type in ('User', 'Organization') ),
-    installation_id BIGINT        NOT NULL,
-    status          VARCHAR(20)   NOT NULL DEFAULT 'ACTIVE',
-    created_at      TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
-    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id) ON DELETE CASCADE ON UPDATE CASCADE
-);
 
 
-ALTER TABLE TBL_PROJ
-    ADD COLUMN vcs_installation_id BIGINT,
-    ADD CONSTRAINT FK_PROJ_VCS_INSTALLATION
-        FOREIGN KEY (vcs_installation_id)
-            REFERENCES TBL_VCS_INSTALLATION(id)
-            ON DELETE SET NULL
-            ON UPDATE CASCADE;
 
-ALTER TABLE TBL_PROJ
-    DROP COLUMN vcs_type;
+
