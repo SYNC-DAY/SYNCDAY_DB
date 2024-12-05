@@ -294,21 +294,21 @@ CREATE TABLE `TBL_TEAM_BOARD`
         REFERENCES `TBL_TEAM` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '팀 게시판';
 
-CREATE TABLE `TBL_TEAM_POST`
-(
-    `team_post_id`  BIGINT       NOT NULL AUTO_INCREMENT,
-    `title`         VARCHAR(255) NOT NULL,
-    `content`       TEXT         NOT NULL,
-    `created_at`    TIMESTAMP    NOT NULL,
-    `updated_at`    TIMESTAMP    NOT NULL,
-    `user_id`       BIGINT       NOT NULL,
-    `team_board_id` BIGINT       NOT NULL,
-    PRIMARY KEY (`team_post_id`),
-    CONSTRAINT `FK_TEAM_POST_USER` FOREIGN KEY (`user_id`)
-        REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `FK_TEAM_POST_BOARD` FOREIGN KEY (`team_board_id`)
-        REFERENCES `TBL_TEAM_BOARD` (`team_board_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) COMMENT = '팀 게시글';
+CREATE TABLE `TBL_TEAM_POST` (
+                                 `team_post_id` BIGINT NOT NULL AUTO_INCREMENT,
+                                 `title` VARCHAR(255) NOT NULL,
+                                 `content` TEXT NOT NULL,
+                                 `created_at` TIMESTAMP NOT NULL,
+                                 `updated_at` TIMESTAMP NOT NULL,
+                                 `user_id` BIGINT NOT NULL,
+                                 `team_board_id` BIGINT NOT NULL,
+                                 `comments` BIGINT NOT NULL DEFAULT 0,
+                                 PRIMARY KEY (`team_post_id`),
+                                 CONSTRAINT `FK_TEAM_POST_USER` FOREIGN KEY (`user_id`)
+                                     REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                                 CONSTRAINT `FK_TEAM_POST_BOARD` FOREIGN KEY (`team_board_id`)
+                                     REFERENCES `TBL_TEAM_BOARD` (`team_board_id`) ON DELETE CASCADE ON UPDATE CASCADE
+)COMMENT = '팀 게시글';
 
 CREATE TABLE `TBL_TEAM_COMMENT`
 (
@@ -324,6 +324,32 @@ CREATE TABLE `TBL_TEAM_COMMENT`
     CONSTRAINT `FK_TEAM_COMMENT_AUTHOR` FOREIGN KEY (`user_id`)
         REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '팀 댓글';
+
+DELIMITER $$
+
+CREATE TRIGGER trg_increment_comments
+AFTER INSERT ON TBL_TEAM_COMMENT
+FOR EACH ROW
+BEGIN
+    UPDATE TBL_TEAM_POST
+    SET comments = comments + 1
+    WHERE team_post_id = NEW.team_post_id;
+END$$
+
+DELIMITER ;
+DELIMITER $$
+
+CREATE TRIGGER trg_decrement_comments
+AFTER DELETE ON TBL_TEAM_COMMENT
+FOR EACH ROW
+BEGIN
+    UPDATE TBL_TEAM_POST
+    SET comments = comments - 1
+    WHERE team_post_id = OLD.team_post_id;
+END$$
+
+DELIMITER ;
+
 
 -- 10. 연결 테이블들
 
