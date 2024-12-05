@@ -31,51 +31,54 @@ CREATE TABLE TBL_PROJ
 -- 2. TBL_TEAM을 참조하는 테이블
 CREATE TABLE `TBL_USER`
 (
-    `user_id`                BIGINT       NOT NULL AUTO_INCREMENT,
-    `username`               VARCHAR(255) NOT NULL,
-    `email`                  VARCHAR(255) NOT NULL,
-    `password`               VARCHAR(255) NOT NULL,
-    `phone_number`           VARCHAR(255),
-    `profile_photo`          VARCHAR(1023),
-    `join_year`              TIMESTAMP,
-    `position`               VARCHAR(255),
-    `team_id`                BIGINT       NOT NULL,
-    `last_activated_at`      TIMESTAMP,
+    `user_id`           BIGINT       NOT NULL AUTO_INCREMENT,
+    `username`          VARCHAR(255) NOT NULL,
+    `email`             VARCHAR(255) NOT NULL,
+    `password`          VARCHAR(255) NOT NULL,
+    `phone_number`      VARCHAR(255),
+    `profile_photo`     VARCHAR(1023),
+    `join_year`         TIMESTAMP,
+    `position`          VARCHAR(255),
+    `team_id`           BIGINT       NOT NULL,
+    `last_activated_at` TIMESTAMP,
     PRIMARY KEY (`user_id`),
     CONSTRAINT `FK_USER_TEAM` FOREIGN KEY (`team_id`)
         REFERENCES `TBL_TEAM` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '회원';
 
-CREATE TABLE TBL_GITHUB_ORG (
-                                github_org_id BIGINT NOT NULL,
-                                encrypted_installation_id TEXT NOT NULL, -- installation_id 암호화 저장
-                                org_login VARCHAR(255) NOT NULL,
-                                org_type ENUM('USER', 'ORGANIZATION') NOT NULL,
-                                installed_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                avatar_url VARCHAR(1023),
-                                status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
-                                vcs_org_url VARCHAR(1023) NOT NULL,
-                                last_synced_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                PRIMARY KEY (github_org_id),
-                                UNIQUE INDEX idx_org_login (org_login),
-                                INDEX idx_org_type (org_type),
-                                CONSTRAINT check_status CHECK (status IN ('ACTIVE', 'INACTIVE', 'SUSPENDED'))
+CREATE TABLE TBL_GITHUB_ORG
+(
+    github_org_id             BIGINT                        NOT NULL,
+    encrypted_installation_id TEXT                          NOT NULL, -- installation_id 암호화 저장
+    org_login                 VARCHAR(255)                  NOT NULL,
+    org_type                  ENUM ('USER', 'ORGANIZATION') NOT NULL,
+    installed_at              TIMESTAMP                     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    avatar_url                VARCHAR(1023),
+    status                    VARCHAR(20)                   NOT NULL DEFAULT 'ACTIVE',
+    vcs_org_url               VARCHAR(1023)                 NOT NULL,
+    last_synced_at            TIMESTAMP                     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (github_org_id),
+    UNIQUE INDEX idx_org_login (org_login),
+    INDEX idx_org_type (org_type),
+    CONSTRAINT check_status CHECK (status IN ('ACTIVE', 'INACTIVE', 'SUSPENDED'))
 ) COMMENT = 'GH organization information';
 
 -- Organization Member 테이블
-CREATE TABLE TBL_GITHUB_ORG_MEMBER (
-                                       user_id BIGINT NOT NULL,
-                                       github_org_id BIGINT NOT NULL,
-                                       github_username VARCHAR(255) NOT NULL,
-                                       membership_state ENUM ('ACTIVE', 'PENDING') NOT NULL,
-                                       role ENUM ('ADMIN', 'MEMBER') NOT NULL,
-                                       last_synced_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                       connected_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                       PRIMARY KEY (user_id, github_org_id),
-                                       FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id) ON DELETE CASCADE,
-                                       FOREIGN KEY (github_org_id) REFERENCES TBL_GITHUB_ORG (github_org_id) ON DELETE CASCADE,
-                                       UNIQUE INDEX idx_github_username_per_org (github_org_id, github_username),
-                                       INDEX idx_github_username (github_username)
+CREATE TABLE TBL_GITHUB_ORG_MEMBER
+(
+    github_org_member_id BIGINT                     NOT NULL AUTO_INCREMENT,
+    user_id              BIGINT                     NOT NULL,
+    github_org_id        BIGINT                     NOT NULL,
+    github_username      VARCHAR(255)               NOT NULL,
+    membership_state     ENUM ('ACTIVE', 'PENDING') NOT NULL,
+    role                 ENUM ('ADMIN', 'MEMBER')   NOT NULL,
+    last_synced_at       TIMESTAMP                  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    connected_at         TIMESTAMP                  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (github_org_member_id),
+    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id) ON DELETE CASCADE,
+    FOREIGN KEY (github_org_id) REFERENCES TBL_GITHUB_ORG (github_org_id) ON DELETE CASCADE,
+    UNIQUE INDEX idx_github_username_per_org (github_org_id, github_username),
+    INDEX idx_github_username (github_username)
 ) COMMENT = 'User-GH organization relationship';
 
 CREATE TABLE `TBL_MEETINGROOM`
@@ -294,21 +297,22 @@ CREATE TABLE `TBL_TEAM_BOARD`
         REFERENCES `TBL_TEAM` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '팀 게시판';
 
-CREATE TABLE `TBL_TEAM_POST` (
-                                 `team_post_id` BIGINT NOT NULL AUTO_INCREMENT,
-                                 `title` VARCHAR(255) NOT NULL,
-                                 `content` TEXT NOT NULL,
-                                 `created_at` TIMESTAMP NOT NULL,
-                                 `updated_at` TIMESTAMP NOT NULL,
-                                 `user_id` BIGINT NOT NULL,
-                                 `team_board_id` BIGINT NOT NULL,
-                                 `comments` BIGINT NOT NULL DEFAULT 0,
-                                 PRIMARY KEY (`team_post_id`),
-                                 CONSTRAINT `FK_TEAM_POST_USER` FOREIGN KEY (`user_id`)
-                                     REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                 CONSTRAINT `FK_TEAM_POST_BOARD` FOREIGN KEY (`team_board_id`)
-                                     REFERENCES `TBL_TEAM_BOARD` (`team_board_id`) ON DELETE CASCADE ON UPDATE CASCADE
-)COMMENT = '팀 게시글';
+CREATE TABLE `TBL_TEAM_POST`
+(
+    `team_post_id`  BIGINT       NOT NULL AUTO_INCREMENT,
+    `title`         VARCHAR(255) NOT NULL,
+    `content`       TEXT         NOT NULL,
+    `created_at`    TIMESTAMP    NOT NULL,
+    `updated_at`    TIMESTAMP    NOT NULL,
+    `user_id`       BIGINT       NOT NULL,
+    `team_board_id` BIGINT       NOT NULL,
+    `comments`      BIGINT       NOT NULL DEFAULT 0,
+    PRIMARY KEY (`team_post_id`),
+    CONSTRAINT `FK_TEAM_POST_USER` FOREIGN KEY (`user_id`)
+        REFERENCES `TBL_USER` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_TEAM_POST_BOARD` FOREIGN KEY (`team_board_id`)
+        REFERENCES `TBL_TEAM_BOARD` (`team_board_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) COMMENT = '팀 게시글';
 
 CREATE TABLE `TBL_TEAM_COMMENT`
 (
@@ -328,8 +332,9 @@ CREATE TABLE `TBL_TEAM_COMMENT`
 DELIMITER $$
 
 CREATE TRIGGER trg_increment_comments
-AFTER INSERT ON TBL_TEAM_COMMENT
-FOR EACH ROW
+    AFTER INSERT
+    ON TBL_TEAM_COMMENT
+    FOR EACH ROW
 BEGIN
     UPDATE TBL_TEAM_POST
     SET comments = comments + 1
@@ -340,8 +345,9 @@ DELIMITER ;
 DELIMITER $$
 
 CREATE TRIGGER trg_decrement_comments
-AFTER DELETE ON TBL_TEAM_COMMENT
-FOR EACH ROW
+    AFTER DELETE
+    ON TBL_TEAM_COMMENT
+    FOR EACH ROW
 BEGIN
     UPDATE TBL_TEAM_POST
     SET comments = comments - 1
