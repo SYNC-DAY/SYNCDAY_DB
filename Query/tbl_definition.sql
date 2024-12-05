@@ -46,40 +46,38 @@ CREATE TABLE `TBL_USER`
         REFERENCES `TBL_TEAM` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '회원';
 
-CREATE TABLE TBL_GITHUB_ORG
-(
-    github_org_id             BIGINT                        NOT NULL,
-    encrypted_installation_id TEXT                          NOT NULL, -- installation_id 암호화 저장
-    org_login                 VARCHAR(255)                  NOT NULL,
-    org_type                  ENUM ('USER', 'ORGANIZATION') NOT NULL,
-    installed_at              TIMESTAMP                     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    avatar_url                VARCHAR(1023),
-    status                    VARCHAR(20)                   NOT NULL DEFAULT 'ACTIVE',
-    vcs_org_url               VARCHAR(1023)                 NOT NULL,
-    last_synced_at            TIMESTAMP                     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (github_org_id),
-    UNIQUE INDEX idx_org_login (org_login),
-    INDEX idx_org_type (org_type),
-    CONSTRAINT check_status CHECK (status IN ('ACTIVE', 'INACTIVE', 'SUSPENDED'))
-) COMMENT = 'GH organization information';
+-- 1. VCS Organizations table
+CREATE TABLE TBL_VCS_ORGANIZATION (
+                                      org_id BIGINT NOT NULL AUTO_INCREMENT,
+                                      vcs_type VARCHAR(50) NOT NULL, -- GITHUB, GITLAB, BITBUCKET
+                                      external_org_id VARCHAR(255) NOT NULL, -- Provider's org ID
+                                      org_name VARCHAR(255) NOT NULL,
+                                        org_url VARCHAR(1023) NOT NULL,
+                                      avatar_url VARCHAR(1023),
+                                      encrypted_installation_id TEXT, -- Changed to TEXT and encrypted
+                                      installed_at TIMESTAMP,
+                                      last_synced_at TIMESTAMP,
+                                      PRIMARY KEY (org_id),
+                                      UNIQUE KEY UK_VCS_ORG (vcs_type, external_org_id)
+) COMMENT 'VCS 조직';
 
+-- Rest of the tables remain the same
+CREATE TABLE TBL_VCS_ORG_MEMBER (
+                                    member_id BIGINT NOT NULL AUTO_INCREMENT,  -- Added dedicated PK
+                                    org_id BIGINT NOT NULL,
+                                    user_id BIGINT NOT NULL,
+                                    role VARCHAR(50) NOT NULL,  -- OWNER, MEMBER
+                                    membership_state VARCHAR(50) NOT NULL, -- ACTIVE, PENDING
+                                    joined_at TIMESTAMP,
+                                    PRIMARY KEY (member_id),
+                                    UNIQUE KEY UK_ORG_USER (org_id, user_id),  -- Changed to unique constraint
+                                    CONSTRAINT FK_VCS_ORG_MEMBER_ORG FOREIGN KEY (org_id)
+                                        REFERENCES TBL_VCS_ORGANIZATION (org_id) ON DELETE CASCADE ON UPDATE CASCADE,
+                                    CONSTRAINT FK_VCS_ORG_MEMBER_USER FOREIGN KEY (user_id)
+                                        REFERENCES TBL_USER (user_id) ON DELETE CASCADE ON UPDATE CASCADE
+) COMMENT 'VCS 조직 멤버십';
 -- Organization Member 테이블
-CREATE TABLE TBL_GITHUB_ORG_MEMBER
-(
-    github_org_member_id BIGINT                     NOT NULL AUTO_INCREMENT,
-    user_id              BIGINT                     NOT NULL,
-    github_org_id        BIGINT                     NOT NULL,
-    github_username      VARCHAR(255)               NOT NULL,
-    membership_state     ENUM ('ACTIVE', 'PENDING') NOT NULL,
-    role                 ENUM ('ADMIN', 'MEMBER')   NOT NULL,
-    last_synced_at       TIMESTAMP                  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    connected_at         TIMESTAMP                  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (github_org_member_id),
-    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id) ON DELETE CASCADE,
-    FOREIGN KEY (github_org_id) REFERENCES TBL_GITHUB_ORG (github_org_id) ON DELETE CASCADE,
-    UNIQUE INDEX idx_github_username_per_org (github_org_id, github_username),
-    INDEX idx_github_username (github_username)
-) COMMENT = 'User-GH organization relationship';
+
 
 CREATE TABLE `TBL_MEETINGROOM`
 (
