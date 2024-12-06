@@ -46,38 +46,45 @@ CREATE TABLE `TBL_USER`
         REFERENCES `TBL_TEAM` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '회원';
 
--- 1. VCS Organizations table
-CREATE TABLE TBL_VCS_ORGANIZATION (
-                                      org_id BIGINT NOT NULL AUTO_INCREMENT,
-                                      vcs_type VARCHAR(50) NOT NULL, -- GITHUB, GITLAB, BITBUCKET
-                                      external_org_id VARCHAR(255) NOT NULL, -- Provider's org ID
-                                      org_name VARCHAR(255) NOT NULL,
-                                        org_url VARCHAR(1023) NOT NULL,
-                                      avatar_url VARCHAR(1023),
-                                      encrypted_installation_id TEXT, -- Changed to TEXT and encrypted
-                                      installed_at TIMESTAMP,
-                                      last_synced_at TIMESTAMP,
-                                      PRIMARY KEY (org_id),
-                                      UNIQUE KEY UK_VCS_ORG (vcs_type, external_org_id)
-) COMMENT 'VCS 조직';
+-- GitHub Installation 테이블 (확장된 버전)
+CREATE TABLE tbl_github_installation
+(
+    id              BIGINT PRIMARY KEY AUTO_INCREMENT,
+    installation_id BIGINT       NOT NULL UNIQUE,
+    account_id      BIGINT       NOT NULL,
+    account_name    VARCHAR(255) NOT NULL,
+    account_type    VARCHAR(20)  NOT NULL,                  -- USER, ORGANIZATION
+    avatar_url      VARCHAR(500),
+    html_url        VARCHAR(500),                           -- GitHub 조직/사용자 프로필 URL
+    status          VARCHAR(20)  NOT NULL DEFAULT 'ACTIVE', -- ACTIVE, SUSPENDED, DELETED
+    created_at      TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    user_id BIGINT NOT NULL,
+    FOREIGN KEY (user_id) references syncdaydb.tbl_user(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    INDEX idx_installation_id (installation_id),
+    INDEX idx_account (account_name, account_type)
+);
 
--- Rest of the tables remain the same
-CREATE TABLE TBL_VCS_ORG_MEMBER (
-                                    member_id BIGINT NOT NULL AUTO_INCREMENT,  -- Added dedicated PK
-                                    org_id BIGINT NOT NULL,
-                                    user_id BIGINT NOT NULL,
-                                    role VARCHAR(50) NOT NULL,  -- OWNER, MEMBER
-                                    membership_state VARCHAR(50) NOT NULL, -- ACTIVE, PENDING
-                                    joined_at TIMESTAMP,
-                                    PRIMARY KEY (member_id),
-                                    UNIQUE KEY UK_ORG_USER (org_id, user_id),  -- Changed to unique constraint
-                                    CONSTRAINT FK_VCS_ORG_MEMBER_ORG FOREIGN KEY (org_id)
-                                        REFERENCES TBL_VCS_ORGANIZATION (org_id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                    CONSTRAINT FK_VCS_ORG_MEMBER_USER FOREIGN KEY (user_id)
-                                        REFERENCES TBL_USER (user_id) ON DELETE CASCADE ON UPDATE CASCADE
-) COMMENT 'VCS 조직 멤버십';
--- Organization Member 테이블
-
+-- GitHub App 설치 테이블 (확장된 버전)
+CREATE TABLE tbl_github_repository
+(
+    id              BIGINT PRIMARY KEY AUTO_INCREMENT,
+    installation_id BIGINT       NOT NULL,
+    user_id         BIGINT       NOT NULL,
+    repo_id         BIGINT       NOT NULL,
+    repo_name       VARCHAR(255) NOT NULL,
+    repo_full_name  VARCHAR(510) NOT NULL, -- {owner}/{name} 형식
+    repo_url        VARCHAR(500) NOT NULL,
+    html_url        VARCHAR(500),          -- GitHub 웹 URL
+    default_branch  VARCHAR(100) DEFAULT 'main',
+    is_private      BOOLEAN      DEFAULT FALSE,
+    is_active       BOOLEAN      DEFAULT TRUE,
+    created_at      TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (installation_id) REFERENCES tbl_github_installation (installation_id),
+    UNIQUE KEY unique_repo (user_id, repo_name),
+    INDEX idx_installation_repo (installation_id, repo_name)
+);
 
 CREATE TABLE `TBL_MEETINGROOM`
 (
