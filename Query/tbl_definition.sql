@@ -85,7 +85,27 @@ CREATE TABLE tbl_github_repository
     UNIQUE KEY unique_repo (user_id, repo_name),
     INDEX idx_installation_repo (installation_id, repo_name)
 );
+CREATE TABLE tbl_github_project (
+                                    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                    installation_id BIGINT,
+                                    user_id BIGINT NOT NULL,
+                                    project_id BIGINT NOT NULL,
+                                    project_node_id VARCHAR(100) NOT NULL,
+                                    project_name VARCHAR(255) NOT NULL,
+                                    project_number INT,
+                                    html_url VARCHAR(255),
+                                    body TEXT,
+                                    state VARCHAR(50),
+                                    creator VARCHAR(100),
+                                    is_active BOOLEAN DEFAULT true,
+                                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
+                                    INDEX idx_installation_id (installation_id),
+                                    INDEX idx_user_id (user_id),
+                                    INDEX idx_project_id (project_id),
+                                    UNIQUE INDEX uq_project_id (project_id)
+);
 CREATE TABLE `TBL_MEETINGROOM`
 (
     `meetingroom_id`       BIGINT NOT NULL AUTO_INCREMENT,
