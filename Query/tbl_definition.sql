@@ -15,18 +15,7 @@ CREATE TABLE TBL_TEAM
     PRIMARY KEY (team_id)
 ) COMMENT = '팀';
 
-CREATE TABLE TBL_PROJ
-(
-    proj_id         BIGINT       NOT NULL AUTO_INCREMENT COMMENT '프로젝트ID',
-    proj_name       VARCHAR(255) NOT NULL COMMENT '프로젝트명',
-    start_time      TIMESTAMP COMMENT '시작시각',
-    end_time        TIMESTAMP COMMENT '종료시각',
-    created_at      TIMESTAMP    NOT NULL COMMENT '생성시각',
-    progress_status TINYINT      NOT NULL COMMENT '진척도',
-    vcs_proj_url    VARCHAR(255),
-    vcs_type        VARCHAR(255),
-    PRIMARY KEY (proj_id)
-) COMMENT = '프로젝트';
+
 
 -- 2. TBL_TEAM을 참조하는 테이블
 CREATE TABLE `TBL_USER`
@@ -106,6 +95,21 @@ CREATE TABLE tbl_github_project (
                                     INDEX idx_project_id (project_id),
                                     UNIQUE INDEX uq_project_id (project_id)
 );
+
+CREATE TABLE TBL_PROJ
+(
+    proj_id         BIGINT       NOT NULL AUTO_INCREMENT COMMENT '프로젝트ID',
+    proj_name       VARCHAR(255) NOT NULL COMMENT '프로젝트명',
+    start_time      TIMESTAMP COMMENT '시작시각',
+    end_time        TIMESTAMP COMMENT '종료시각',
+    created_at      TIMESTAMP    NOT NULL COMMENT '생성시각',
+    progress_status TINYINT      NOT NULL COMMENT '진척도',
+    vcs_proj_url    VARCHAR(255),
+    vcs_type        VARCHAR(255),
+    github_installation_id BIGINT,
+    FOREIGN KEY (github_installation_id) REFERENCES tbl_github_installation(installation_id) ON DELETE SET NULL,
+    PRIMARY KEY (proj_id)
+) COMMENT = '프로젝트';
 CREATE TABLE `TBL_MEETINGROOM`
 (
     `meetingroom_id`       BIGINT NOT NULL AUTO_INCREMENT,
