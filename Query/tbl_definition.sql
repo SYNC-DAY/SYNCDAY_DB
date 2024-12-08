@@ -16,7 +16,6 @@ CREATE TABLE TBL_TEAM
 ) COMMENT = '팀';
 
 
-
 -- 2. TBL_TEAM을 참조하는 테이블
 CREATE TABLE `TBL_USER`
 (
@@ -48,66 +47,64 @@ CREATE TABLE tbl_github_installation
     status          VARCHAR(20)  NOT NULL DEFAULT 'ACTIVE', -- ACTIVE, SUSPENDED, DELETED
     created_at      TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    user_id BIGINT NOT NULL,
-    FOREIGN KEY (user_id) references syncdaydb.tbl_user(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    user_id         BIGINT       NOT NULL,
+    FOREIGN KEY (user_id) references syncdaydb.tbl_user (user_id) ON DELETE CASCADE ON UPDATE CASCADE,
     INDEX idx_installation_id (installation_id),
     INDEX idx_account (account_name, account_type)
 );
 
--- GitHub App 설치 테이블 (확장된 버전)
-CREATE TABLE tbl_github_repository
+-- Core VCS Installation table
+CREATE TABLE tbl_vcs_installation
 (
     id              BIGINT PRIMARY KEY AUTO_INCREMENT,
-    installation_id BIGINT       NOT NULL,
-    user_id         BIGINT       NOT NULL,
-    repo_id         BIGINT       NOT NULL,
-    repo_name       VARCHAR(255) NOT NULL,
-    repo_full_name  VARCHAR(510) NOT NULL, -- {owner}/{name} 형식
-    repo_url        VARCHAR(500) NOT NULL,
-    html_url        VARCHAR(500),          -- GitHub 웹 URL
-    default_branch  VARCHAR(100) DEFAULT 'main',
-    is_private      BOOLEAN      DEFAULT FALSE,
-    is_active       BOOLEAN      DEFAULT TRUE,
-    created_at      TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMP    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (installation_id) REFERENCES tbl_github_installation (installation_id),
-    UNIQUE KEY unique_repo (user_id, repo_name),
-    INDEX idx_installation_repo (installation_id, repo_name)
-);
-CREATE TABLE tbl_github_project (
-                                    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                                    installation_id BIGINT,
-                                    user_id BIGINT NOT NULL,
-                                    project_id BIGINT NOT NULL,
-                                    project_node_id VARCHAR(100) NOT NULL,
-                                    project_name VARCHAR(255) NOT NULL,
-                                    project_number INT,
-                                    html_url VARCHAR(255),
-                                    body TEXT,
-                                    state VARCHAR(50),
-                                    creator VARCHAR(100),
-                                    is_active BOOLEAN DEFAULT true,
-                                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    installation_id VARCHAR(255) NOT NULL COMMENT 'Installation ID from VCS provider',
+    vcs_type        VARCHAR(255) NOT NULL COMMENT 'VCS provider type (GITHUB, GITLAB, etc.)',
+    account_id      VARCHAR(255) NOT NULL COMMENT 'Account ID from VCS provider',
+    account_name    VARCHAR(255) NOT NULL COMMENT 'Organization or user name',
+    account_type    VARCHAR(255) NOT NULL COMMENT 'USER or ORGANIZATION',
+    avatar_url      VARCHAR(511) NOT NULL COMMENT 'PROFILE PHOTO URL',
+    api_url         VARCHAR(511) NOT NULL COMMENT 'API URL',
+    html_url        VARCHAR(511),
+    status          VARCHAR(255) NOT NULL DEFAULT 'ACTIVE' COMMENT 'ACTIVE, SUSPENDED, DELETED',
+    created_at      TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at      TIMESTAMP,
+    UNIQUE KEY uk_installation (installation_id, vcs_type),
+    INDEX idx_account (account_name, account_type),
+    CHECK (account_type IN ('USER', 'ORGANIZATION')),
+    CHECK (status IN ('ACTIVE', 'SUSPENDED', 'DELETED')),
+    CHECK (vcs_type IN ('GITHUB', 'GITLAB'))
+) COMMENT = 'VCS Installation';
 
-                                    INDEX idx_installation_id (installation_id),
-                                    INDEX idx_user_id (user_id),
-                                    INDEX idx_project_id (project_id),
-                                    UNIQUE INDEX uq_project_id (project_id)
-);
+-- User-Installation relationship
+CREATE TABLE tbl_user_vcs_installation
+(
+    id              BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id         BIGINT NOT NULL,
+    installation_id BIGINT NOT NULL,
+    scope           TEXT COMMENT 'Granted permissions scope',
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at      TIMESTAMP,
+    UNIQUE KEY uk_user_installation (user_id, installation_id),
+    FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id) ON DELETE CASCADE,
+    FOREIGN KEY (installation_id) REFERENCES tbl_vcs_installation (id) ON DELETE CASCADE
+) COMMENT = 'User VCS Installation relationship and tokens';
+
 
 CREATE TABLE TBL_PROJ
 (
-    proj_id         BIGINT       NOT NULL AUTO_INCREMENT COMMENT '프로젝트ID',
-    proj_name       VARCHAR(255) NOT NULL COMMENT '프로젝트명',
-    start_time      TIMESTAMP COMMENT '시작시각',
-    end_time        TIMESTAMP COMMENT '종료시각',
-    created_at      TIMESTAMP    NOT NULL COMMENT '생성시각',
-    progress_status TINYINT      NOT NULL COMMENT '진척도',
-    vcs_proj_url    VARCHAR(255),
-    vcs_type        VARCHAR(255),
-    github_installation_id BIGINT,
-    FOREIGN KEY (github_installation_id) REFERENCES tbl_github_installation(installation_id) ON DELETE SET NULL,
+    proj_id             BIGINT       NOT NULL AUTO_INCREMENT COMMENT '프로젝트ID',
+    proj_name           VARCHAR(255) NOT NULL COMMENT '프로젝트명',
+    start_time          TIMESTAMP COMMENT '시작시각',
+    end_time            TIMESTAMP COMMENT '종료시각',
+    created_at          TIMESTAMP    NOT NULL COMMENT '생성시각',
+    progress_status     TINYINT      NOT NULL COMMENT '진척도',
+    vcs_proj_url        VARCHAR(255),
+    vcs_type            VARCHAR(255),
+    vcs_installation_id BIGINT,
+    CONSTRAINT fk_proj_installation FOREIGN KEY (vcs_installation_id)
+        REFERENCES tbl_vcs_installation (id) ON DELETE SET NULL,
     PRIMARY KEY (proj_id)
 ) COMMENT = '프로젝트';
 CREATE TABLE `TBL_MEETINGROOM`
