@@ -34,24 +34,7 @@ CREATE TABLE `TBL_USER`
         REFERENCES `TBL_TEAM` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT = '회원';
 
--- GitHub Installation 테이블 (확장된 버전)
-CREATE TABLE tbl_github_installation
-(
-    id              BIGINT PRIMARY KEY AUTO_INCREMENT,
-    installation_id BIGINT       NOT NULL UNIQUE,
-    account_id      BIGINT       NOT NULL,
-    account_name    VARCHAR(255) NOT NULL,
-    account_type    VARCHAR(20)  NOT NULL,                  -- USER, ORGANIZATION
-    avatar_url      VARCHAR(500),
-    html_url        VARCHAR(500),                           -- GitHub 조직/사용자 프로필 URL
-    status          VARCHAR(20)  NOT NULL DEFAULT 'ACTIVE', -- ACTIVE, SUSPENDED, DELETED
-    created_at      TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMP             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    user_id         BIGINT       NOT NULL,
-    FOREIGN KEY (user_id) references syncdaydb.tbl_user (user_id) ON DELETE CASCADE ON UPDATE CASCADE,
-    INDEX idx_installation_id (installation_id),
-    INDEX idx_account (account_name, account_type)
-);
+
 
 -- Core VCS Installation table
 CREATE TABLE tbl_vcs_installation
