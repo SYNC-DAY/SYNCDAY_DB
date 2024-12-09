@@ -60,7 +60,7 @@ CREATE TABLE tbl_github_installation
     created_at      TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     user_id BIGINT NOT NULL,
-    FOREIGN KEY (user_id) references syncdaydb.tbl_user(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (user_id) references TBL_USER(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
     INDEX idx_installation_id (installation_id),
     INDEX idx_account (account_name, account_type)
 );
@@ -108,8 +108,8 @@ CREATE TABLE `TBL_SCHEDULE_REPEAT`
     `repeat_end`                        TIMESTAMP,
     `recurrence_type`                   VARCHAR(255) NOT NULL,
     `personal_recurrence_unit`          VARCHAR(255),
-    `personal_recurrence_interval`      INT,
-    `personal_recurrence_selected_days` INT,
+    `personal_recurrence_interval`      BIGINT,
+    `personal_recurrence_selected_days` BIGINT,
     `personal_monthly_type`             VARCHAR(255),
     `user_id`                           BIGINT       NOT NULL,
     PRIMARY KEY (`schedule_repeat_id`),
