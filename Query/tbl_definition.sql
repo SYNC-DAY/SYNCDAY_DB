@@ -36,7 +36,7 @@ CREATE TABLE `TBL_USER`
 ) COMMENT = '회원';
 
 -- GitHub Installation 테이블 (확장된 버전)
-CREATE TABLE tbl_github_installation
+CREATE TABLE TBL_GITHUB_INSTALLATION
 (
     id              BIGINT PRIMARY KEY AUTO_INCREMENT,
     installation_id BIGINT       NOT NULL UNIQUE,
@@ -55,7 +55,7 @@ CREATE TABLE tbl_github_installation
 );
 
 -- GitHub App 설치 테이블 (확장된 버전)
-CREATE TABLE tbl_github_repository
+CREATE TABLE TBL_GITHUB_REPOSITORY
 (
     id              BIGINT PRIMARY KEY AUTO_INCREMENT,
     installation_id BIGINT       NOT NULL,
@@ -70,11 +70,11 @@ CREATE TABLE tbl_github_repository
     is_active       BOOLEAN      DEFAULT TRUE,
     created_at      TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (installation_id) REFERENCES tbl_github_installation (installation_id),
+    FOREIGN KEY (installation_id) REFERENCES TBL_GITHUB_INSTALLATION (installation_id),
     UNIQUE KEY unique_repo (user_id, repo_name),
     INDEX idx_installation_repo (installation_id, repo_name)
 );
-CREATE TABLE tbl_github_project (
+CREATE TABLE TBL_GITHUB_PROJECT (
                                     id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                     installation_id BIGINT,
                                     user_id BIGINT NOT NULL,
@@ -107,7 +107,7 @@ CREATE TABLE TBL_PROJ
     vcs_proj_url    VARCHAR(255),
     vcs_type        VARCHAR(255),
     github_installation_id BIGINT,
-    FOREIGN KEY (github_installation_id) REFERENCES tbl_github_installation(installation_id) ON DELETE SET NULL,
+    FOREIGN KEY (github_installation_id) REFERENCES TBL_GITHUB_INSTALLATION(installation_id) ON DELETE SET NULL,
     PRIMARY KEY (proj_id)
 ) COMMENT = '프로젝트';
 CREATE TABLE `TBL_MEETINGROOM`
