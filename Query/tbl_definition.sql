@@ -37,7 +37,7 @@ CREATE TABLE `TBL_USER`
 
 
 -- Core VCS Installation table
-CREATE TABLE tbl_vcs_installation
+CREATE TABLE TBL_VCS_INSTALLATION
 (
     id              BIGINT PRIMARY KEY AUTO_INCREMENT,
     installation_id VARCHAR(255) NOT NULL COMMENT 'Installation ID from VCS provider',
@@ -52,15 +52,15 @@ CREATE TABLE tbl_vcs_installation
     created_at      TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted_at      TIMESTAMP,
-    UNIQUE KEY uk_installation (installation_id, vcs_type),
-    INDEX idx_account (account_name, account_type),
+    UNIQUE KEY UK_INSTALLATION (installation_id, vcs_type),
+    INDEX IDX_ACCOUNT (account_name, account_type),
     CHECK (account_type IN ('USER', 'ORGANIZATION')),
     CHECK (status IN ('ACTIVE', 'SUSPENDED', 'DELETED')),
     CHECK (vcs_type IN ('GITHUB', 'GITLAB'))
 ) COMMENT = 'VCS Installation';
 
 -- User-Installation relationship
-CREATE TABLE tbl_user_vcs_installation
+CREATE TABLE TBL_USER_VCS_INSTALLATION
 (
     id              BIGINT PRIMARY KEY AUTO_INCREMENT,
     user_id         BIGINT NOT NULL,
@@ -69,9 +69,9 @@ CREATE TABLE tbl_user_vcs_installation
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted_at      TIMESTAMP,
-    UNIQUE KEY uk_user_installation (user_id, installation_id),
+    UNIQUE KEY UK_USER_INSTALLATION (user_id, installation_id),
     FOREIGN KEY (user_id) REFERENCES TBL_USER (user_id) ON DELETE CASCADE,
-    FOREIGN KEY (installation_id) REFERENCES tbl_vcs_installation (id) ON DELETE CASCADE
+    FOREIGN KEY (installation_id) REFERENCES TBL_VCS_INSTALLATION(id) ON DELETE CASCADE
 ) COMMENT = 'User VCS Installation relationship and tokens';
 
 
@@ -86,8 +86,8 @@ CREATE TABLE TBL_PROJ
     vcs_proj_url        VARCHAR(255),
     vcs_type            VARCHAR(255),
     vcs_installation_id BIGINT,
-    CONSTRAINT fk_proj_installation FOREIGN KEY (vcs_installation_id)
-        REFERENCES tbl_vcs_installation (id) ON DELETE SET NULL,
+    CONSTRAINT FK_PROJ_INSTALLATION FOREIGN KEY (vcs_installation_id)
+        REFERENCES TBL_VCS_INSTALLATION (id) ON DELETE SET NULL,
     PRIMARY KEY (proj_id)
 ) COMMENT = '프로젝트';
 CREATE TABLE `TBL_MEETINGROOM`
