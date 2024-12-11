@@ -19,7 +19,7 @@ VALUES
 -- Additional Project Member Data
 INSERT INTO TBL_PROJ_MEMBER (bookmark_status, participation_status, proj_id, user_id)
 VALUES
-    ('BOOKMARKED', 'OWNER', 4, 1),    -- 김개발이 모바일 앱 프로젝트 소유자
+    ('BOOKMARKED', 'OWNER', 4, 1),   -- 김개발이 모바일 앱 프로젝트 소유자
     ('NONE', 'MEMBER', 4, 2), -- 이코딩이 모바일 앱 프로젝트 멤버
     ('BOOKMARKED', 'OWNER', 5, 1),    -- 김개발이 API 서버 프로젝트 소유자
     ('NONE', 'MEMBER', 5, 2), -- 이코딩이 API 서버 프로젝트 멤버
