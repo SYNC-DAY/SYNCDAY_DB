@@ -1,47 +1,53 @@
--- Create view for cards with tag and user information including profile URLs
-CREATE OR REPLACE VIEW VW_CARD_INFO AS
 SELECT
+    -- Card info
     c.card_id,
     c.title AS card_title,
-    c.content AS card_content,
+    c.content,
     c.created_at,
     c.start_time,
     c.end_time,
     c.vcs_object_type,
     c.vcs_object_url,
-    c.cardboard_id,
 
-    -- Tag information
-    ct.tag_id,
-    ct.tag_name,
-    ct.color AS tag_color,
+    -- Tag info
+    t.tag_id,
+    t.tag_name,
+    t.color_hex,
 
-    -- Cardboard information
-    cb.title AS cardboard_title,
-    cb.workspace_id,
+    -- created_by (Project Member) info
+    created_by_pm.proj_member_id AS created_by_member_id,
+    created_by_pm.participation_status AS created_by_status,
+    created_by_pm.bookmark_status AS created_by_bookmark_status,
+    created_by_u.user_id AS created_by_id,
+    created_by_u.username AS created_by_name,
+    created_by_u.profile_url AS created_by_profile_url,
 
-    -- Creator information
-    creator.user_id AS creator_id,
-    creator.username AS creator_name,
-    creator.email AS creator_email,
-    creator.profile_photo AS creator_profile_url,
-    creator.team_id AS creator_team_id,
+    -- Assignee (Project Member) info
+    assignee_pm.proj_member_id AS assignee_member_id,
+    assignee_pm.participation_status AS assignee_status,
+    assignee_pm.bookmark_status AS assignee_bookmark_status,
+    assignee_u.user_id AS assignee_id,
+    assignee_u.username AS assignee_name,
+    assignee_u.profile_url AS assignee_profile_url
 
-    -- Assignee information
-    assignee.user_id AS assignee_id,
-    assignee.username AS assignee_name,
-    assignee.email AS assignee_email,
-    assignee.profile_photo AS assignee_profile_url,
-    assignee.team_id AS assignee_team_id,
+FROM TBL_CARD c
+-- Join for workspace and project context
+         JOIN TBL_CARDBOARD cb ON c.cardboard_id = cb.cardboard_id
+         JOIN TBL_WORKSPACE w ON cb.workspace_id = w.workspace_id
+         JOIN TBL_PROJ p ON w.proj_id = p.proj_id
 
-    -- Team information for creator and assignee
-    creator_team.team_name AS creator_team_name,
-    assignee_team.team_name AS assignee_team_name
-FROM
-    TBL_CARD c
-        LEFT JOIN TBL_CARD_TAG ct ON c.tag_id = ct.tag_id
-        LEFT JOIN TBL_CARDBOARD cb ON c.cardboard_id = cb.cardboard_id
-        LEFT JOIN TBL_USER creator ON c.created_by = creator.user_id
-        LEFT JOIN TBL_USER assignee ON c.assignee = assignee.user_id
-        LEFT JOIN TBL_TEAM creator_team ON creator.team_id = creator_team.team_id
-        LEFT JOIN TBL_TEAM assignee_team ON assignee.team_id = assignee_team.team_id;
+-- Tag information
+         LEFT JOIN TBL_CARD_TAG t ON c.tag_id = t.tag_id
+
+-- created_by information through project member
+         LEFT JOIN TBL_USER created_by_u ON c.created_by = created_by_u.user_id
+         LEFT JOIN TBL_PROJ_MEMBER created_by_pm ON created_by_u.user_id = created_by_pm.user_id
+    AND created_by_pm.proj_id = p.proj_id
+
+-- Assignee information through project member
+         LEFT JOIN TBL_USER assignee_u ON c.assignee = assignee_u.user_id
+         LEFT JOIN TBL_PROJ_MEMBER assignee_pm ON assignee_u.user_id = assignee_pm.user_id
+    AND assignee_pm.proj_id = p.proj_id
+
+WHERE c.cardboard_id = ? -- Parameter for filtering by specific cardboard
+ORDER BY c.created_at DESC;
